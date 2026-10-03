@@ -1,0 +1,149 @@
+/*
+ * kien-hp デザイントークン（単一情報源）
+ *
+ * 値の根拠は docs/DESIGN.md。参考モック（reference/mock.png, 幅869px）を
+ * デスクトップ1440px相当（約1.66倍）に換算して決めている。
+ * セクションのCSSはここにある変数だけを参照し、色・余白・文字サイズを直書きしない。
+ * 値を足す・変える場合は統括エージェントに報告してからここを編集する。
+ *
+ * ブレークポイント（CSS変数はメディアクエリに使えないため、各CSSでこの値を直接書く）
+ *   tablet  : min-width: 640px
+ *   desktop : min-width: 1024px
+ *   wide    : min-width: 1280px
+ */
+
+:root {
+  /* ---- Color: brand ---- */
+  --color-primary: #fe764f;          /* 参考画像のメインオレンジ。装飾・アイコン・見出しマーク用 */
+  --color-primary-strong: #cc4a22;   /* 白文字を載せるボタン地。#fe764fでは白文字が2.65:1でAA未達のため */
+  --color-primary-strong-hover: #b13d1a;
+  --color-primary-text: #c2461f;     /* オレンジの文字（リンク等）。白・各トーン地で4.6:1以上 */
+  --color-secondary: #75b880;        /* サブ（グリーン）。見出し下の筆線など */
+  --color-accent: #3baced;           /* アクセント（ブルー） */
+  --color-base: #fdead1;             /* ベース（ベージュ）。見出しマーカー等 */
+
+  /* ---- Color: neutral ---- */
+  --color-text: #2b3a4a;             /* 見出し・本文。白地で11.6:1 */
+  --color-text-muted: #5c616d;       /* 注記・日付。白地で6.2:1 */
+  --color-bg: #ffffff;
+  --color-bg-soft: #fdfdfb;          /* セクション地のごく薄いオフホワイト */
+  --color-border: #e8e6e1;
+  --color-footer-bg: #2e3d48;
+  --color-footer-text: #c5cdd1;      /* フッター地で6.9:1 */
+  --color-on-dark: #ffffff;
+  --color-focus: #2f6f9e;
+
+  /* ---- Color: service tones（サービス4種・採用/ブログカードの色分け） ---- */
+  --tone-yellow-base: #febf49;
+  --tone-yellow-tint: #fef9ec;
+  --tone-yellow-text: #c2461f;       /* 参考画像でも黄色カードのリンクはオレンジ */
+  --tone-green-base: #6eb47b;
+  --tone-green-tint: #f0f8f2;
+  --tone-green-text: #3a7a47;
+  --tone-orange-base: #fd6e48;
+  --tone-orange-tint: #fff6ee;
+  --tone-orange-text: #c2461f;
+  --tone-blue-base: #3ba9ea;
+  --tone-blue-tint: #eef9ff;
+  --tone-blue-text: #2f6f9e;
+
+  /* ---- Typography: family ---- */
+  --font-heading: var(--font-klee), "Hiragino Maru Gothic ProN", sans-serif;
+  --font-body: var(--font-zen-maru), "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+
+  /*
+   * ---- Typography: size（handbook/02_quality/web_design_standard.md 第2条の3トークン） ----
+   * 区分ごとに個別値を持つ（第5条2項）。下のメディアクエリで上書きする。
+   * --t-display はヒーローのメインコピー専用の例外（第6条）。参考画像の主コピーが
+   * セクション見出しの約1.8倍あり、--t-headingでは再現できないため。
+   */
+  --t-display: 2.25rem;
+  --t-heading: 1.625rem;
+  --t-body: 1.0625rem;
+  --t-note: 0.9375rem;
+
+  /* ---- Typography: UIラベル（第3条。役割ごとに1種類） ---- */
+  --ui-nav: 0.875rem;
+  --ui-button: 0.9375rem;
+  --ui-button-sm: 0.875rem;
+  --ui-meta: 0.875rem;               /* 日付・カテゴリ・「一覧を見る」等の小リンク */
+  --ui-caption: 0.75rem;             /* コピーライト等 */
+
+  --lh-heading: 1.5;
+  --lh-body: 1.9;
+  --ls-heading: 0.12em;
+  --ls-body: 0.06em;
+  --ls-ui: 0.08em;
+
+  /* ---- Spacing（8pxベースのスケール。これ以外の値で余白を作らない） ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 80px;
+  --space-11: 96px;
+  --space-12: 128px;
+
+  /* ---- Layout ---- */
+  --container-max: 1200px;           /* 参考画像のサービスカード群の外幅 */
+  --container-pad: var(--space-5);
+  --section-pad-block: var(--space-9);
+  --header-height: 64px;
+
+  /* ---- Shape ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-card: 0 2px 12px rgb(43 58 74 / 0.06);
+  --shadow-button: 0 4px 12px rgb(204 74 34 / 0.24);
+
+  /* ---- Button ---- */
+  --button-h-sm: 40px;
+  --button-h-md: 48px;
+  --button-h-lg: 56px;
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 160ms;
+  --duration-base: 240ms;
+
+  /* ---- Layer ---- */
+  --z-decor: 1;
+  --z-content: 2;
+  --z-header: 50;
+  --z-menu: 60;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --t-display: 2.75rem;
+    --t-heading: 1.75rem;
+    --t-body: 1.125rem;
+    --container-pad: var(--space-7);
+    --section-pad-block: var(--space-10);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --t-display: 3.5rem;
+    --t-heading: 2rem;
+    --t-body: 1.25rem;
+    --t-note: 1rem;
+    --section-pad-block: var(--space-11);
+    --header-height: 96px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --t-display: 4rem;
+    --t-heading: 2.25rem;
+  }
+}

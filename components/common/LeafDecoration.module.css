@@ -1,0 +1,14 @@
+.leaf {
+  position: absolute;
+  z-index: var(--z-decor);
+  pointer-events: none;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+}
+
+.flip {
+  transform: scaleX(-1);
+}

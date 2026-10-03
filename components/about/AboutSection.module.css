@@ -1,0 +1,52 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  padding-block: var(--section-pad-block);
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.backgroundImage {
+  object-fit: cover;
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-7);
+  align-items: center;
+}
+
+.text {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+}
+
+.body {
+  font-size: var(--t-body);
+}
+
+.line {
+  display: block;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 8 / 5;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.photoImage {
+  object-fit: cover;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,0 +1,36 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--color-bg);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--header-height);
+}
+
+.nav,
+.contact {
+  display: none;
+}
+
+.navList {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.navLink {
+  font-size: var(--ui-nav);
+  letter-spacing: var(--ls-ui);
+}
+
+@media (min-width: 1024px) {
+  .nav,
+  .contact {
+    display: flex;
+  }
+}

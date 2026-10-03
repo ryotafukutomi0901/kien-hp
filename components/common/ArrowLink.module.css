@@ -1,0 +1,39 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px; /* タップ領域の確保 */
+  font-size: var(--ui-meta);
+  font-weight: 500;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text);
+}
+
+.arrow {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.link:hover .arrow {
+  transform: translateX(3px);
+}
+
+.link:hover span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.yellow {
+  color: var(--tone-yellow-text);
+}
+
+.green {
+  color: var(--tone-green-text);
+}
+
+.orange {
+  color: var(--tone-orange-text);
+}
+
+.blue {
+  color: var(--tone-blue-text);
+}

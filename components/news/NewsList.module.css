@@ -1,0 +1,29 @@
+.list {
+  display: grid;
+}
+
+.item + .item {
+  border-top: 1px solid var(--color-border);
+}
+
+.link {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-6);
+  padding-block: var(--space-3);
+}
+
+.date {
+  font-size: var(--ui-meta);
+  color: var(--color-text-muted);
+}
+
+.text {
+  font-size: var(--t-note);
+}
+
+.category {
+  margin-right: var(--space-3);
+  padding-right: var(--space-3);
+  border-right: 1px solid var(--color-border);
+}

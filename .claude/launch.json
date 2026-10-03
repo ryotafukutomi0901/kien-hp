@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "kien-hp",
+      "url": "http://localhost:3461",
+      "port": 3461
+    }
+  ]
+}

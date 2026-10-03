@@ -1,0 +1,42 @@
+.section {
+  padding-block: var(--space-6);
+  background: var(--color-bg-soft);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.panel {
+  position: relative;
+  display: grid;
+  margin-top: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  overflow: hidden;
+  padding-inline: var(--space-5);
+}
+
+.media {
+  display: none;
+}
+
+.image {
+  object-fit: cover;
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    grid-template-columns: 1fr 360px;
+    padding-right: 0;
+  }
+
+  .media {
+    display: block;
+    position: relative;
+  }
+}

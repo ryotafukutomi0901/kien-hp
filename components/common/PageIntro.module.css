@@ -1,0 +1,9 @@
+.intro {
+  padding-block: var(--section-pad-block);
+  background: var(--color-bg-soft);
+}
+
+.body {
+  margin-top: var(--space-5);
+  font-size: var(--t-note);
+}

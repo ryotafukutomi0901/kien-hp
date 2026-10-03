@@ -1,0 +1,32 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  padding-block: var(--space-8);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5) var(--space-9);
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: var(--t-heading);
+  letter-spacing: var(--ls-heading);
+}
+
+.line {
+  display: block;
+}

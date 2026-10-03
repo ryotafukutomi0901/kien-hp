@@ -1,0 +1,41 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.content {
+  position: relative;
+  z-index: var(--z-content);
+  display: grid;
+  justify-items: start;
+  gap: var(--space-6);
+  padding-block: var(--space-10);
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: var(--t-display);
+  letter-spacing: var(--ls-heading);
+}
+
+.lead {
+  font-size: var(--t-body);
+  font-weight: 500;
+}
+
+.line {
+  display: block;
+}
