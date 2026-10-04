@@ -1,0 +1,36 @@
+.list {
+  border-top: 1px solid var(--color-border);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-1);
+  padding-block: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.term {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text-muted);
+}
+
+.detail {
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+  /* 語の途中で折り返さない（「その他の事／業」等を防ぐ）。長い語で横にはみ出さないよう overflow-wrap を併用 */
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
+
+.detail > * + * {
+  margin-top: var(--space-2);
+}
+
+@media (min-width: 640px) {
+  .row {
+    grid-template-columns: 12rem minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+}

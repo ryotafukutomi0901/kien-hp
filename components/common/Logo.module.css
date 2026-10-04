@@ -1,7 +1,17 @@
+/*
+ * ロゴの組み（参考モック実測 → 1440px換算、docs/DESIGN.md 6章 Header）
+ *   太陽マーク 41×36 → 68×60（画像は四辺に約3%の透明余白があるため、表示幅は72px）
+ *   マーク下の欧文名 字高7 → 12（--t-note）、マークとの隙間はほぼ0
+ *   「株式会社／SAMPLE」2段 字高10・行送り13.5 → --t-note・行送り22
+ *   社名「華護」字高20 → 33（--t-heading）。2段の上端より少し上に揃う
+ * マーク画像の幅だけは文字サイズ・余白ではなく画像寸法なので px で指定する。
+ */
+
 .logo {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
   color: var(--color-text);
 }
 
@@ -9,47 +19,60 @@
   color: var(--color-on-dark);
 }
 
-.mark {
-  display: grid;
-  justify-items: center;
-}
-
 .markImage {
-  width: 40px;
+  width: 48px;
   height: auto;
 }
 
-.markText {
-  font-size: var(--ui-caption);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: var(--ls-ui);
-  color: var(--color-primary-text);
-}
-
-.light .markText {
-  color: var(--color-on-dark);
-}
-
+/* 小さな法人格＋ふりがな付きの社名。法人格は社名の字面（ふりがなを除く）の縦中央にそろえる */
 .name {
+  --legal-size: var(--ui-caption);
+
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-2);
 }
 
 .legal {
-  display: grid;
-  font-size: var(--ui-caption);
+  margin-top: calc((var(--t-heading) - var(--legal-size) * 1.4) / 2);
+  font-size: var(--legal-size);
   font-weight: 700;
-  line-height: 1.3;
-}
-
-.en {
+  line-height: 1.4;
   letter-spacing: var(--ls-ui);
+  white-space: nowrap;
 }
 
 .main {
-  font-size: var(--t-body);
-  font-weight: 700;
+  font-size: var(--t-heading);
+  font-weight: 500;
+  line-height: 1;
   letter-spacing: var(--ls-ui);
+  white-space: nowrap;
+  ruby-position: under;
+  ruby-align: space-between;
+}
+
+/* ふりがな。社名の幅いっぱいに字を散らし、社名との間はわずかに空ける */
+.reading {
+  padding-top: var(--space-1);
+  font-size: var(--ui-caption);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+@media (min-width: 1024px) {
+  .logo {
+    gap: var(--space-6);
+  }
+
+  .markImage {
+    width: 72px;
+  }
+
+  .name {
+    --legal-size: var(--t-note);
+
+    gap: var(--space-3);
+  }
 }

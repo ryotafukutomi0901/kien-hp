@@ -28,8 +28,8 @@
   --color-bg: #ffffff;
   --color-bg-soft: #fdfdfb;          /* セクション地のごく薄いオフホワイト */
   --color-border: #e8e6e1;
-  --color-footer-bg: #2e3d48;
-  --color-footer-text: #c5cdd1;      /* フッター地で6.9:1 */
+  --color-footer-bg: var(--color-primary-strong);   /* ボタンと同じオレンジ（2026-10-04 CEO指示。モックは紺 #2e3d48） */
+  --color-footer-text: var(--color-on-dark);        /* 白。オレンジ地で4.60:1 */
   --color-on-dark: #ffffff;
   --color-focus: #2f6f9e;
 
@@ -59,6 +59,7 @@
    */
   --t-display: 2.25rem;
   --t-heading: 1.625rem;
+  --t-heading-sm: 1.375rem;          /* 小見出し（スタッフ紹介・NEWSの三角マーク見出し、Final CTAの見出し）。第6条の例外。モックで--t-headingの約0.8倍 */
   --t-body: 1.0625rem;
   --t-note: 0.9375rem;
 
@@ -71,6 +72,7 @@
 
   --lh-heading: 1.5;
   --lh-body: 1.9;
+  --lh-compact: 1.5;                 /* カード内の短い本文（採用・ブログ等）。モック実測で行送りが詰まっている箇所用 */
   --ls-heading: 0.12em;
   --ls-body: 0.06em;
   --ls-ui: 0.08em;
@@ -91,6 +93,7 @@
 
   /* ---- Layout ---- */
   --container-max: 1200px;           /* 参考画像のサービスカード群の外幅 */
+  --header-max: calc(var(--container-max) + var(--space-10) * 2); /* ヘッダーは本文より左右80pxずつ広い（モック実測） */
   --container-pad: var(--space-5);
   --section-pad-block: var(--space-9);
   --header-height: 64px;
@@ -102,6 +105,8 @@
   --radius-pill: 999px;
   --shadow-card: 0 2px 12px rgb(43 58 74 / 0.06);
   --shadow-button: 0 4px 12px rgb(204 74 34 / 0.24);
+
+  --tap-min: 44px;                   /* タップ領域の最小値（WCAG 2.5.5 / Apple HIG） */
 
   /* ---- Button ---- */
   --button-h-sm: 40px;
@@ -124,6 +129,7 @@
   :root {
     --t-display: 2.75rem;
     --t-heading: 1.75rem;
+    --t-heading-sm: 1.5rem;
     --t-body: 1.125rem;
     --container-pad: var(--space-7);
     --section-pad-block: var(--space-10);
@@ -134,6 +140,7 @@
   :root {
     --t-display: 3.5rem;
     --t-heading: 2rem;
+    --t-heading-sm: 1.75rem;
     --t-body: 1.25rem;
     --t-note: 1rem;
     --section-pad-block: var(--space-11);
@@ -145,5 +152,6 @@
   :root {
     --t-display: 4rem;
     --t-heading: 2.25rem;
+    --t-heading-sm: 2rem;
   }
 }

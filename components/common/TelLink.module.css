@@ -1,0 +1,38 @@
+.tel {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-primary-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  white-space: nowrap; /* 番号を途中で折り返さない */
+}
+
+/* 見た目の行の高さは変えず、押せる範囲だけを上下に広げる */
+.tel::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  min-height: var(--tap-min);
+  height: 100%;
+  transform: translateY(-50%);
+}
+
+.tel:hover {
+  text-decoration-thickness: 2px;
+}
+
+.large {
+  font-size: var(--t-body);
+}
+
+.icon {
+  flex-shrink: 0;
+}

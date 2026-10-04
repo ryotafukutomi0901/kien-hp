@@ -45,10 +45,18 @@
 }
 
 /* size */
+/* sm は見た目40pxだが、当たり判定を上下に広げてタップ領域44px以上にする */
 .sm {
+  position: relative;
   min-height: var(--button-h-sm);
   padding-inline: var(--space-5);
   font-size: var(--ui-button-sm);
+}
+
+.sm::after {
+  content: "";
+  position: absolute;
+  inset: calc((var(--tap-min) - var(--button-h-sm)) / -2) 0;
 }
 
 .md {
@@ -61,4 +69,11 @@
   min-height: var(--button-h-lg);
   padding-inline: var(--space-7);
   font-size: var(--ui-button);
+}
+
+/* モックの lg は約300px幅（ヒーロー・About）。既定の余白では約255pxにしかならないため、タブレット以上で広げる */
+@media (min-width: 640px) {
+  .lg {
+    padding-inline: var(--space-9);
+  }
 }

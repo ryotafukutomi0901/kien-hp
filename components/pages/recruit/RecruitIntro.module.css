@@ -1,0 +1,98 @@
+.intro {
+  /* 末尾の1〜2文字だけが次の行に落ちないよう、文節で折り返す */
+  word-break: auto-phrase;
+  text-wrap: pretty;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.lead {
+  font-size: var(--t-body);
+  font-weight: 500;
+  line-height: var(--lh-body);
+}
+
+/* 1文ずつの塊にして、幅が足りるときは文の途中で折り返さない（足りないときは塊の中で折り返す） */
+.sentence {
+  display: inline-block;
+}
+
+/* ---- 働き方の特徴: 先頭（週1から短時間・ダブルワークOK）だけ大きく、残りは小さな札 ---- */
+.points {
+  /* 札は短いので、折り返すときは2行の長さをそろえる（「OK！」「中」だけが落ちるのを防ぐ） */
+  text-wrap: balance;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.featured {
+  flex-basis: 100%;
+}
+
+.featuredText {
+  display: inline-block;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--tone-orange-tint);
+  color: var(--color-primary-text);
+  font-size: var(--t-body);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+}
+
+.point {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  font-weight: 500;
+}
+
+.point::before {
+  content: "";
+  flex-shrink: 0;
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+}
+
+/* ---- ページ内リンク ---- */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+
+.tocLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+/* ページ内へ下がるリンクなので矢印は下向き */
+.tocArrow {
+  flex-shrink: 0;
+  color: var(--color-primary-text);
+  transform: rotate(90deg);
+}
+
+.tocLink:hover {
+  border-color: var(--color-primary-text);
+  color: var(--color-primary-text);
+}

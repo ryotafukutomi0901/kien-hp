@@ -1,0 +1,129 @@
+/* ---- ご利用案内（料金・対応・キャンセル・協力事業所） ---- */
+.guide {
+  display: grid;
+  /* 文節の切れ目で折り返す（未対応ブラウザは通常の折り返し）。1文節が1行に収まらない長い語だけは途中でも折り返し、横にはみ出さない */
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.item {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.text {
+  font-size: var(--t-note);
+}
+
+/* 区切り（<wbr>）の位置でだけ折り返す。区切りの間が1行に収まらない幅では、そこだけ途中で折り返す */
+.phrased {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* ---- 表 ---- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-note);
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table thead th {
+  border-bottom-color: color-mix(in srgb, var(--tone-orange-base) 35%, var(--color-bg));
+  background: var(--tone-orange-tint);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.table tbody th {
+  font-weight: 500;
+}
+
+.table .valueCol,
+.table .value {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.value {
+  font-size: var(--t-body);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- ご予約 ---- */
+.reserve {
+  display: grid;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--tone-orange-base) 25%, var(--color-bg));
+  border-radius: var(--radius-lg);
+  background: var(--tone-orange-tint);
+}
+
+.reserveText {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.reserveActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+}
+
+.telRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.telLabel {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+@media (min-width: 640px) {
+  .item {
+    padding: var(--space-6);
+  }
+
+  .reserve {
+    padding: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .guide {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .reserve {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--space-8);
+    padding: var(--space-6) var(--space-8);
+  }
+}

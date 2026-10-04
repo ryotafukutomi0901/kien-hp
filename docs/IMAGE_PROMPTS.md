@@ -1,0 +1,103 @@
+# トップページ 画像の配置案と生成プロンプト
+
+2026-10-04 作成。トップページのHTMLから実測した画像の数と、差し替え用の生成プロンプト（ヒーローの富士山は変更しない）。
+
+## 現状（トップページの img 25枚）
+
+| 種類 | 枚数 | 内訳 |
+|---|---|---|
+| 写真 | 14か所／12ファイル | **使い回し2件**: `services/business-support.jpg`（家事支援カード＋会社行事1枚目）、`about/about-fuji.jpg`（私たちのことの背景＋楕円） |
+| 葉っぱ（装飾） | 9か所／5ファイル | `leaf-bottom-left.png` 4回、`leaf-top-right.png` 2回 ほか |
+| ロゴ | 2 | ヘッダー（カラー）・フッター（白） |
+
+→ **ヒーローを除く写真13か所をすべて別の画像にする。** 生成後は表の「保存先」に保存し、`data/sections/*.ts` の `src` を書き換える。
+
+## 共通のトンマナ（全プロンプトの前提）
+
+- 明るく柔らかい自然光、ハイキー、白とベージュを基調に、ロゴのコーラル・やさしい黄・若草色・淡いピンクを小物や植物で少しだけ。清潔で温かい、静岡県富士市の日常
+- 写実的な写真（イラスト・3D・過度なボケ・彩度の高すぎる色・ドラマチックな光は避ける）
+- **人物は顔を出さない**（手元・後ろ姿・遠景）。架空の人物を実在のスタッフ・利用者に見せないため（`IMAGE_QUALITY.md` 4章）
+- 文字・ロゴ・看板の文字・透かしを入れない
+- 解像度は下表の「最小サイズ」以上。横長・余白多めで生成し、切り抜きはサイト側で行う
+
+共通のネガティブプロンプト（使えるツールでは毎回指定）:
+```
+text, letters, logo, watermark, signature, faces in focus, identifiable faces, distorted hands, extra fingers, illustration, 3d render, cartoon, oversaturated, harsh shadows, dramatic lighting, cluttered background, blur artifacts
+```
+
+## 画像ごとの配置案とプロンプト
+
+| # | 挿入位置 | 保存先 | 比率・最小サイズ | 何を見せるか |
+|---|---|---|---|---|
+| 1 | サービス: 訪問介護 | `public/images/services/home-visit.jpg` | 3:2・1200×800 | 自宅での見守り・介助 |
+| 2 | サービス: 居宅介護支援 | `public/images/services/care-plan.jpg` | 3:2・1200×800 | ケアプランの相談 |
+| 3 | サービス: 家事支援 | `public/images/services/home-help.jpg` | 3:2・1200×800 | 掃除・育児・食事の手伝い |
+| 4 | 私たちのこと: 背景（ぼかして使う） | `public/images/about/about-bg.jpg` | 4:1・2880×720 | 富士市の緑と街の遠景 |
+| 5 | 私たちのこと: 楕円写真 | `public/images/about/about-oval.jpg` | 16:9・1300×730 | ヒーローと違う角度の富士山 |
+| 6〜9 | 会社行事カード4枚 | `public/images/events/event-1〜4.jpg` | 2:1・800×400 | **推奨は記事の実際の写真**（下の注意） |
+| 10 | お知らせ: 右の写真（装飾） | `public/images/news/news-bg.jpg` | 5:2・800×320 | 富士市の茶畑と富士山 |
+| 11 | 採用情報カード | `public/images/recruit/recruit.jpg` | 4:3・600×450 | 働く準備をするスタッフ |
+| 12 | スタッフの一日カード | `public/images/recruit/staff-day.jpg` | 4:3・600×450 | 1日の予定と道具 |
+| 13 | 最終CTA（帯） | `public/images/cta/cta-panorama.jpg` | 3:1・1500×500 | 夕方の富士山と街並み |
+
+> **会社行事（6〜9）の注意**: カードには最新4件の記事が順に入れ替わって表示される。特定の行事（例: カレーパーティー）を生成画像で描くと、実際には無かった光景を記録写真のように見せることになる。**推奨は各記事の実際の写真**（クライアントの元写真）。生成する場合は、行事を特定しない「事務所の日常」の静物にし、記事の写真が入ったら置き換える。
+
+### 1. 訪問介護（3:2、被写体は画面の上寄り。上下を切って横長の帯にしても成立する構図）
+```
+Photorealistic, bright natural window light, a Japanese home living room in Fuji City. A caregiver in a navy polo shirt gently supports an elderly person's hands as they stand up from a low sofa; shot from the side at chest height, faces out of frame, focus on the caring hands. Soft beige and white interior, a small coral cushion and green houseplant. Warm, calm, clean. Landscape 3:2, subject in the upper-middle third, generous space above and below.
+```
+
+### 2. 居宅介護支援（3:2）
+```
+Photorealistic, bright soft daylight, a care manager and an elderly person's family sitting at a wooden dining table in a Japanese home, reviewing a care plan document together; view from behind the care manager's shoulder, faces not visible, hands pointing at the paper, a cup of green tea and a pen. Warm beige tones with a small yellow flower in a vase. Calm and trustworthy. Landscape 3:2, subject in the upper-middle third.
+```
+
+### 3. 家事支援（3:2）
+```
+Photorealistic, bright morning light in a tidy Japanese apartment kitchen and living room. A housekeeping staff member's hands folding small children's clothes next to a neatly prepared simple homemade meal (rice, miso soup, vegetables) on the table; a toddler's wooden toy blocks in soft focus. No faces. White, beige and soft coral accents. Warm and helpful mood. Landscape 3:2, subject in the upper-middle third.
+```
+
+### 4. 私たちのこと: 背景（ぼかして使うので細部は不要）
+```
+Photorealistic wide panorama of Fuji City, Shizuoka on a clear spring day: soft green trees and tea fields in the foreground, low residential town in the middle, pale blue sky with light clouds; Mount Fuji very faint or out of frame on the right. Airy, high-key, pastel. Ultra-wide 4:1 landscape, left half calm and bright (text will be placed there).
+```
+
+### 5. 私たちのこと: 楕円写真（ヒーローとは違う写真に）
+```
+Photorealistic, Mount Fuji seen from a hillside park in Fuji City with fresh green trees in the foreground and the town below, clear blue sky with a few soft clouds, gentle afternoon light. The summit sits in the upper third, centered. Different viewpoint from a classic front view: framed by leafy branches on both sides. Landscape 16:9.
+```
+
+### 6〜9. 会社行事（生成する場合の代替。行事を特定しない静物、人物なし）
+```
+6: Photorealistic still life on an office break-room table in Japan: a large pot of homemade curry and stacked bowls, soft daylight, beige and white, warm and friendly. Landscape 2:1, no people.
+7: Photorealistic still life in a small bright meeting room: notebooks, pens and printed training handouts on a wooden table, a whiteboard softly out of focus, no readable text. Landscape 2:1, no people.
+8: Photorealistic still life on an office desk: a small bouquet of pastel flowers and a wrapped gift, soft window light, coral and yellow accents. Landscape 2:1, no people.
+9: Photorealistic still life: a cozy office corner with a houseplant, a teapot and cups on a tray, morning light, calm atmosphere. Landscape 2:1, no people.
+```
+
+### 10. お知らせ: 右の写真（装飾。左側は白へフェードして使う）
+```
+Photorealistic, rows of bright green tea fields in Fuji City with Mount Fuji small in the distance on the right, clear sky, soft morning light. Wide 5:2 landscape, main subject on the right half, left half simple.
+```
+
+### 11. 採用情報カード（顔なし）
+```
+Photorealistic, a care staff member in a navy polo shirt seen from behind at the entrance of a small bright office, holding a tote bag and a clipboard, ready to visit clients; a bicycle or small car softly in the background. Morning light, friendly and welcoming. Landscape 4:3, subject on the left half.
+```
+
+### 12. スタッフの一日カード（静物）
+```
+Photorealistic flat-lay on a light wooden desk: a daily schedule notebook with time slots (no readable text), a navy polo shirt neatly folded, car keys, a water bottle and a small potted plant. Soft daylight, beige, white, coral and green accents. Landscape 4:3, items arranged on the right two thirds.
+```
+
+### 13. 最終CTA（帯。左は空色〜白へフェードして文字を載せる）
+```
+Photorealistic ultra-wide panorama of Mount Fuji at late afternoon from Fuji City: soft golden light on the snow cap, layered green hills and the town below, pale blue sky. Mount Fuji on the right third, the left half mostly open sky. Landscape 3:1.
+```
+
+## 葉っぱ（装飾）について
+
+装飾の使い回しは一般的で、写真と違い内容の誤解は生まない。差し替える場合は、水彩の葉の枝を白背景で6種類生成し、背景を透過にしてから `public/images/decor/` に同名で上書きする（幅600px以上）。
+```
+Watercolor illustration of a single small leafy branch, fresh light green and yellow-green, soft translucent washes, isolated on pure white background, no shadow, high resolution. Variation: [branch curving to the upper right / hanging down / two leaves only / small sprig / long branch / round leaves].
+```

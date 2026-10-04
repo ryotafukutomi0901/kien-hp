@@ -1,13 +1,38 @@
+/*
+ * 08 Final CTA（定義書 docs/sections/08-final-cta.md）
+ * モック実測（幅869px → 1440px換算 ×1.657）
+ *   帯: 高さ84 → 139（実装は144＝上下24＋見出し2行48×2）。地は白ではなく淡い空色、右に富士山と町並み・木立
+ *   見出し: 左端 x77 → 128（コンテナ左端）。2行とも約5°右上がり。字送り21.5 → 36、行送り28 → 46
+ *   ボタン: x347〜507 → 575〜840、帯の縦中央。見出しの文字との間 48 → 80
+ *   ペン線: 2行目「ともに。」の下から句点の右へ少しはみ出す。1行目の読点の右に小さなペン先
+ */
+
 .section {
   position: relative;
   isolation: isolate;
-  padding-block: var(--space-8);
+  overflow: clip; /* 傾けた見出しと写真を帯の外に出さない */
+  padding-block: var(--space-7) var(--space-8);
+  /*
+   * 地は白ではなく淡い空色（モック実測: 左端 rgb(224 240 253) → 中央 rgb(205 232 253) → 写真の手前 rgb(187 225 253) 前後）。
+   * アクセント色を白に混ぜて作り、左ほど白へ寄せる（定義書の「左は淡い空色〜白」）。右端の濃さは写真の空に揃え、境目を消す
+   */
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-accent) 16%, var(--color-bg)),
+    color-mix(in srgb, var(--color-accent) 30%, var(--color-bg))
+  );
 }
 
+/* ---- 写真: モバイルは右下に寄せ、左上（文字の背後）へ向かって空色に溶かす ---- */
 .media {
   position: absolute;
-  inset: 0;
   z-index: -1;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 64%;
+  /* 楕円の縦半径を箱の高さに合わせ、上端では必ず透明になるようにする（上端に写真の縁が出ないように） */
+  mask-image: radial-gradient(ellipse 130% 100% at 100% 100%, #000 40%, transparent 100%);
 }
 
 .image {
@@ -16,17 +41,112 @@
 
 .inner {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-5) var(--space-9);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
 }
 
+/*
+ * ---- 見出し: 手書き2行。行ごとではなく見出し全体を傾けると、モックどおり2行目の左端がわずかに左へ出る ----
+ * 文字サイズは --t-heading-sm。モックのこの見出しはサービス等のセクション見出しの約0.83倍（字送り21.5px対26px）で、
+ * 1440px換算32px＝--t-heading-sm の wide 値と一致する。--t-heading（36px）だとボタンが約50px右へずれる。
+ * 320px幅でも2行目（11字）が折り返さない大きさでもある
+ */
 .title {
   font-family: var(--font-heading);
-  font-size: var(--t-heading);
+  font-size: var(--t-heading-sm);
+  font-weight: 600;
+  line-height: var(--lh-heading);
   letter-spacing: var(--ls-heading);
+  color: var(--color-text);
+  transform: rotate(-2deg);
+  transform-origin: left center;
 }
 
 .line {
+  position: relative;
   display: block;
+  width: fit-content;
+}
+
+/* 「ともに。」の下のペン線。BrushStroke自体が右上がりなので、高さを抑えて文字の傾きと平行に近づける */
+.stroke {
+  position: absolute;
+  right: 0.35em;
+  bottom: 0.02em;
+  width: 3.6em;
+  height: 0.22em;
+}
+
+/* 読点の右の小さなペン先（モックでは薄い緑の短い線） */
+.flick {
+  position: absolute;
+  right: 0.25em;
+  bottom: 0.42em;
+  width: 0.6em;
+  height: 0.16em;
+  opacity: 0.6;
+}
+
+.button {
+  flex-shrink: 0;
+}
+
+/* 320px級では2行目（11字）がコンテナ幅ちょうどになるため、字間を本文と同じに詰めて折り返しを防ぐ */
+@media (max-width: 359px) {
+  .title {
+    letter-spacing: var(--ls-body);
+  }
+}
+
+/* ---- tablet: 見出しとボタンを横並び、写真は右1/3程度 ---- */
+@media (min-width: 640px) {
+  .section {
+    padding-block: var(--space-6);
+  }
+
+  .media {
+    top: 0;
+    width: 36%;
+    height: auto;
+    mask-image: linear-gradient(to right, transparent, #000 45%);
+  }
+
+  .inner {
+    flex-direction: row;
+    flex-wrap: wrap; /* 640〜720px付近で入りきらない間だけ、ボタンを見出しの下へ回す */
+    align-items: center;
+    gap: var(--space-5) var(--space-7);
+  }
+
+  .title {
+    transform: rotate(-5deg);
+  }
+}
+
+/* ---- desktop: 帯の高さ約140（1440px時）。ボタンは見出しの右隣、帯の縦中央 ---- */
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-5);
+  }
+
+  /*
+   * 写真は帯の高さの3倍幅に固定する（1440pxで432px＝幅の30%）。幅を％にすると広い画面ほど拡大され、
+   * 富士山の頂上が帯の上に切れるため。幅基準ではなく高さ基準にして、どの画面幅でも同じ切り抜きにする
+   * （仮画像は181×143px。これ以上広げると町並みと木立が帯の外に出て、ぼやけた山肌だけになる）
+   */
+  .media {
+    width: auto;
+    aspect-ratio: 3 / 1;
+  }
+
+  /* 1440pxでボタン左端がモックの x575 前後に来る値（句点の後ろの空き約0.7emを含めて、文字との見た目の間隔は約85px） */
+  .inner {
+    column-gap: var(--space-9);
+  }
+
+  /* モックは見出しの文字の塊が帯の中央より少し上にある（ボタンは中央）。4pxだけ持ち上げる */
+  .title {
+    transform: translateY(calc(var(--space-1) * -1)) rotate(-5deg);
+  }
 }

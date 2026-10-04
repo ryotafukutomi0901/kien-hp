@@ -1,0 +1,83 @@
+.nav {
+  margin-top: var(--space-6);
+}
+
+/* モバイル: 縦に積んで全幅のタップ領域。タブレット以上: 横に並べ、収まらなければ折り返す */
+.list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--button-h-lg);
+  padding: var(--space-2) var(--space-5) var(--space-2) var(--space-2);
+  border: 1px solid color-mix(in srgb, var(--jump-base) 35%, var(--color-bg));
+  border-radius: var(--radius-pill);
+  background: var(--jump-tint);
+  font-size: var(--ui-button);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.link:hover {
+  border-color: var(--jump-base);
+}
+
+.link:hover .label {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.yellow {
+  --jump-base: var(--tone-yellow-base);
+  --jump-tint: var(--tone-yellow-tint);
+}
+
+.green {
+  --jump-base: var(--tone-green-base);
+  --jump-tint: var(--tone-green-tint);
+}
+
+.orange {
+  --jump-base: var(--tone-orange-base);
+  --jump-tint: var(--tone-orange-tint);
+}
+
+.blue {
+  --jump-base: var(--tone-blue-base);
+  --jump-tint: var(--tone-blue-tint);
+}
+
+/* 目印（トップのサービスカードと同じ ToneMark）。ピルの高さ56pxに収まる40px */
+.mark {
+  --tone-mark-size: var(--space-7);
+}
+
+/* 同じページの下へ移動するので、矢印は下向き */
+.arrow {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--color-text-muted);
+  transform: rotate(90deg);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.link:hover .arrow {
+  transform: rotate(90deg) translateX(3px);
+}
+
+@media (min-width: 640px) {
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .arrow {
+    margin-left: var(--space-1);
+  }
+}

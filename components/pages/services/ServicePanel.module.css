@@ -1,0 +1,155 @@
+/*
+ * 事業の要点パネル（/services）。トーンの色は --panel-base / --panel-tint に入れ、以下はそれだけを参照する。
+ * 1280px未満: アイコン→本文→事業所カード→ボタンの縦積み。1280px以上: 本文（＋ボタン）｜事業所カードの2列。
+ */
+.panel {
+  /* 文節の切れ目で折り返す（未対応ブラウザは通常の折り返し）。1文節が1行に収まらない長い語だけは途中でも折り返し、横にはみ出さない */
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+
+  /* 目印（ToneMark）の一辺（余白ではない部品の寸法。トップのサービスカードと同じ 48 / 64px） */
+  --mark-size: 48px;
+
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--panel-base) 25%, var(--color-bg));
+  border-radius: var(--radius-lg);
+  background: var(--panel-tint);
+}
+
+.yellow {
+  --panel-base: var(--tone-yellow-base);
+  --panel-tint: var(--tone-yellow-tint);
+}
+
+.green {
+  --panel-base: var(--tone-green-base);
+  --panel-tint: var(--tone-green-tint);
+}
+
+.orange {
+  --panel-base: var(--tone-orange-base);
+  --panel-tint: var(--tone-orange-tint);
+}
+
+.blue {
+  --panel-base: var(--tone-blue-base);
+  --panel-tint: var(--tone-blue-tint);
+}
+
+.intro {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+}
+
+/* 目印の色面は箱の上から約1/7で始まるので、箱を少し持ち上げて色面の上端を本文の1行目にそろえる */
+.mark {
+  --tone-mark-size: var(--mark-size);
+
+  margin-top: calc(var(--space-2) * -1);
+}
+
+.text {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 38em;
+  font-size: var(--t-note);
+}
+
+.lead {
+  font-size: var(--t-body);
+  font-weight: 500;
+}
+
+/* 目立たせる一文（居宅介護支援の「介護休暇や介護辞職の前に〜」）。白地＋トーン色の縦線 */
+.message {
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid var(--panel-base);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-weight: 700;
+}
+
+/* ---- 事業所カード ---- */
+.office {
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.officeName {
+  margin-bottom: var(--space-3);
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+}
+
+.action {
+  display: flex;
+}
+
+/* 番号は途中で折り返さない（パネルの overflow-wrap: anywhere を打ち消す） */
+.number {
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .panel {
+    padding: var(--space-6);
+  }
+
+  .intro {
+    grid-template-columns: var(--mark-size) minmax(0, 1fr);
+    column-gap: var(--space-5);
+  }
+
+  .office {
+    padding: var(--space-5) var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    --mark-size: 64px;
+
+    padding: var(--space-8);
+    row-gap: var(--space-6);
+  }
+
+}
+
+/*
+ * 本文｜事業所カード（1280px以上）。それより狭いと事業所カードの定義リスト（項目名の列 12rem 固定）で
+ * 番号が収まらないため縦積みのまま。ボタンは本文のすぐ下（左列）に置き、パネルが間延びしないようにする。
+ * DOMの順は 本文→事業所→ボタン のまま（読み上げ・フォーカスは事業の末尾でボタンに届く）
+ */
+@media (min-width: 1280px) {
+  .withOffice {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "intro office"
+      "action office";
+    column-gap: var(--space-8);
+  }
+
+  .withOffice .intro {
+    grid-area: intro;
+  }
+
+  .withOffice .office {
+    grid-area: office;
+    align-self: start;
+  }
+
+  /* ボタンは本文の左端にそろえる（トップのサービスカードの「詳しく見る」と同じ揃え） */
+  .withOffice .action {
+    grid-area: action;
+    align-self: start;
+    padding-left: calc(var(--mark-size) + var(--space-5));
+  }
+}

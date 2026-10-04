@@ -1,56 +1,209 @@
+/*
+ * サービスカード（Sub-Agent 03）
+ * モック 351×184 → 1440で約582×305。写真帯 66→110、目印 38→64（モックは円形アイコン。喜援のロゴに合わせた ToneMark に変更）、角丸 約9→16。
+ * トーンごとの色は --card-base / --card-tint に入れ、以下の共通ルールはそれだけを参照する。
+ *
+ * 角丸: 定義書は --radius-md(8px) だが、モックの角は半径約9px（1440で約15px）あり、
+ *       最寄りのステップ --radius-lg(16px) を使う（docs/sections/README.md「最寄りのステップに丸める」）。
+ */
 .card {
+  /* 部品の寸法（余白ではないためトークン外。モバイル値。≥1024で上書き） */
+  --mark-size: 48px; /* 目印（ToneMark）の一辺 */
+  --edge-h: 18px; /* 縁のSVGの高さ。24pxのとき丘の中心が x=63、18pxのとき x=47（＝目印の色面の中心） */
+  --pad-x: var(--space-5);
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--card-base) 20%, var(--color-bg));
+  border-radius: var(--radius-lg);
+  background: var(--card-tint);
   box-shadow: var(--shadow-card);
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.yellow { background: var(--tone-yellow-tint); }
-.green { background: var(--tone-green-tint); }
-.orange { background: var(--tone-orange-tint); }
-.blue { background: var(--tone-blue-tint); }
+.yellow {
+  --card-base: var(--tone-yellow-base);
+  --card-tint: var(--tone-yellow-tint);
+}
 
+.green {
+  --card-base: var(--tone-green-base);
+  --card-tint: var(--tone-green-tint);
+}
+
+.orange {
+  --card-base: var(--tone-orange-base);
+  --card-tint: var(--tone-orange-tint);
+}
+
+.blue {
+  --card-base: var(--tone-blue-base);
+  --card-tint: var(--tone-blue-tint);
+}
+
+/* カード全体がリンクの押せる範囲なので、枠の色を少し濃くして反応を返す（リンク側は矢印が動き下線が付く） */
+.card:hover {
+  border-color: color-mix(in srgb, var(--card-base) 45%, var(--color-bg));
+}
+
+/* ---- 写真帯 ---- */
 .media {
   position: relative;
-  aspect-ratio: 5 / 1;
+  flex-shrink: 0;
+  height: 120px; /* モバイル: 定義書どおり約120px */
 }
 
 .image {
   object-fit: cover;
 }
 
+/* 写真帯の下端に縦中央を合わせて置く縁。下半分はカード地と同色で、本文の上余白に重なる */
+.edge {
+  position: absolute;
+  left: 0;
+  bottom: calc(var(--edge-h) / -2);
+  width: 100%;
+  height: var(--edge-h);
+  color: var(--card-tint);
+  pointer-events: none;
+}
+
+/* 白いにじみ（太く薄い線）と縁取り（細く濃い線）。写真側へ少し寄せて、写真の下端が白んで溶けて見えるようにする */
+.edgeGlow,
+.edgeRim {
+  fill: none;
+  stroke: var(--color-bg);
+  stroke-linecap: round;
+  transform: translateY(-1.5px);
+}
+
+.edgeGlow {
+  stroke-width: 10;
+  stroke-opacity: 0.35;
+}
+
+.edgeRim {
+  stroke-width: 2;
+  stroke-opacity: 0.65;
+}
+
+/* ---- 本文: 左に目印、右に見出し・説明・リンク（説明とリンクは見出しの左端に揃う） ---- */
 .body {
+  flex: 1;
   display: grid;
-  gap: var(--space-2);
-  padding: var(--space-5);
+  grid-template-columns: var(--mark-size) minmax(0, 1fr);
+  column-gap: var(--space-4);
+  align-items: start;
+  padding: var(--space-3) var(--pad-x) var(--space-2);
 }
 
-.icon {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-pill);
-  color: var(--color-on-dark);
+/*
+ * 目印の色面は64pxの箱の上から約9pxで始まるので、箱を本文の上余白へ8px持ち上げ、
+ * 色面の上端が写真の縁から約13pxに来るようにする（縁のSVGより手前に描くため position: relative）
+ */
+.mark {
+  --tone-mark-size: var(--mark-size);
+
+  position: relative;
+  margin-top: calc(var(--space-2) * -1);
 }
 
-.yellow .icon { background: var(--tone-yellow-base); }
-.green .icon { background: var(--tone-green-base); }
-.orange .icon { background: var(--tone-orange-base); }
-.blue .icon { background: var(--tone-blue-base); }
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding-top: var(--space-1);
+}
 
 .title {
   font-size: var(--t-body);
   font-weight: 700;
+  letter-spacing: var(--ls-heading);
+  color: var(--color-text);
 }
 
+/* 狭いカードで見出しが折り返すときは「（新設）」をひとかたまりで次の行へ送る */
 .badge {
+  display: inline-block;
+  font-weight: 500;
   color: var(--tone-blue-text);
 }
 
 .description {
+  margin-top: var(--space-2);
   font-size: var(--t-note);
+  word-break: auto-phrase; /* 1行に収まらない行は文節の切れ目で折り返す（未対応ブラウザは通常の折り返し） */
 }
 
+/*
+ * デスクトップ未満は配列の強制改行を解除する（定義書: タブレット・モバイル）。
+ * 各行を inline-block にして、2行が1行に収まれば続けて流し、収まらなければ配列の区切りで折り返す。
+ * 区切りが「文の切れ目」なので、ただ流すより不自然な折り返しが出にくい
+ */
 .line {
-  display: block;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* 行数の違うカードを並べても「詳しく見る」の位置をそろえる */
+.link {
+  margin-top: auto;
+}
+
+/* カード全面を押せる範囲にする（フォーカスは「詳しく見る」1つ。二重リンクにしない） */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-content);
+  border-radius: var(--radius-lg);
+}
+
+/* フォーカスリングはカード全体に出す。カードの overflow: hidden で切れないよう内側に描く */
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible::after {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -4px;
+}
+
+/* ---- タブレット: 2列。写真帯はカード幅に比例して縮める ---- */
+@media (min-width: 640px) {
+  .media {
+    height: auto;
+    aspect-ratio: 4 / 1;
+  }
+}
+
+/* ---- デスクトップ: モックの寸法（1440で 582×305、写真帯110、アイコン64） ---- */
+@media (min-width: 1024px) {
+  .card {
+    --mark-size: 64px;
+    --edge-h: 24px;
+    --pad-x: var(--space-6);
+  }
+
+  .media {
+    height: 110px;
+    aspect-ratio: auto;
+  }
+
+  .body {
+    column-gap: var(--space-6);
+  }
+
+  /* 字間はモックに合わせて広め。モバイル・タブレットでは配列の1行がカード幅に収まるよう本文の既定（--ls-body）のまま */
+  .description {
+    letter-spacing: var(--ls-heading);
+  }
+
+  .line {
+    display: block;
+  }
 }

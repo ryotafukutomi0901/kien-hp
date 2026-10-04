@@ -1,0 +1,63 @@
+.card {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.yellow {
+  --card-base: var(--tone-yellow-base);
+  --card-tint: var(--tone-yellow-tint);
+  --card-text: var(--tone-yellow-text);
+}
+
+.green {
+  --card-base: var(--tone-green-base);
+  --card-tint: var(--tone-green-tint);
+  --card-text: var(--tone-green-text);
+}
+
+.orange {
+  --card-base: var(--tone-orange-base);
+  --card-tint: var(--tone-orange-tint);
+  --card-text: var(--tone-orange-text);
+}
+
+.blue {
+  --card-base: var(--tone-blue-base);
+  --card-tint: var(--tone-blue-tint);
+  --card-text: var(--tone-blue-text);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--card-tint);
+}
+
+/* 目印（トップのサービスカードと同じ ToneMark）。色帯の地に淡い色面が乗る */
+.mark {
+  --tone-mark-size: var(--space-8);
+}
+
+.title {
+  /* 狭い幅で末尾の1〜2文字だけが次の行に落ちないよう、文節で折り返し行の長さをそろえる（SectionTitle と同じ指定） */
+  word-break: auto-phrase;
+  text-wrap: balance;
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-body);
+  color: var(--color-text);
+}
+
+.body {
+  /* 項目の内容・1日の流れも、末尾の1〜2文字だけが次の行に落ちないよう文節で折り返す */
+  word-break: auto-phrase;
+  text-wrap: pretty;
+  /* 上の余白は中身（dl・ol）によって違うので呼び出し側（bodyClassName）で決める。ここでは指定しない */
+  padding-inline: var(--space-5);
+  padding-bottom: var(--space-5);
+}

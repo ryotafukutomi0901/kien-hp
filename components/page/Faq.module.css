@@ -1,0 +1,67 @@
+.list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.question {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--t-note);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.question::-webkit-details-marker {
+  display: none;
+}
+
+/* 開閉の目印（＋／−）。色だけに頼らず形でも示す */
+.question::after {
+  content: "＋";
+  margin-left: auto;
+  color: var(--color-primary-text);
+}
+
+.item[open] .question::after {
+  content: "－";
+}
+
+.mark {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-pill);
+  background: var(--tone-orange-tint);
+  color: var(--color-primary-text);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.markAnswer {
+  background: var(--tone-green-tint);
+  color: var(--tone-green-text);
+}
+
+.answer {
+  display: flex;
+  gap: var(--space-3);
+  padding: 0 var(--space-4) var(--space-4);
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+}
+
+.answer p + p {
+  margin-top: var(--space-2);
+}

@@ -1,35 +1,33 @@
 # kien-hp 構成とテキスト（CONTENTS.md）
 
-株式会社 華護（サンプル）のコーポレートサイト。トップページの構成と下層ページの一覧。
+株式会社喜援（きえん）のコーポレートサイト。静岡県富士市の居宅介護支援・訪問介護・家事支援の会社。
 
-**テキストの正本は `data/site.ts`**（型は `types/site.ts`）。この文書に本文を二重に書かない
-（`handbook/02_quality/documentation_standard.md` 単一情報源の原則）。文言を変えるときは data/site.ts を直す。
+**内容（文言・数字）の正本は [`CONTENT_SOURCE.md`](./CONTENT_SOURCE.md)**（旧サイト3つの原文の整理と、食い違い・要確認の一覧）。
+**実装上のテキストの置き場は `data/`**（サイト全体は `data/site.ts`、トップの各セクションは `data/sections/`、会社行事・ニュースは `data/records/`、下層ページは `data/pages/`）。
+この文書に本文を二重に書かない（`handbook/02_quality/documentation_standard.md` 単一情報源の原則）。
 
 ## メタ情報
 
-`data/site.ts` の `seo`。本番ドメイン（`siteUrl`）は未確定で `https://example.com` を仮置き。
+`data/site.ts` の `seo`。本番ドメイン（`siteUrl`）は未確定で `https://example.com` を仮置き。SNS共有画像は `public/og.jpg`（ロゴ原本から生成）。
 
-## トップページ（`app/page.tsx`）
+## サイトマップ
 
-| 順 | セクション | data/site.ts のキー | 担当 |
+| ページ | ルート | 内容 | 仕様 |
 |---|---|---|---|
-| 1 | Header（グローバルナビ7項目＋お問い合わせ） | `company` `nav` `contact` | Sub-Agent 01 |
-| 2 | Hero「富士のまちで、ともに生きる。」 | `hero` | Sub-Agent 02 |
-| 3 | 私たちのサービス（4事業） | `services` | Sub-Agent 03 |
-| 4 | 私たちのこと | `about` | Sub-Agent 04 |
-| 5 | スタッフ紹介（4件） | `staff` | Sub-Agent 05 |
-| 6 | NEWS・ブログ（3件） | `news` | Sub-Agent 06 |
-| 7 | 採用情報／スタッフブログ | `promos` | Sub-Agent 07 |
-| 8 | これからも、地域の皆さまとともに。 | `finalCta` | Sub-Agent 08 |
-| 9 | Footer（住所・ナビ・SNS） | `company` `nav` `social` | Sub-Agent 09 |
+| トップ | `/` | ヒーロー／私たちのサービス（3事業）／私たちのこと／会社行事（最新4件）／お知らせ（ニュース）／採用情報・スタッフの一日／最終CTA | [`sections/`](./sections/) |
+| サービス | `/services` | 訪問介護・居宅介護支援・家事支援（`#home-visit` `#care-plan` `#home-help`） | [`PAGES.md`](./PAGES.md) |
+| 事業所・会社概要 | `/about` | `#company`（ご挨拶・経営理念・3つの方針・基本情報）、`#offices`（2事業所・アクセス） | 同上 |
+| 会社行事 | `/events` | 全20件（旧サイトの会社行事） | 同上 |
+| 採用情報 | `/recruit` | 募集職種・スタッフの一日（`#day`）・よくあるご質問・応募方法 | 同上 |
+| お知らせ | `/news` | ニュース全2件 | 同上 |
+| お問い合わせ | `/contact` | 電話・FAX・所在地（メールフォームは未実装） | 同上 |
 
-## 下層ページ（PHASE 1では「準備中」の仮置き）
+旧サイトにあって新サイトに無いもの: ブログ（旧サイトにも無い）、家事支援の予約フォーム・利用者アンケート、応募フォーム、問い合わせフォーム、プライバシーポリシー本文（旧サイトも本文が空）。
 
-`/services` `/about`（事業所 `#offices`・会社概要 `#company`） `/staff` `/news` `/recruit` `/blog` `/contact`
+## 納品前に必ず解消する
 
-## 未確定・要差し替え（納品前に必ず解消する）
+[`CONTENT_SOURCE.md`](./CONTENT_SOURCE.md) 9章の「食い違い・要確認」と、次の項目。
 
-- 社名「華護」・住所・投稿・お知らせはモック上のサンプル値
-- 写真・ロゴ・葉っぱは素材シートからの仮切り出し（低解像度）
-- SNSのURLは各サービスのトップページを仮置き
-- 本番ドメイン、OGP画像、問い合わせフォームの仕様
+- 写真・葉っぱは仮画像（解像度不足で、人物は架空）。[`IMAGE_QUALITY.md`](./IMAGE_QUALITY.md)
+- Instagram のURL、本番ドメイン、お問い合わせフォームの方式、プライバシーポリシーの文面
+- 会社行事の写真（旧サイトの写真は未取得）

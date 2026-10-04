@@ -1,0 +1,29 @@
+.list {
+  display: grid;
+  border-left: 2px solid var(--tone-orange-base);
+}
+
+.item {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
+}
+
+.time {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-primary-text);
+}
+
+.text {
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+}
+
+@media (min-width: 640px) {
+  .item {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+}

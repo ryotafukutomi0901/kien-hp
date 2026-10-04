@@ -1,42 +1,94 @@
+/*
+ * トップのNEWS（モック (0,1325)-(869,1465)）。
+ * 上下の余白はこのセクションでは持たない。上は Staff の下余白、下は Recruit/Blog の上余白で
+ * 区切り線・パネルまでの間隔が決まる（モック実測: 線の上 約33px／パネルの下 約26px）。
+ */
 .section {
-  padding-block: var(--space-6);
   background: var(--color-bg-soft);
 }
 
+/*
+ * Staff との区切り線（コンテナ幅・1px）。見出しはモックどおり線のすぐ下に詰める（線→字面の上端 約16px）。
+ * 「一覧を見る →」は見出しとベースラインをそろえる。
+ */
 .head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  flex-wrap: wrap; /* 320px幅など見出しと並ばない幅では「一覧を見る」を次の行の右端へ送る */
   justify-content: space-between;
-  gap: var(--space-4);
+  column-gap: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+/*
+ * 矢印の右端をパネルの角丸の内側にそろえる（モック実測）。
+ * ArrowLink のタップ領域（min-height 44px）は保ったまま、上下にはみ出す分を負のマージンで相殺し、
+ * 見出し行の高さ＝見出しの行高にする（はみ出し分で見出しとパネルの間隔が広がらないように）。
+ */
+.more {
+  margin-inline: auto var(--space-2);
+  margin-block: calc((1lh - var(--tap-min)) / 2);
+  white-space: nowrap;
 }
 
 .panel {
   position: relative;
-  display: grid;
-  margin-top: var(--space-4);
+  margin-top: var(--space-2); /* 見出しの字面の下端→パネル 約18px（モック実測 約20px） */
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-bg);
-  overflow: hidden;
-  padding-inline: var(--space-5);
 }
 
+/* ---- モバイル: 写真はパネル上部の細い帯。下端を白へフェードして一覧につなぐ ---- */
 .media {
-  display: none;
+  position: relative;
+  height: var(--space-9);
+  overflow: hidden;
+  border-radius: calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0 0; /* 枠線の内側の角丸 */
+  mask-image: linear-gradient(to bottom, #000 35%, transparent);
 }
 
 .image {
   object-fit: cover;
 }
 
-@media (min-width: 1024px) {
+.list {
+  padding-inline: var(--space-4);
+}
+
+/*
+ * ---- タブレット以上: 写真をパネル右側に重ね、左端を白へフェードする ----
+ * 写真の幅（--photo-w）はパネル幅に対する比率。リンクの右端も同じ値で内側へ寄せ、文字とフォーカスリングが写真に潜らないようにする。
+ * 行間の線はリストの右端まで引き、写真のフェード部分で自然に消える（不透明な部分では写真の下に隠れる）。
+ */
+@media (min-width: 640px) {
   .panel {
-    grid-template-columns: 1fr 360px;
-    padding-right: 0;
+    container-type: inline-size;
+    --photo-w: 25cqi; /* 定義書: タブレットは25%程度 */
   }
 
   .media {
-    display: block;
-    position: relative;
+    position: absolute;
+    inset-block: -1px; /* 写真を枠線の上まで広げ、右側の枠を写真で隠す（モックでは写真が角まで届く） */
+    right: -1px;
+    width: var(--photo-w);
+    height: auto;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    mask-image: linear-gradient(to right, transparent, #000 30%);
+  }
+
+  .list {
+    --news-row-inset-end: calc(var(--photo-w) + var(--space-5));
+    padding-inline: var(--space-5) 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    --photo-w: 31cqi; /* モック: 226/724px。1440幅で約372px */
+  }
+
+  .media {
+    mask-image: linear-gradient(to right, transparent, #000 22%); /* モック実測: 写真幅の約2割で不透明になる */
   }
 }

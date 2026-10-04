@@ -1,0 +1,25 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-primary-text);
+}
+
+.link:hover > span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.arrow {
+  transform: rotate(180deg);
+}

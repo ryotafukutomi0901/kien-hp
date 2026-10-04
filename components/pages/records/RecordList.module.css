@@ -1,0 +1,245 @@
+/*
+ * 会社行事・お知らせの「はがき」カード（/events・/news 共用）
+ *   1023px以下: 1列 / 1024px以上: 2列
+ *   列数は見出しの長い文節（「オーストラリア風ハンバーガー！」「主任ケアマネージャー高本さんの」の15字）が
+ *   1行に収まる幅から決めた。640〜1023pxで2列、1280px以上で3列にすると15字が入らず語の途中で折り返す。
+ *   2列なら本文も1行30字前後で、高齢の読者にも読みやすい長さになる。
+ * カードの中は 日付スタンプ → 見出し → 本文。右上にロゴと同じ水彩の点を2つ散らす（装飾。並びの位置で配置を変える）。
+ * 写真（record.image）が入った記事だけ、カードの上部に写真を出す。
+ */
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+/* 同じ行のカードの高さをそろえる */
+.cell {
+  display: grid;
+}
+
+.card {
+  --stamp-color: var(--color-primary);
+  --dot-a: var(--tone-yellow-base);
+  --dot-b: var(--tone-green-base);
+
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "stamp"
+    "title"
+    "body";
+  grid-template-rows: auto auto 1fr;
+  align-content: start;
+  justify-items: start;
+  row-gap: var(--space-3);
+  /* 左右は狭め（360px幅でも見出しの15字が1行に入るように） */
+  padding: var(--space-5) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  /* スタンプの後ろに、その色の淡い水彩のにじみ（中心はスタンプの中心＝カード余白＋輪の半径） */
+  background:
+    radial-gradient(
+      circle at calc(var(--space-4) + var(--space-6)) calc(var(--space-5) + var(--space-6)),
+      color-mix(in srgb, var(--stamp-color) 16%, transparent) 0,
+      transparent var(--space-10)
+    ),
+    var(--color-bg);
+  box-shadow: var(--shadow-card);
+  /* html の scroll-padding-top（ヘッダーの高さ）に足して、着地したカードの上に少し余白を残す */
+  scroll-margin-top: var(--space-5);
+}
+
+/* ロゴの点の色を巡回させる（コーラル・黄・緑・ピンク）。ピンクはトークンに無いのでコーラルを白で薄めて作る */
+.coral {
+  --stamp-color: var(--color-primary);
+  --dot-a: var(--tone-yellow-base);
+  --dot-b: var(--tone-green-base);
+}
+
+.yellow {
+  --stamp-color: var(--tone-yellow-base);
+  --dot-a: color-mix(in srgb, var(--color-primary) 55%, var(--color-bg));
+  --dot-b: var(--tone-green-base);
+}
+
+.green {
+  --stamp-color: var(--tone-green-base);
+  --dot-a: var(--color-primary);
+  --dot-b: var(--tone-yellow-base);
+}
+
+.pink {
+  --stamp-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-bg));
+  --dot-a: var(--tone-green-base);
+  --dot-b: var(--tone-yellow-base);
+}
+
+/* 水彩の点（装飾）。形は少しいびつな円、大きさは余白スケールの値 */
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 52% 48% 55% 45% / 47% 55% 45% 53%;
+  opacity: 0.75;
+}
+
+.card::before {
+  top: var(--space-5);
+  right: var(--space-6);
+  width: var(--space-5);
+  height: var(--space-5);
+  background: var(--dot-a);
+}
+
+.card::after {
+  top: var(--space-9);
+  right: var(--space-4);
+  width: var(--space-3);
+  height: var(--space-3);
+  background: var(--dot-b);
+}
+
+/* 並びの位置で輪の開き位置と点の配置を変え、同じ判の繰り返しに見えないようにする */
+.cell:nth-child(4n + 2) .card {
+  --stamp-turn: 35deg;
+}
+
+.cell:nth-child(4n + 3) .card {
+  --stamp-turn: -25deg;
+}
+
+.cell:nth-child(4n) .card {
+  --stamp-turn: 70deg;
+}
+
+.cell:nth-child(3n + 2) .card::before {
+  top: var(--space-7);
+  right: var(--space-4);
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.cell:nth-child(3n + 2) .card::after {
+  top: var(--space-4);
+  right: var(--space-8);
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.cell:nth-child(3n) .card::before {
+  top: var(--space-4);
+  right: var(--space-4);
+  width: var(--space-6);
+  height: var(--space-6);
+}
+
+.cell:nth-child(3n) .card::after {
+  top: var(--space-8);
+  right: var(--space-9);
+  width: var(--space-2);
+  height: var(--space-2);
+}
+
+.stamp {
+  grid-area: stamp;
+}
+
+.title {
+  grid-area: title;
+  font-family: var(--font-heading);
+  font-size: var(--t-body);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-body);
+  color: var(--color-text);
+  /*
+   * 文節で折り返し、行の長さをそろえる。文節1つが行より長いときだけ語の途中で折り返し（はみ出し防止）、
+   * その場合も「ー」「！」などを行頭に置かない（line-break: strict）
+   */
+  word-break: auto-phrase;
+  line-break: strict;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.body {
+  grid-area: body;
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+}
+
+.body > p + p {
+  margin-top: var(--space-2);
+}
+
+/* ---- 写真がある記事（将来用）: カードの上部いっぱいに写真、点は写真の上に重ねない ---- */
+.withImage {
+  grid-template-areas:
+    "media"
+    "stamp"
+    "title"
+    "body";
+  grid-template-rows: auto auto auto 1fr;
+}
+
+.withImage::before,
+.withImage::after {
+  display: none;
+}
+
+.media {
+  grid-area: media;
+  position: relative;
+  justify-self: stretch;
+  aspect-ratio: 3 / 2;
+  margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--color-border);
+}
+
+.image {
+  object-fit: cover;
+}
+
+/*
+ * ページ内リンク（/events#<id>）で着地した記事。枠を濃いオレンジ（白地で5.0:1）の2重線にする。
+ * :target は直接アクセス・<a href="#...">、[data-current] は next/link からの遷移（RecordHashHighlight が付ける）
+ */
+.card:target,
+.card[data-current] {
+  border-color: var(--color-primary-text);
+  box-shadow:
+    0 0 0 2px var(--color-primary-text),
+    var(--shadow-card);
+}
+
+@media (min-width: 640px) {
+  .grid {
+    gap: var(--space-6);
+  }
+
+  .card {
+    padding: var(--space-6);
+    background:
+      radial-gradient(
+        circle at calc(var(--space-6) + var(--space-7)) calc(var(--space-6) + var(--space-7)),
+        color-mix(in srgb, var(--stamp-color) 16%, transparent) 0,
+        transparent var(--space-11)
+      ),
+      var(--color-bg);
+  }
+
+  .media {
+    margin: calc(var(--space-6) * -1) calc(var(--space-6) * -1) 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

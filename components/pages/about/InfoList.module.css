@@ -1,0 +1,9 @@
+/* 狭い幅で語の途中（「その他の事／業」等）で折り返さないよう、文節で折り返す */
+.value {
+  word-break: auto-phrase;
+}
+
+.note {
+  word-break: auto-phrase;
+  color: var(--color-text-muted);
+}

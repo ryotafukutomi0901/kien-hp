@@ -1,41 +1,303 @@
+/*
+ * Hero（参考モック (0,61)-(869,470) → 1440px換算 ×1.657。docs/sections/02-hero.md）
+ *   写真: 高さ 409 → 約680（波の最下点まで）。上端はごく浅い弧、下端は左高右低の白い波（形は Hero.tsx）
+ *   主コピー: 左端 x78 → 129（コンテナ左端）、字の上端はヘッダー下から約115。行送り約1.45
+ *   リード: 字の上端 328、3行・行送り 22.5 → 37
+ *   ボタン: 上端 452、181×37 → 300×61
+ *
+ * 写真の下部は Hero の箱より下へはみ出させ、Services の上余白に重ねる（--hero-bleed）。
+ * モックでは Services の見出しが波の左側の白地に入り込んでいる（右端の写真の下端より約60px上）ため。
+ * Hero の箱を写真の最下点で終えると、波から見出しまでの余白が開きすぎる。
+ * 波より下は透明なので、Services の地色（--color-bg-soft）がそのまま見える。
+ *
+ * 前提: Services の上余白は --section-pad-block（ServicesSection.module.css にも同じ注記あり。変えるときは両方）。
+ *   1440幅: 箱 508（コピーの高さ）＋はみ出し 176 = 写真 684。見出しの上端 604（モック 598）、
+ *   波の左側の平らな部分 561 との間は約43（モック約40）。右側の写真は見出しの右横まで下りる。
+ * Hero の箱の高さはコピーの量で決まり、写真の高さはそれに追従する（文字を拡大しても重ならない）。
+ */
+
 .hero {
+  /* 写真が Hero の箱より下へはみ出す量 */
+  --hero-bleed: var(--space-7);
+
   position: relative;
-  isolation: isolate;
-  min-height: 560px;
-  display: flex;
-  align-items: center;
+  z-index: var(--z-content); /* 写真の下部と右下の葉っぱを Services より手前に出す */
+  overflow-x: clip; /* 画面外へはみ出す葉っぱで横スクロールを出さない（縦ははみ出してよい） */
+  background: var(--color-bg-soft); /* 写真の外側の地。Services と同じ色 */
 }
+
+/* ---- 写真 ---- */
 
 .media {
   position: absolute;
+  inset: 0 0 calc(var(--hero-bleed) * -1);
+  isolation: isolate;
+  overflow: hidden;
+  clip-path: url(#hero-wave-sm);
+  pointer-events: none;
+}
+
+/*
+ * モバイルでは写真の上端を透明へ溶かし、Hero の地色につなぐ（リードの2〜3行目がこの上に乗る）。
+ * 白い板を重ねる方式だと、写真の端と板の端が1pxずれて線が出るため、写真そのものをマスクする。
+ * マスクは透明度だけを使うので、色は black（不透明）／transparent でよい。
+ */
+.photo {
+  position: absolute;
   inset: 0;
-  z-index: -1;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
 }
 
 .image {
   object-fit: cover;
 }
 
+/* 霞（タブレット以上）。文字の背後だけ写真を白く飛ばして読みやすくする（グラデーションは霞の再現に限る） */
+.media::after {
+  content: none;
+  position: absolute;
+  inset: 0;
+}
+
+.decorTop {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-decor);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---- コピー ---- */
+
 .content {
   position: relative;
   z-index: var(--z-content);
-  display: grid;
-  justify-items: start;
-  gap: var(--space-6);
-  padding-block: var(--space-10);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-block: var(--space-7) var(--space-5);
 }
 
 .title {
   font-family: var(--font-heading);
   font-size: var(--t-display);
+  font-weight: 600;
+  line-height: 1.45; /* モック実測（行送り 55.5 → 92 / 64px）。--lh-heading 1.5 では行間が開きすぎる */
   letter-spacing: var(--ls-heading);
+  white-space: nowrap; /* 「富士のまちで、」「ともに生きる。」は各1行で読ませる */
 }
 
 .lead {
+  margin-top: var(--space-5);
   font-size: var(--t-body);
-  font-weight: 500;
+  font-weight: 700; /* モックのリードは線が太い（字高約20pxに対して線幅約3px） */
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); /* 2行目（15字）が320幅でも折り返さない字間 */
 }
 
 .line {
   display: block;
+}
+
+/* .hero を付けて Button（.lg）と同じ詳細度の指定より確実に優先させる（CSS Modules の読み込み順に依存しない） */
+.hero .cta {
+  margin-top: var(--space-5);
+}
+
+/* ---- 葉っぱ（幅はモックの見えている大きさから。画面外にはみ出す分は .hero と .media で切る） ---- */
+
+.leafTopLeft {
+  top: calc(var(--space-8) * -1);
+  left: calc(var(--space-4) * -1);
+  width: 104px; /* モバイルは主コピーの行の上に収まる大きさ（字の背後に葉を入れない） */
+}
+
+.leafTopRight,
+.leafMidLeft,
+.leafCornerTall,
+.leafCornerLow {
+  display: none;
+}
+
+.leafCornerWide {
+  right: calc(var(--space-5) * -1);
+  bottom: calc(var(--hero-bleed) * -1 - var(--space-3));
+  width: 150px;
+}
+
+/* ---- モバイル（〜639）: コピーは上、写真は下側に縦長で置き、ボタンは写真の上 ---- */
+@media (max-width: 639px) {
+  .hero {
+    min-height: 560px; /* 375幅で ヘッダー64＋560。ボタンまでが主要な端末の初期表示に収まる高さ */
+  }
+
+  .media {
+    /* 写真は高さ基準で拡大され、山頂は写真の上から約20%に来る。山頂がリードの下に出る位置から始める */
+    top: 37%;
+  }
+
+  .content {
+    min-height: inherit;
+  }
+
+  .lead {
+    margin-bottom: var(--space-9); /* リードとボタンの間に写真（富士山）を見せる最低限の間 */
+  }
+
+  .hero .cta {
+    margin-top: auto;
+  }
+}
+
+/* ---- タブレット（640〜1023）: 写真は全面、霞は左から ---- */
+@media (min-width: 640px) {
+  .hero {
+    --hero-bleed: calc(var(--section-pad-block) + var(--space-9)); /* 80+64。768幅で写真の高さ約550 */
+  }
+
+  .media {
+    clip-path: url(#hero-wave-lg);
+  }
+
+  /*
+   * 写真の箱を右へ1割はみ出させ、山頂（position の x66%）を画面幅の約73%に置く（モック実測 72.7%）。
+   * object-position だけでは、1440幅で写真の左右の余りが約130pxしかなく右へ寄せきれないため。
+   */
+  .photo {
+    right: -10%;
+    mask-image: none;
+  }
+
+  /* タブレットはコピーが画面幅の6割近くを占め、主コピーの行末が山肌の濃い筋にかかるため、霞を広く取る */
+  .media::after {
+    content: "";
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-bg) 72%, transparent) 0%,
+      color-mix(in srgb, var(--color-bg) 60%, transparent) 45%,
+      transparent 80%
+    );
+  }
+
+  .content {
+    padding-block: var(--space-9) 0;
+  }
+
+  .title {
+    letter-spacing: 0.16em; /* モック実測（字送り 約46 → 76 / 64px）。--ls-heading 0.12em では詰まる */
+  }
+
+  .lead {
+    margin-top: var(--space-6);
+    letter-spacing: 0.16em; /* モック実測（2行目の幅 222 → 368）。--ls-heading では1割狭い */
+  }
+
+  .leafTopLeft {
+    top: calc(var(--space-9) * -1);
+    left: calc(var(--space-4) * -1);
+    width: 160px;
+  }
+
+  .leafTopRight {
+    display: block;
+    top: calc(var(--space-8) * -1);
+    right: calc(var(--space-9) * -1);
+    width: 160px;
+  }
+
+  /*
+   * 左の中ほど（モック: x0〜75・ボタンの左横から波の下まで）。ボタンにかぶせないよう、右端を
+   * 「コンテンツの左端 − --space-2」に合わせる。左の余白が狭い画面では大半が画面外へ逃げる。
+   */
+  .leafMidLeft {
+    --leaf-w: 100px;
+    --content-left: max(var(--container-pad), (100% - var(--container-max)) / 2);
+
+    display: block;
+    bottom: 18%;
+    left: calc(var(--content-left) - var(--leaf-w) - var(--space-2));
+    width: var(--leaf-w);
+  }
+
+  .leafCornerTall {
+    display: block;
+    right: calc(var(--space-8) * -1);
+    bottom: calc(var(--hero-bleed) * -1 + var(--space-9));
+    width: 160px;
+    transform: scaleY(-1); /* 右上用の枝を上下反転し、右下の角から立ち上がる房にする */
+  }
+
+  /* 右下の角を埋める房（左下用の枝を左右反転し、右下の角から左上へ伸ばす） */
+  .leafCornerLow {
+    display: block;
+    right: calc(var(--space-4) * -1);
+    bottom: calc(var(--hero-bleed) * -1 - var(--space-2));
+    width: 130px;
+  }
+
+  /* 波に沿って横へ伸びる枝（モックの黄色い花の帯の位置） */
+  .leafCornerWide {
+    right: var(--space-11);
+    bottom: calc(var(--hero-bleed) * -1 - var(--space-3));
+    width: 160px;
+  }
+}
+
+/* ---- デスクトップ（1024〜） ---- */
+@media (min-width: 1024px) {
+  .hero {
+    --hero-bleed: calc(var(--section-pad-block) + var(--space-10)); /* 96+80。1440幅で写真の高さ684 */
+  }
+
+  .media::after {
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-bg) 70%, transparent) 0%,
+      color-mix(in srgb, var(--color-bg) 50%, transparent) 32%,
+      transparent 62%
+    );
+  }
+
+  .content {
+    padding-top: var(--space-11);
+  }
+
+  /* モックは枝が上端に沿って横へ広がる（x0〜240・高さ約90）。素材の斜めの枝を少し起こして寄せる */
+  .leafTopLeft {
+    top: calc(var(--space-2) * -1);
+    left: calc(var(--space-7) * -1);
+    width: 250px; /* 下端を主コピーの字の上端より上に収める（1024〜1279はコンテンツの左端が40pxしかない） */
+    transform: rotate(-28deg);
+    transform-origin: 0 0;
+  }
+
+  .leafTopRight {
+    top: calc(var(--space-9) * -1);
+    right: calc(var(--space-11) * -1);
+    width: 240px;
+  }
+
+  .leafMidLeft {
+    --leaf-w: 150px;
+  }
+
+  .leafCornerTall {
+    width: 280px;
+  }
+
+  .leafCornerLow {
+    width: 200px;
+  }
+
+  .leafCornerWide {
+    right: var(--space-12);
+    width: 240px;
+  }
 }

@@ -1,0 +1,65 @@
+.block {
+  display: grid;
+  gap: var(--space-5);
+  /* パネルとの間は節の既定の間隔（--space-5）より広くとり、ここから「サービス内容」の区切りと分かるようにする */
+  margin-top: var(--space-5);
+}
+
+/* モバイル・タブレット: 1列。デスクトップ: 3列（各約370px） */
+.grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.card {
+  /* 文節の切れ目で折り返す（未対応ブラウザは通常の折り返し）。1文節が1行に収まらない長い語だけは途中でも折り返し、横にはみ出さない */
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--tone-orange-base);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.title {
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+}
+
+.description {
+  font-size: var(--t-note);
+}
+
+.note {
+  font-size: var(--t-note);
+  color: var(--color-text-muted);
+}
+
+/* 行数の違うカードを並べても「対象外」の位置をそろえる */
+.excluded {
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.excludedLabel {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-primary-text);
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .card {
+    padding: var(--space-6);
+  }
+}

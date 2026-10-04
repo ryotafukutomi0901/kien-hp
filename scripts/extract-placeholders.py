@@ -16,7 +16,6 @@ OUT = ROOT / "public" / "images"
 
 # (出力パス, 切り出し範囲 (left, top, right, bottom), 背景を透過するか)
 CROPS = [
-    ("logo/logo-mark.png", (34, 80, 154, 186), True),
     ("decor/leaf-top-left.png", (498, 58, 646, 176), True),
     ("decor/leaf-top-right.png", (718, 54, 872, 180), True),
     ("decor/leaf-single.png", (904, 78, 978, 196), True),

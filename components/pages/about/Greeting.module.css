@@ -1,0 +1,54 @@
+.opening {
+  word-break: auto-phrase;
+  font-size: var(--t-body);
+  font-weight: 500;
+  line-height: var(--lh-body);
+}
+
+/* 標語のカード。葉っぱは右下に少しだけ覗かせる */
+.motto {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-6) var(--space-9) var(--space-6) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--tone-orange-tint);
+}
+
+.mottoText {
+  position: relative;
+  z-index: var(--z-content);
+  /* 狭い幅で文節の途中で折り返さないようにする */
+  word-break: auto-phrase;
+  text-wrap: balance;
+  font-family: var(--font-heading);
+  font-size: var(--t-heading-sm);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+  color: var(--color-text);
+}
+
+.leaf {
+  right: var(--space-4);
+  bottom: calc(var(--space-4) * -1);
+  width: var(--space-8);
+  opacity: 0.85;
+}
+
+.prose {
+  display: grid;
+  gap: var(--space-3);
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+}
+
+@media (min-width: 640px) {
+  .motto {
+    padding: var(--space-7) var(--space-10) var(--space-7) var(--space-7);
+  }
+
+  .leaf {
+    right: var(--space-6);
+    width: var(--space-9);
+  }
+}

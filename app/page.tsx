@@ -4,7 +4,7 @@ import { Hero } from "@/components/hero/Hero";
 import { NewsSection } from "@/components/news/NewsSection";
 import { RecruitBlogSection } from "@/components/recruit/RecruitBlogSection";
 import { ServicesSection } from "@/components/services/ServicesSection";
-import { StaffSection } from "@/components/staff/StaffSection";
+import { EventsSection } from "@/components/events/EventsSection";
 
 export default function HomePage() {
   return (
@@ -12,7 +12,7 @@ export default function HomePage() {
       <Hero />
       <ServicesSection />
       <AboutSection />
-      <StaffSection />
+      <EventsSection />
       <NewsSection />
       <RecruitBlogSection />
       <FinalCta />

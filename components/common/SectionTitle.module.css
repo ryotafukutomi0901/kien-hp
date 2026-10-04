@@ -1,27 +1,70 @@
 .root {
   display: grid;
+  justify-items: start;
   gap: var(--space-2);
 }
 
 .title {
-  font-size: var(--t-heading);
+  color: var(--color-text);
+  letter-spacing: var(--ls-heading);
+  /* 狭い幅で1文字だけ次の行に残らないよう文節で折り返す。auto-phrase だけだと長い語で横にはみ出すので overflow-wrap を併用 */
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.text {
+  position: relative;
+  display: inline-block;
+}
+
+.subtitle {
+  /* 狭い幅で末尾1文字だけが次の行に落ちないよう、文節で折り返し行の長さをそろえる */
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  font-size: var(--t-note);
+  font-weight: 500;
   letter-spacing: var(--ls-heading);
   color: var(--color-text);
 }
 
-.subtitle {
-  font-size: var(--t-note);
-  letter-spacing: var(--ls-body);
-  color: var(--color-text);
-}
-
-/* brush: 手書き風見出し（筆線の装飾はServices担当が実装） */
+/* ---- brush: 手書き見出し。ペン線は末尾の2〜3文字の下から右へ少しはみ出す（モック実測） ---- */
 .brush .title {
   font-family: var(--font-heading);
+  font-size: var(--t-heading);
+  font-weight: 600;
 }
 
-/* mark: 三角マーク付き見出し（マークの装飾はStaff担当が実装） */
+.brush .stroke {
+  position: absolute;
+  right: -0.5em;
+  bottom: -0.05em;
+  width: 2.6em;
+  height: 0.38em;
+}
+
+/* ---- mark: 左上がオレンジ・右下が淡い緑に分かれた正方形のマーク＋ゴシック ---- */
 .mark .title {
   font-family: var(--font-body);
-  font-weight: 700;
+  font-size: var(--t-heading-sm);
+  font-weight: 500;
+}
+
+.mark .text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.mark .text::before {
+  content: "";
+  flex-shrink: 0;
+  width: 0.72em;
+  height: 0.72em;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0 50%,
+    color-mix(in srgb, var(--color-secondary) 28%, var(--color-bg)) 50% 100%
+  );
 }

@@ -1,33 +1,49 @@
 import type { SiteContent } from "@/types/site";
 
+import { about } from "./sections/about";
+import { events } from "./sections/events";
+import { finalCta } from "./sections/final-cta";
+import { hero } from "./sections/hero";
+import { news } from "./sections/news";
+import { promos } from "./sections/promos";
+import { services } from "./sections/services";
+
 /**
- * kien-hp のサイト内容。テキストは参考モック（reference/mock.png）の表記に合わせている。
- * 事業所名・住所・投稿などはモック上のサンプル値であり、納品前に実データへ差し替える。
+ * 株式会社喜援（きえん）のサイト内容。文言・数字は旧サイト3つの原文から起こしている
+ * （正本: docs/CONTENT_SOURCE.md、原文: reference/old-site-text/）。
+ * 旧サイトに無い事実は書かない。食い違い・未確認の項目は docs/CONTENT_SOURCE.md 9章を参照。
+ *
+ * サイト全体の情報（会社・ナビ・SNS・SEO）はこのファイル、各セクションの内容は data/sections/、
+ * 会社行事・ニュースの記事は data/records/ に置く。
  */
 export const site: SiteContent = {
   seo: {
-    siteName: "株式会社 華護",
-    title: "株式会社 華護｜富士市の訪問介護・居宅介護支援・訪問看護",
+    siteName: "株式会社喜援（きえん）",
+    title: "株式会社喜援（きえん）｜富士市の居宅介護支援・訪問介護・家事支援",
     description:
-      "静岡県富士市の株式会社華護です。訪問介護・居宅介護支援・事業支援・訪問看護の4つのサービスで、ご利用者様の「その人らしさ」とご家族の安心を支えます。",
+      "静岡県富士市の株式会社喜援（きえん）です。居宅介護支援・訪問介護・家事支援（家事代行）を行っています。ケアマネジャー・ヘルパー・家事支援スタッフも募集中です。",
+    // 本番ドメインは未確定。確定したら差し替える（docs/CONTENT_SOURCE.md）
     siteUrl: "https://example.com",
   },
 
   company: {
     legalForm: "株式会社",
-    name: "華護",
-    nameEn: "SAMPLE",
-    logoMark: { src: "/images/logo/logo-mark.png", alt: "" },
-    postalCode: "417-0061",
-    address: "静岡県富士市富士見台251番地の1",
-    copyright: "© 2025 SAMPLE. All rights reserved.",
+    name: "喜援",
+    nameReading: "きえん",
+    logoMark: { src: "/images/logo/kien-emblem.png", alt: "" },
+    logoMarkLight: { src: "/images/logo/kien-emblem-white.png", alt: "" },
+    // 郵便番号は旧サイトに記載がないため載せない（推測で入れない）
+    address: "静岡県富士市川成新町53番地",
+    tel: "0545-32-7860",
+    fax: "0545-32-7886",
+    copyright: "© 株式会社喜援（きえん）",
   },
 
   nav: [
     { label: "トップ", href: "/" },
     { label: "サービス", href: "/services" },
     { label: "事業所", href: "/about#offices" },
-    { label: "スタッフ紹介", href: "/staff" },
+    { label: "会社行事", href: "/events" },
     { label: "採用情報", href: "/recruit" },
     { label: "お知らせ", href: "/news" },
     { label: "会社概要", href: "/about#company" },
@@ -35,159 +51,14 @@ export const site: SiteContent = {
 
   contact: { label: "お問い合わせ", href: "/contact" },
 
-  social: {
-    instagram: "https://www.instagram.com/",
-    facebook: "https://www.facebook.com/",
-  },
+  // Instagramを始めたと旧サイトにあるがURLが不明。確認でき次第ここに入れる
+  social: {},
 
-  hero: {
-    title: ["富士のまちで、", "ともに生きる。"],
-    lead: ["地域に根ざしたサービスで", "ご利用者様の「その人らしさ」と", "ご家族の安心を支えます。"],
-    cta: { label: "私たちの想いを見る", href: "/about" },
-    image: {
-      src: "/images/hero/hero-fuji.jpg",
-      alt: "",
-      position: "70% 40%",
-    },
-  },
-
-  services: {
-    title: "私たちのサービス",
-    lead: "あなたの暮らしに、寄り添う4つのサービス",
-    items: [
-      {
-        title: "訪問介護事業",
-        description: ["ご自宅での生活を", "安心して続けられるように、", "支援いたします。"],
-        icon: "house",
-        tone: "yellow",
-        image: {
-          src: "/images/services/home-care.jpg",
-          alt: "スタッフが高齢の女性と笑顔で話している様子",
-          position: "50% 30%",
-        },
-        link: { label: "詳しく見る", href: "/services#home-care" },
-      },
-      {
-        title: "居宅介護事業",
-        description: ["ケアプランの作成や", "地域での生活をサポートします。"],
-        icon: "person",
-        tone: "green",
-        image: {
-          src: "/images/services/care-planning.jpg",
-          alt: "ケアマネジャーが利用者様と相談している様子",
-          position: "50% 30%",
-        },
-        link: { label: "詳しく見る", href: "/services#care-planning" },
-      },
-      {
-        title: "事業支援事業",
-        description: ["事業の継続を支援し、", "質の向上をサポートします。"],
-        icon: "sun",
-        tone: "orange",
-        image: {
-          src: "/images/services/business-support.jpg",
-          alt: "笑顔で作業をするスタッフ",
-          position: "50% 25%",
-        },
-        link: { label: "詳しく見る", href: "/services#business-support" },
-      },
-      {
-        title: "訪問看護事業",
-        badge: "新設",
-        description: ["医療の視点から、", "ご利用者さまを支えます。"],
-        icon: "heart",
-        tone: "blue",
-        image: {
-          src: "/images/services/home-nursing.jpg",
-          alt: "看護師が高齢の女性に寄り添っている様子",
-          position: "50% 30%",
-        },
-        link: { label: "詳しく見る", href: "/services#home-nursing" },
-      },
-    ],
-  },
-
-  about: {
-    title: "私たちのこと",
-    body: ["富士の自然とともに、", "地域の皆さまの暮らしを支える。", "それが、私たちの使命です。"],
-    cta: { label: "事業所・会社案内", href: "/about" },
-    background: { src: "/images/about/about-fuji.jpg", alt: "", position: "50% 60%" },
-    photo: {
-      src: "/images/about/about-fuji.jpg",
-      alt: "富士山と富士市の街並み",
-      position: "50% 45%",
-    },
-  },
-
-  staff: {
-    title: "スタッフ紹介",
-    more: { label: "一覧を見る", href: "/staff" },
-    posts: [
-      {
-        title: ["スタッフの笑顔が", "私たちの力です"],
-        date: "2025-06-10",
-        href: "/staff#smile",
-        image: { src: "/images/services/business-support.jpg", alt: "", position: "50% 25%" },
-      },
-      {
-        title: ["仲間と働くことの", "意義を感じて"],
-        date: "2025-06-05",
-        href: "/staff#team",
-        image: { src: "/images/staff/staff-group-outdoor.jpg", alt: "", position: "50% 40%" },
-      },
-      {
-        title: ["利用者様の声を", "ご紹介します"],
-        date: "2025-05-28",
-        href: "/staff#voice",
-        image: { src: "/images/staff/staff-meeting.jpg", alt: "", position: "50% 35%" },
-      },
-      {
-        title: ["新しい仲間が", "加わりました"],
-        date: "2025-05-20",
-        href: "/staff#new-member",
-        image: { src: "/images/staff/staff-table.jpg", alt: "", position: "50% 35%" },
-      },
-    ],
-  },
-
-  news: {
-    title: "NEWS・ブログ",
-    more: { label: "一覧を見る", href: "/news" },
-    items: [
-      {
-        date: "2025-06-08",
-        category: "スタッフ紹介",
-        title: "新しい仲間が加わりました。",
-        href: "/news#2025-06-08",
-      },
-      { date: "2025-06-02", title: "夏のレクリエーションを行いました", href: "/news#2025-06-02" },
-      { date: "2025-05-20", title: "富士市の事業所でのイベントを開催しました", href: "/news#2025-05-20" },
-    ],
-    image: { src: "/images/news/news-fuji.jpg", alt: "", position: "50% 50%" },
-  },
-
-  promos: [
-    {
-      title: "採用情報",
-      body: ["一緒に働く仲間を募集しています。", "私たちと一緒に、地域の暮らしを", "支えていきませんか?"],
-      icon: "clipboard",
-      tone: "green",
-      cta: { label: "採用情報を見る", href: "/recruit" },
-      image: { src: "/images/recruit/recruit.jpg", alt: "", position: "50% 25%" },
-    },
-    {
-      title: "スタッフブログ",
-      body: ["現場での出来事や、", "スタッフの日常をお届けします。"],
-      icon: "document",
-      tone: "orange",
-      cta: { label: "ブログを読む", href: "/blog" },
-      image: { src: "/images/blog/blog.jpg", alt: "", position: "40% 30%" },
-    },
-  ],
-
-  finalCta: {
-    title: ["これからも、", "地域の皆さまとともに。"],
-    cta: { label: "お問い合わせはこちら", href: "/contact" },
-    image: { src: "/images/cta/cta-fuji.jpg", alt: "", position: "50% 60%" },
-  },
+  hero,
+  services,
+  about,
+  events,
+  news,
+  promos,
+  finalCta,
 };

@@ -1,14 +1,15 @@
 import Image from "next/image";
 
 import { Button } from "@/components/common/Button";
-import { Icon } from "@/components/icons";
+import { ToneMark } from "@/components/common/ToneMark";
 import type { PromoCard } from "@/types/site";
 
 import styles from "./RecruitCard.module.css";
 
 /**
- * 採用情報・スタッフブログの横長カード（写真＋アイコン付き見出し＋ボタン）。
- * imageSide で写真の左右を切り替える。PHASE 1は構造のみ、Sub-Agent 07（Recruit / Blog）が仕上げる。
+ * 採用情報・スタッフブログの横長カード（写真＋目印付き見出し＋本文＋ボタン）。
+ * imageSide で写真の左右を切り替える（モバイルでは常に上部の帯）。
+ * 見出しはh2。このセクションには見える見出しが無く、h3にすると直前のNEWSの子に読まれるため。
  */
 export function RecruitCard({ card, imageSide = "left" }: { card: PromoCard; imageSide?: "left" | "right" }) {
   return (
@@ -18,18 +19,16 @@ export function RecruitCard({ card, imageSide = "left" }: { card: PromoCard; ima
           src={card.image.src}
           alt={card.image.alt}
           fill
-          sizes="(min-width: 1024px) 240px, 40vw"
+          sizes="(min-width: 1024px) 240px, (min-width: 640px) 40vw, 100vw"
           className={styles.image}
           style={{ objectPosition: card.image.position }}
         />
       </div>
       <div className={styles.body}>
-        <h3 className={styles.title}>
-          <span className={styles.icon}>
-            <Icon name={card.icon} size={24} />
-          </span>
+        <h2 className={styles.title}>
+          <ToneMark icon={card.icon} tone={card.tone} className={styles.mark} />
           {card.title}
-        </h3>
+        </h2>
         <p className={styles.text}>
           {card.body.map((line) => (
             <span key={line} className={styles.line}>

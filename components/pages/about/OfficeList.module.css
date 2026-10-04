@@ -1,0 +1,100 @@
+.list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--card-base) 20%, var(--color-bg));
+  border-radius: var(--radius-lg);
+  background: var(--card-tint);
+}
+
+.yellow {
+  --card-base: var(--tone-yellow-base);
+  --card-tint: var(--tone-yellow-tint);
+}
+
+.green {
+  --card-base: var(--tone-green-base);
+  --card-tint: var(--tone-green-tint);
+}
+
+.orange {
+  --card-base: var(--tone-orange-base);
+  --card-tint: var(--tone-orange-tint);
+}
+
+.blue {
+  --card-base: var(--tone-blue-base);
+  --card-tint: var(--tone-blue-tint);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* 目印（装飾。名前は見出しの文字で伝える）。トップのサービスカードと同じ ToneMark */
+.mark {
+  --tone-mark-size: var(--space-8);
+}
+
+.name {
+  word-break: auto-phrase;
+  font-size: var(--t-body);
+  font-weight: 700;
+  line-height: var(--lh-heading);
+}
+
+/* 項目名の列を2行でそろえる（subgrid） */
+.meta {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--space-4);
+  border-top: 1px solid color-mix(in srgb, var(--card-base) 30%, var(--color-bg));
+}
+
+.row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding-block: var(--space-1);
+  border-bottom: 1px solid color-mix(in srgb, var(--card-base) 30%, var(--color-bg));
+}
+
+.term {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text-muted);
+}
+
+.number {
+  font-size: var(--t-note);
+  font-variant-numeric: tabular-nums;
+}
+
+.link {
+  justify-self: start;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: var(--space-6);
+  }
+}
+
+/* 2枚並びは本文の列が960pxになる1280px以上（1024px台だと事業所名が途中で折り返す） */
+@media (min-width: 1280px) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}

@@ -1,0 +1,50 @@
+.grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.wage {
+  font-size: var(--t-body);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+  color: var(--card-text);
+}
+
+/*
+ * デスクトップ: 3枚を横に並べ、subgrid で項目の行を3枚共通のトラックに載せる（時給・勤務時間などの行が横一列にそろう）。
+ * カード1枚の幅（約300〜380px）では DefinitionList の「項目名12rem＋内容」の2列が収まらないため、
+ * ここだけ項目名を内容の上に積む（DefinitionList の 640px 未満と同じ形）。
+ * DefinitionList の内部構造（dl > div > dt + dd）に依存している。共通部品側に縦積みの指定が入ったらこの上書きは消す。
+ */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 0;
+  }
+
+  .card {
+    display: grid;
+    grid-row: span var(--card-rows);
+    grid-template-rows: subgrid;
+  }
+
+  .body {
+    display: grid;
+    grid-row: span var(--term-rows);
+    grid-template-rows: subgrid;
+  }
+
+  .body > dl {
+    display: grid;
+    grid-row: span var(--term-rows);
+    grid-template-rows: subgrid;
+  }
+
+  /* 共通部品の内部構造（dl > div / ol > li）に依存した上書き。3列カードの行揃え（subgrid）と組み合わせるため、
+     共通部品に縦積みの指定を足すのではなくここで上書きしている。共通部品の構造を変えるときはここも直す */
+  .body > dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: var(--space-1);
+  }
+}

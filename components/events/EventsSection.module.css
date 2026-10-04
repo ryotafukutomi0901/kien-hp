@@ -1,0 +1,69 @@
+/*
+ * スタッフ紹介（定義書 docs/sections/05-events.md）
+ * 1440px換算の実測（モックpx×1.657、About下端=0）:
+ *   見出しの字面 上端36 / 写真 84〜210 / タイトル字面 228〜273 / 日付 288〜303 / ボタン 283〜324 / 区切り線 354
+ * 上下の余白は Services・About（--section-pad-block）より詰める。区切り線は News 側が持つ。
+ */
+.section {
+  padding-block: var(--space-5) var(--space-6);
+  background: var(--color-bg-soft);
+}
+
+.row {
+  display: grid;
+  margin-top: var(--space-4);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5) var(--space-4);
+}
+
+/* カードの高さをそろえ、日付を各カードの下端に置く（タイトルの行数が違っても日付の列がそろう） */
+.grid > li {
+  display: grid;
+}
+
+/* モバイル: 2列×2段の下、中央 */
+.more {
+  justify-self: center;
+  margin-top: var(--space-6);
+}
+
+/* タブレット: 2列×2段の下、右寄せ */
+@media (min-width: 640px) {
+  .grid {
+    gap: var(--space-6);
+  }
+
+  .more {
+    justify-self: end;
+    margin-top: var(--space-5);
+  }
+}
+
+/*
+ * デスクトップ: 4列。モックでは4枚目の右端がコンテナ右端より内側で終わり（723px中705px）、
+ * 空いた右端に「一覧を見る」が4枚目の日付と同じ高さで張り出す（グリッドの外・右下）。
+ * ボタン幅は固定でカードだけが縮むため、1024〜1279px は右の空きを広げて日付とボタンが触れないようにする
+ * （--space-6 のままだと1024pxで日付とボタンの間が約6pxになる）。
+ */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--space-7);
+    padding-inline-end: var(--space-9);
+  }
+
+  /* 日付の行ボックス（--ui-meta × --lh-body）の上端から --space-1 下にボタンの上端をそろえる */
+  .more {
+    margin-top: calc(var(--space-1) - var(--ui-meta) * var(--lh-body));
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    padding-inline-end: var(--space-6);
+  }
+}

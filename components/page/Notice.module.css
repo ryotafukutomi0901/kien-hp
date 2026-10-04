@@ -1,0 +1,15 @@
+.notice {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-md);
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+}
+
+.notice > * + * {
+  margin-top: var(--space-2);
+}
+
+.yellow { background: var(--tone-yellow-tint); }
+.green { background: var(--tone-green-tint); }
+.orange { background: var(--tone-orange-tint); }
+.blue { background: var(--tone-blue-tint); }

@@ -1,0 +1,25 @@
+.section {
+  padding-block: var(--space-8);
+  /* ヘッダー分は styles/base.css の html { scroll-padding-top } が持つ。ここでは見出しの上の小さな余白だけ足す */
+  scroll-margin-top: var(--space-3);
+}
+
+.plain {
+  background: var(--color-bg);
+}
+
+.soft {
+  background: var(--color-bg-soft);
+}
+
+.body {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-9);
+  }
+}

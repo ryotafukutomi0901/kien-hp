@@ -24,11 +24,17 @@ export interface Company {
   /** 法人格（例: 株式会社） */
   legalForm: string;
   name: string;
-  /** ロゴ下・社名下に入る欧文表記 */
-  nameEn: string;
-  logoMark: ImageAsset;
-  postalCode: string;
+  /** 社名の読み仮名。ロゴでは社名の下にふりがなとして表示する */
+  nameReading: string;
+  /** ロゴのマーク画像。未入手の間は省略し、社名のテキストだけで組む */
+  logoMark?: ImageAsset;
+  /** 暗い地（フッター）用の白一色のロゴ。省略するとlogoMarkを使う */
+  logoMarkLight?: ImageAsset;
+  /** 郵便番号。未確認の間は省略する（推測で入れない） */
+  postalCode?: string;
   address: string;
+  tel: string;
+  fax: string;
   copyright: string;
 }
 
@@ -70,7 +76,7 @@ export interface AboutContent {
   photo: ImageAsset;
 }
 
-export interface StaffPost {
+export interface EventPost {
   title: string[];
   /** ISO形式（YYYY-MM-DD） */
   date: string;
@@ -78,10 +84,22 @@ export interface StaffPost {
   image: ImageAsset;
 }
 
-export interface StaffContent {
+/** 会社行事・ニュースの1件。トップの抜粋と一覧ページ（/events・/news）で共通に使う */
+export interface DatedRecord {
+  /** URLのハッシュ（#id）にも使う。例: "2026-07-26" */
+  id: string;
+  /** ISO形式（YYYY-MM-DD） */
+  date: string;
+  title: string;
+  /** 本文（段落ごとの配列。旧サイトの原文のまま） */
+  body: string[];
+  image?: ImageAsset;
+}
+
+export interface EventsContent {
   title: string;
   more: Link;
-  posts: StaffPost[];
+  posts: EventPost[];
 }
 
 export interface NewsItem {
@@ -130,7 +148,7 @@ export interface SiteContent {
   hero: HeroContent;
   services: ServicesContent;
   about: AboutContent;
-  staff: StaffContent;
+  events: EventsContent;
   news: NewsContent;
   promos: PromoCard[];
   finalCta: FinalCtaContent;

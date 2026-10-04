@@ -1,0 +1,13 @@
+.heading {
+  padding-left: var(--space-3);
+  border-left: 4px solid var(--sub-accent);
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+  color: var(--color-text);
+}
+
+.yellow { --sub-accent: var(--tone-yellow-base); }
+.green { --sub-accent: var(--tone-green-base); }
+.orange { --sub-accent: var(--tone-orange-base); }
+.blue { --sub-accent: var(--tone-blue-base); }

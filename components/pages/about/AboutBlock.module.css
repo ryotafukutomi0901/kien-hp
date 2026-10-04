@@ -1,0 +1,54 @@
+.stack {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.block {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.block + .block {
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--color-border);
+}
+
+/* 小見出し: 左に短いオレンジの線（節見出し h2 の三角マークより一段控えめ） */
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  word-break: auto-phrase;
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+}
+
+.title::before {
+  content: "";
+  flex-shrink: 0;
+  width: var(--space-5);
+  height: 2px;
+  background: var(--color-primary);
+}
+
+.content {
+  display: grid;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .block {
+    /* 見出し列の幅は DefinitionList の項目名の列（12rem）とそろえる */
+    grid-template-columns: 12rem minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  /* 見出し列は狭いので、線を文字の上に移して列の幅をすべて文字に使う（「喜援の3つの方針」を1行に収める） */
+  .title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,50 @@
+/*
+ * 事業の目印（ToneMark.tsx）。大きさは呼び出し側で --tone-mark-size を指定する（部品の寸法なので余白スケールの外）。
+ * 色面と点はトーン色を地色に半分混ぜた淡い色（ロゴの水彩の点に近い明るさ）。線は本文と同じ紺。
+ */
+.mark {
+  display: block;
+  flex-shrink: 0;
+  width: var(--tone-mark-size, 48px);
+  height: var(--tone-mark-size, 48px);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.blob {
+  fill: color-mix(in srgb, var(--mark-base) 50%, var(--color-bg));
+}
+
+.dot {
+  fill: color-mix(in srgb, var(--mark-dot) 50%, var(--color-bg));
+}
+
+.glyph {
+  color: var(--color-text);
+}
+
+/* 添える点はロゴの配色（黄・緑・桃）から、自分以外の色を選ぶ */
+.yellow {
+  --mark-base: var(--tone-yellow-base);
+  --mark-dot: var(--tone-green-base);
+}
+
+.green {
+  --mark-base: var(--tone-green-base);
+  --mark-dot: var(--tone-orange-base);
+}
+
+.orange {
+  --mark-base: var(--tone-orange-base);
+  --mark-dot: var(--tone-yellow-base);
+}
+
+.blue {
+  --mark-base: var(--tone-blue-base);
+  --mark-dot: var(--tone-yellow-base);
+}

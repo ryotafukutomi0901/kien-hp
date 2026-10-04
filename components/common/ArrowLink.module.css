@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: 44px; /* タップ領域の確保 */
+  min-height: var(--tap-min);
   font-size: var(--ui-meta);
   font-weight: 500;
   letter-spacing: var(--ls-ui);

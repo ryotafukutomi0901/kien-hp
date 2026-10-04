@@ -1,0 +1,60 @@
+/*
+ * 筆の輪の日付スタンプ（ロゴ public/images/logo/kien-emblem.png の輪に寄せる）。
+ * 輪の大きさは余白スケールの値（64px / 640px以上 80px。カードの余白が広がる幅とそろえる）。文字はUIラベルと本文のトークンだけを使う。
+ */
+
+.stamp {
+  --stamp-size: var(--space-9);
+
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.face {
+  position: relative;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  width: var(--stamp-size);
+  height: var(--stamp-size);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.1;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  fill: var(--stamp-color, var(--color-primary));
+  /* 輪の開き位置をカードごとに変える（呼び出し側が --stamp-turn を指定） */
+  transform: rotate(var(--stamp-turn, 0deg));
+}
+
+/* 書き始め側のかすれ（地色の細い線） */
+.dry {
+  fill: none;
+  stroke: var(--color-bg);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.month {
+  position: relative;
+  font-size: var(--ui-meta);
+  letter-spacing: var(--ls-ui);
+}
+
+.day {
+  position: relative;
+  font-size: var(--t-body);
+  letter-spacing: 0;
+}
+
+@media (min-width: 640px) {
+  .stamp {
+    --stamp-size: var(--space-10);
+  }
+}

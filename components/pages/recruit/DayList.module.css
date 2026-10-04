@@ -1,0 +1,34 @@
+.grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.body {
+  padding-top: var(--space-4);
+}
+
+/*
+ * デスクトップ: 3例を横に並べ、subgrid で見出しの行の高さを3枚でそろえる。カード1枚の幅では Timeline の「時刻11rem＋内容」の2列が収まらないため、
+ * ここだけ時刻を内容の上に積む（Timeline の 640px 未満と同じ形）。
+ * Timeline の内部構造（ol > li > span + span）に依存している。共通部品側に縦積みの指定が入ったらこの上書きは消す。
+ */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 0;
+  }
+
+  /* 見出しが2行になるカードがあっても、3枚の時刻の列の始まりをそろえる */
+  .card {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+
+  /* 共通部品の内部構造（dl > div / ol > li）に依存した上書き。3列カードの行揃え（subgrid）と組み合わせるため、
+     共通部品に縦積みの指定を足すのではなくここで上書きしている。共通部品の構造を変えるときはここも直す */
+  .body > ol > li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+}

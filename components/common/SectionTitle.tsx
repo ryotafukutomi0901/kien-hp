@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { BrushStroke } from "./BrushStroke";
 import styles from "./SectionTitle.module.css";
 
 type Variant = "brush" | "mark";
@@ -7,8 +8,8 @@ type Variant = "brush" | "mark";
 interface SectionTitleProps {
   children: ReactNode;
   /**
-   * brush: 手書き風見出し＋緑の筆線（サービス・私たちのこと）
-   * mark : 左上にオレンジの三角マークが付く小見出し（スタッフ紹介・NEWS）
+   * brush: 手書き風見出し＋末尾の下に緑のペン線（サービス・私たちのこと）
+   * mark : 左にオレンジの三角マークが付くゴシックの小見出し（スタッフ紹介・NEWS）
    */
   variant?: Variant;
   subtitle?: ReactNode;
@@ -17,15 +18,15 @@ interface SectionTitleProps {
   className?: string;
 }
 
-/**
- * セクション見出しの共通部品。
- * PHASE 1では構造のみ。筆線（brush）はServices担当、三角マーク（mark）はStaff担当が仕上げる。
- */
+/** セクション見出しの共通部品（統括管理）。見た目を変えたい場合は統括に要望を出す */
 export function SectionTitle({ children, variant = "brush", subtitle, as: Tag = "h2", id, className }: SectionTitleProps) {
   return (
     <div className={[styles.root, styles[variant], className].filter(Boolean).join(" ")}>
       <Tag id={id} className={styles.title}>
-        {children}
+        <span className={styles.text}>
+          {children}
+          {variant === "brush" && <BrushStroke className={styles.stroke} />}
+        </span>
       </Tag>
       {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
     </div>

@@ -1,42 +1,107 @@
+/*
+ * 私たちのこと
+ * モック実測（869px → 1440px換算 ×1.657）: 帯の高さ220→365、楕円の外周 367×208→608×345（白枠込み）、
+ * 楕円の右端＝コンテナ右端、下端は帯の下端に接する。テキスト列は帯の縦中央。
+ */
+
 .section {
+  /* 上下の余白。楕円はこの余白の中まで広がる（下の .photo の負のmargin）ので、同じ変数で連動させる */
+  --about-pad: var(--section-pad-block);
+  /* コンテナの外側の余白幅（画面端〜本文の左端）。葉っぱを本文に重ねないための基準 */
+  --about-gutter: max(var(--container-pad), (100% - var(--container-max)) / 2);
   position: relative;
   isolation: isolate;
-  padding-block: var(--section-pad-block);
+  overflow-x: clip; /* 画面外にはみ出す葉っぱで横スクロールを出さない */
+  padding-block: var(--about-pad);
 }
 
+/* ---- 背景: ぼかした富士山＋文字側を白く霞ませる ---- */
 .background {
   position: absolute;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
 }
 
 .backgroundImage {
   object-fit: cover;
+  filter: blur(4px) saturate(1.15);
+  transform: scale(1.08); /* ぼかしで端が白く抜けるのを防ぐ */
 }
 
+/* モバイルは文字と写真が縦に重なるため、全体に白をかける（上ほど濃く＝文字側） */
+.background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-bg) 82%, transparent) 0%,
+    color-mix(in srgb, var(--color-bg) 72%, transparent) 55%,
+    color-mix(in srgb, var(--color-bg) 40%, transparent) 100%
+  );
+}
+
+/* ---- 葉っぱ（width は素材の表示幅で、余白スケールの対象外） ---- */
+.leafLeft {
+  display: none;
+}
+
+.leafRight {
+  top: 0;
+  right: calc(var(--space-2) * -1);
+  width: 64px;
+}
+
+/* ---- 本体 ---- */
 .inner {
+  position: relative;
+  z-index: var(--z-content);
   display: grid;
-  gap: var(--space-7);
   align-items: center;
 }
 
 .text {
   display: grid;
   justify-items: start;
-  gap: var(--space-5);
 }
 
 .body {
+  margin-block-start: var(--space-4);
   font-size: var(--t-body);
+  font-weight: 500; /* モックの本文は線が太め */
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-heading); /* モックの本文は字間が広い（実測0.19em前後）。トークンの最大値を使う */
+  color: var(--color-text);
 }
 
 .line {
   display: block;
+  /* 320px幅など1行に収まらない画面だけ折り返す。文節で区切り、行長をそろえて「る。」だけの行を作らない */
+  word-break: auto-phrase;
+  text-wrap: balance;
 }
 
+.cta {
+  margin-block-start: var(--space-6);
+}
+
+/* 楕円写真: 白い楕円の上に一回り小さい写真の楕円を重ね、白枠に見せる。
+   モックの白枠は手描き風で、左右が太く（約11px）上が細い（約3px）。余白の差で再現する */
 .photo {
+  inline-size: 100%;
+  margin-block-start: var(--space-7);
+  aspect-ratio: 16 / 9; /* モックの外周 367×208（1.76）に最も近い整数比 */
+  padding: var(--space-1) var(--space-2) var(--space-2);
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.photoInner {
   position: relative;
-  aspect-ratio: 8 / 5;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -45,8 +110,81 @@
   object-fit: cover;
 }
 
+/* ---- tablet: 2列。楕円は幅45%程度、背景は左から白→透明 ---- */
+@media (min-width: 640px) {
+  .section {
+    --about-pad: var(--space-8);
+  }
+
+  .background::after {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-bg) 80%, transparent) 0%,
+      color-mix(in srgb, var(--color-bg) 66%, transparent) 34%,
+      transparent 64%
+    );
+  }
+
+  /* 右の葉っぱは楕円の右上の角に寄せる。余白が広ければ8割をコンテナの外に出し（1440でモックの x1296〜1433）、
+     狭ければ画面端から --space-2 内側に留めて、はみ出た分は楕円の後ろに回す（.inner が手前） */
+  .leafRight {
+    --leaf-w: 72px;
+    top: 0;
+    right: max(var(--space-2), var(--about-gutter) - var(--leaf-w) * 0.8);
+    width: var(--leaf-w);
+  }
+
+  /* テキスト列は本文の最長行（2行目）が折り返さない幅を下限にする（定義書: タブレットでも改行を維持） */
+  .inner {
+    grid-template-columns: minmax(max-content, 11fr) minmax(0, 9fr);
+  }
+
+  .text {
+    padding-inline-end: var(--space-5);
+  }
+
+  /* 楕円は上下の余白の中まで広がってよい（上は8px、下は帯の下端まで）。
+     行の高さはテキスト列で決まり、楕円が大きい幅では帯の下端に接する（モックと同じ） */
+  .photo {
+    margin-block: calc(var(--space-2) - var(--about-pad)) calc(var(--about-pad) * -1);
+  }
+}
+
+/* ---- desktop: 楕円の外周がコンテナの右51%（モック 608/1200）。白枠を左右12pxに ---- */
 @media (min-width: 1024px) {
   .inner {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 49fr) minmax(0, 51fr);
+  }
+
+  .photo {
+    margin-block: calc(var(--space-4) - var(--about-pad)) calc(var(--about-pad) * -1);
+    padding: var(--space-1) var(--space-3) var(--space-2);
+  }
+
+  .leafRight {
+    --leaf-w: 104px;
+    top: var(--space-2);
+  }
+
+  /* モックのボタンは 189→313px 幅。ラベルの長さに依らずモックの幅にそろえる（--space-10 × 4 = 320px） */
+  .cta {
+    min-inline-size: calc(var(--space-10) * 4);
+  }
+}
+
+/* ---- wide: 左の葉っぱを出す。本文の左の余白に収まる分だけ見せる（1440で余白120px → x0〜88。モックは x0〜80） ---- */
+@media (min-width: 1280px) {
+  /* 画面の左端で切れて覗く。本文の左端から --space-6 以上離す（余白40pxの1280付近ではほぼ隠れる）。
+     1920等の広い画面でも画面端に付けたまま、幅の45%以上は画面外に出す */
+  .leafLeft {
+    --leaf-w: 160px;
+    display: block;
+    top: var(--space-1);
+    left: min(var(--leaf-w) * -0.45, var(--about-gutter) - var(--space-6) - var(--leaf-w));
+    width: var(--leaf-w);
+  }
+
+  .leafRight {
+    --leaf-w: 128px;
   }
 }

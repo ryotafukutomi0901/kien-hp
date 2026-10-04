@@ -1,0 +1,135 @@
+/*
+ * 電話の案内パネル
+ *   1023px以下: 電話ボタン（モバイルは全幅）→ 補足 → FAX・注記 を縦に積む
+ *   1024px以上: 左に電話ボタン、右に区切り線をはさんで FAX・注記
+ */
+
+.panel {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--tone-orange-tint);
+}
+
+.callArea {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: stretch;
+}
+
+/* 主CTA。白文字×--color-primary-strong は 4.60:1（どの文字サイズでもAA） */
+.call {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--space-10);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-strong);
+  color: var(--color-on-dark);
+  box-shadow: var(--shadow-button);
+  text-align: center;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.call:hover {
+  background: var(--color-primary-strong-hover);
+}
+
+.callLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--ui-button);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+  letter-spacing: var(--ls-ui);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+/* ページで最も伝えたい一要素（規程第2条の強調）。番号の途中で折り返さない */
+.number {
+  font-size: var(--t-heading);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+  letter-spacing: var(--ls-ui);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.hint {
+  font-size: var(--t-note);
+  text-align: center;
+}
+
+/* マウス操作の端末では「押すと電話をかけられる」の補足は当てはまらないので出さない */
+@media (hover: hover) and (pointer: fine) {
+  .hint {
+    display: none;
+  }
+}
+
+.sub {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.fax {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--t-body);
+  line-height: var(--lh-heading);
+}
+
+.fax dt {
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.fax dd {
+  font-weight: 500;
+  letter-spacing: var(--ls-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.notice {
+  font-size: var(--t-note);
+}
+
+@media (min-width: 640px) {
+  .panel {
+    padding: var(--space-6);
+  }
+
+  .callArea {
+    justify-items: start;
+  }
+
+  .call {
+    padding-inline: var(--space-9);
+  }
+
+  .hint {
+    text-align: start;
+  }
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--space-8);
+    padding: var(--space-7) var(--space-8);
+  }
+
+  .sub {
+    padding-left: var(--space-8);
+    border-left: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--tone-orange-tint));
+  }
+}

@@ -1,3 +1,11 @@
+/*
+ * ヘッダー（参考モック実測 → 1440px換算、docs/DESIGN.md 6章）
+ *   高さ 61 → 101（--header-height 96）。白地、境界線なし
+ *   左右の余白 30 → 50（実装は --container-pad 40 のまま）。ロゴ〜CTAの外幅 805 → 1334 で、本文のコンテンツ幅（1200）より広い
+ *   ナビ: 字高9（14px相当）、字の間隔 約25 → 41。ロゴとCTAの間の中央
+ *   CTA: 100×30 → 166×50（md）、文字の左右余白 14 → 23（--space-5）
+ */
+
 .header {
   position: sticky;
   top: 0;
@@ -5,32 +13,116 @@
   background: var(--color-bg);
 }
 
-.inner {
+/* スクロールしたときだけ薄い影を出し、白いセクションと重なっても境目が分かるようにする（対応ブラウザのみ・JS不要） */
+@supports (animation-timeline: scroll()) {
+  .header {
+    animation: header-raise linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 var(--space-9);
+  }
+
+  @keyframes header-raise {
+    to {
+      box-shadow: var(--shadow-card);
+    }
+  }
+}
+
+/*
+ * .header を付けて詳細度を上げ、Container / Button の同じ詳細度の指定より確実に優先させる
+ * （CSS Modules の読み込み順に依存しないため）。
+ */
+.header .inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-5);
+  gap: var(--space-4);
   min-height: var(--header-height);
 }
 
-.nav,
-.contact {
+.nav {
   display: none;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-inline-start: auto;
+}
+
+.header .contact {
+  display: none;
+  padding-inline: var(--space-5);
+}
+
+/* 字の間隔 = gap + リンク左右の余白×2 = 24 + 8×2 = 40（参考モック約41）。余白はタップ領域とフォーカスリングのゆとり */
 .navList {
   display: flex;
-  gap: var(--space-6);
+  gap: var(--space-5);
 }
 
 .navLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--space-8);
+  padding-inline: var(--space-2);
   font-size: var(--ui-nav);
+  font-weight: 700;
   letter-spacing: var(--ls-ui);
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
-@media (min-width: 1024px) {
-  .nav,
-  .contact {
+/* hover と現在地の下線。トップは参考モックどおり装飾しない（下層ページでのみ現在地を示す） */
+.navLink::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--space-2);
+  bottom: var(--space-2);
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.navLink:hover {
+  color: var(--color-primary-text);
+}
+
+.navLink:hover::after,
+.navLink[aria-current="page"]:not([href="/"])::after {
+  transform: scaleX(1);
+}
+
+.navLink[aria-current="page"]:not([href="/"]) {
+  color: var(--color-primary-text);
+}
+
+@media (min-width: 640px) {
+  .header .contact {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 1280px) {
+  /*
+   * 参考モックのヘッダーは本文より外幅が広い（上記）。Container の上限（1200＋左右余白）を
+   * --space-10 ずつ広げ、1440px幅でちょうど左右 --container-pad になるようにする。
+   */
+  .header .inner {
+    max-width: calc(var(--header-max) + var(--container-pad) * 2);
+    gap: var(--space-6);
+  }
+
+  .nav {
     display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .actions {
+    margin-inline-start: 0;
   }
 }

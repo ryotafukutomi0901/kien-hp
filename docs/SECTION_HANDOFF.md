@@ -1,7 +1,8 @@
 # セクション担当サブエージェントへの引き継ぎ（PHASE 2）
 
 統括エージェントが PHASE 1 で作った骨子の上に、各セクションの見た目を1つずつ仕上げてもらうための指示書。
-起動順: 01 Header → 02 Hero → 03 Services → 04 About → 05 Staff → 06 News → 07 Recruit / Blog → 08 Final CTA → 09 Footer。
+01 Header は完了済み。02〜09 は**同時に並行して**作業する（2026-10-03 CEO指示）。
+各セクションの仕様は [`docs/sections/`](./sections/)（定義書）。この文書は全員共通のルール。
 
 ## 1. 共通指示（全サブエージェントに必ず渡す）
 
@@ -19,7 +20,8 @@
 ## 2. 着手前に読むもの
 
 1. `CLAUDE.md`・`AGENTS.md`（Next.js 16。記憶と違うAPIがある。`next/image` は `priority` ではなく `preload`）
-2. `docs/DESIGN.md`（トークンの根拠、**6章の担当セクションの実測値**）
+2. **担当セクションの定義書** `docs/sections/NN-*.md` と、境界の取り決め `docs/sections/README.md`
+   補足として `docs/DESIGN.md`（トークンの根拠、6章の実測値）
 3. `styles/tokens.css`（使ってよい値のすべて）
 4. 担当ファイル（下表）と `data/site.ts` の該当キー
 
@@ -27,19 +29,20 @@
 
 | # | セクション | 編集してよいファイル | 主に使う共通部品 |
 |---|---|---|---|
-| 01 | Header | `components/layout/Header.*` `MobileMenu.*` `components/common/Logo.*` | Button, Logo |
-| 02 | Hero | `components/hero/*` | Button, LeafDecoration |
-| 03 | Services | `components/services/*`、`SectionTitle.module.css` の `.brush` 部分 | SectionTitle(brush), ArrowLink, Icon, LeafDecoration |
-| 04 | About | `components/about/*` | SectionTitle(brush), Button, LeafDecoration |
-| 05 | Staff | `components/staff/*`、`SectionTitle.module.css` の `.mark` 部分 | SectionTitle(mark), Button(outline) |
-| 06 | News | `components/news/*` | SectionTitle(mark), ArrowLink |
-| 07 | Recruit / Blog | `components/recruit/*` | Button, Icon |
-| 08 | Final CTA | `components/cta/*` | Button |
-| 09 | Footer | `components/layout/Footer.*`（Logoの `tone="light"` の見た目調整を含む） | Logo, Icon |
+| 01 | Header（完了） | — | — |
+| 02 | Hero | `components/hero/*` `data/sections/hero.ts` | Button, LeafDecoration |
+| 03 | Services | `components/services/*` `data/sections/services.ts` | SectionTitle(brush), ArrowLink, Icon, LeafDecoration |
+| 04 | About | `components/about/*` `data/sections/about.ts` | SectionTitle(brush), Button, LeafDecoration |
+| 05 | Events（会社行事） | `components/events/*` `data/sections/events.ts` | SectionTitle(mark), Button(outline) |
+| 06 | News | `components/news/*` `data/sections/news.ts` | SectionTitle(mark), ArrowLink |
+| 07 | Recruit / Blog | `components/recruit/*` `data/sections/promos.ts` | Button, Icon |
+| 08 | Final CTA | `components/cta/*` `data/sections/final-cta.ts` | Button, BrushStroke |
+| 09 | Footer | `components/layout/Footer.*`、`components/common/Logo.module.css` の `.light` を含むルールだけ | Logo, Icon |
 
-上記以外のファイル（`styles/tokens.css`、`Button` `ArrowLink` `Container` `LeafDecoration` `data/site.ts` `types/site.ts` 等）は**編集しない**。
-変更が必要なら「何を・なぜ」を完了報告に書いて統括に返す。統括が判断して反映する。
-セクション専用の似たボタン・見出し部品を新しく作ることも禁止。
+- `data/sections/*.ts` で変えてよいのは写真の `position` と配列の改行位置まで。文言はモックの表記から変えない
+- 上記以外（`styles/` のトークン、`components/common/` の共通部品、`components/icons/`、`data/site.ts`、`types/site.ts`、`app/`、Header、他セクション）は**編集しない**。
+  変更が必要なら「何を・なぜ」を完了報告に書いて統括に返す。統括が判断して反映する
+- セクション専用の似たボタン・見出し・アイコン部品を新しく作ることも禁止。見出しの筆線・三角マークは `SectionTitle` / `BrushStroke` に実装済み
 
 ## 4. 実装ルール
 
@@ -54,13 +57,20 @@
 
 ## 5. 確認手順（完了前に全部やる）
 
-開発サーバは統括が `http://localhost:3461` で起動済みの前提。止まっていたら `npm run dev -- --port 3461` をバックグラウンドで起動する。
+開発サーバは統括が `http://localhost:3461` で起動済み。**別のサーバを起動したり止めたりしない**（応答しないときは報告する）。
+他のエージェントが同時に別ファイルを編集しているため、次を守る。
 
-1. 撮影: `scripts/screenshot.sh 1440 /tmp/<名前>-1440.png / 4000`、同じく 768 と 375 でも撮る。Readツールで画像を見る
-2. 参考画像の該当部分と並べて比較し、差分を直す（サイズ・位置・余白・色・トリミング）
-3. UI/UX確認: コントラスト4.5:1、タップ領域44px、フォーカスリング、見出し階層、alt
-4. `npx tsc --noEmit` / `npm run lint` / 必要に応じて `npm run build`
-5. 横スクロールが出ていないこと（375px幅で確認）
+- **`npm run build` は実行しない**（同時実行で `.next` が壊れる。ビルドは統括が統合時に行う）
+- `npx tsc --noEmit` / `npm run lint` で**担当外のファイル**のエラーが出たら、直さずに報告に書く
+- 撮影ファイル名は `/tmp/kien-<セクション名>-<幅>.png` のように担当名を入れて他と衝突させない
+
+1. 撮影: `node scripts/shot.mjs /tmp/kien-hero-1440.png --width 1440 --selector "<担当sectionのセレクタ>"`。
+   1440・1024・768・375 の各幅で撮る（`--full` で全体、`--clip-y/--clip-h` で範囲指定も可）。Readツールで画像を見る。
+   出力に「横スクロールあり」やコンソールのエラーが出たら原因を確認する
+2. 参考画像の該当部分を拡大して並べて比較し、差分を直す（サイズ・位置・余白・色・トリミング）
+3. UI/UX確認: コントラスト4.5:1（ピクセルを実測してよい）、タップ領域44px、フォーカスリング、見出し階層、alt
+4. `npx tsc --noEmit` / `npm run lint`
+5. 定義書の「合格条件」をすべて確認する
 
 ## 6. 完了報告の書式
 
@@ -77,14 +87,6 @@
 - 検証結果: tsc / lint / build / 1440・768・375の確認（未実施の項目は「未検証」と書く）
 ```
 
-## 7. セクション別メモ（PHASE 1時点で統括が気づいた点）
+## 7. セクション別の仕様
 
-- 01 Header: 1024px付近でナビ7項目＋CTAが入りきらず、ナビ文字が折り返している。ナビの表示開始幅（1024→1280等）か字間を調整する。ロゴの太陽マーク下の「SAMPLE」とマーク画像の比率もモックに合わせる
-- 02 Hero: 下端の白い不定形の波、四隅と右下（黄色い花つき）の葉っぱが未実装。写真は330px幅の仮素材なのでボケる（本番素材待ち）
-- 03 Services: 写真帯からカード地へのフェード、アイコン円が写真にかかる配置、見出し下の緑の筆線、見出し左の葉っぱ
-- 04 About: 背景写真のぼかし＋左側の白抜け、楕円写真の白い太枠
-- 05 Staff: 三角マーク、写真比率約2.1:1、「一覧を見る」の位置
-- 06 News: 区切り線、右側の富士山写真の左フェード
-- 07 Recruit / Blog: 写真からカード地へのフェード、アイコンと見出しの組み
-- 08 Final CTA: 帯の高さ、左の白抜け、ボタン位置
-- 09 Footer: 白ロゴ、SNSの丸アイコン、ページ上部へ戻るボタンの配置
+`docs/sections/` の定義書を参照（PHASE 1時点の気づきも各定義書に反映済み）。

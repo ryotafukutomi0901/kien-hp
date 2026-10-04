@@ -8,7 +8,10 @@ import { site } from "@/data/site";
 import { NewsList } from "./NewsList";
 import styles from "./NewsSection.module.css";
 
-/** PHASE 1: 構造のみ。リスト右側の富士山写真のフェードはSub-Agent 06（News）が仕上げる */
+/**
+ * トップのNEWS。上端の区切り線（Staffとの境界）→ 見出し行 → 白いパネル（3行＋右端の富士山写真）。
+ * 写真は装飾。タブレット以上はパネル右側に重ねて左端を白へフェード、モバイルはパネル上部の細い帯にする。
+ */
 export function NewsSection() {
   const { news } = site;
   return (
@@ -18,23 +21,23 @@ export function NewsSection() {
           <SectionTitle id="news-title" variant="mark">
             {news.title}
           </SectionTitle>
-          <ArrowLink href={news.more.href}>
+          <ArrowLink href={news.more.href} className={styles.more}>
             {news.more.label}
             <span className="visually-hidden">（お知らせ）</span>
           </ArrowLink>
         </div>
         <div className={styles.panel}>
-          <NewsList items={news.items} />
           <div className={styles.media} aria-hidden="true">
             <Image
               src={news.image.src}
               alt=""
               fill
-              sizes="(min-width: 1024px) 360px, 0px"
+              sizes="(min-width: 1280px) 372px, (min-width: 1024px) 31vw, (min-width: 640px) 25vw, 100vw"
               className={styles.image}
               style={{ objectPosition: news.image.position }}
             />
           </div>
+          <NewsList items={news.items} className={styles.list} />
         </div>
       </Container>
     </section>

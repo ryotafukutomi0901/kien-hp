@@ -9,8 +9,9 @@ import "@/styles/tokens.css";
 import "@/styles/base.css";
 
 // 和文フォントはグリフ数が多いためpreloadしない（next/fontが自動でunicode-range分割する）
+// 見出しは600だけを使う（400を読み込むと@font-faceが約120件増えCSSが重くなる）
 const klee = Klee_One({
-  weight: ["400", "600"],
+  weight: ["600"],
   subsets: ["latin"],
   display: "swap",
   preload: false,
@@ -34,6 +35,7 @@ export const metadata: Metadata = {
   description: site.seo.description,
   openGraph: {
     type: "website",
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: site.seo.siteName }],
     locale: "ja_JP",
     siteName: site.seo.siteName,
     title: site.seo.title,
@@ -43,7 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ja" className={`${klee.variable} ${zenMaru.variable}`}>
+    <html lang="ja" className={`${klee.variable} ${zenMaru.variable}`} data-scroll-behavior="smooth">
       <body id="top">
         <a href="#main" className="skip-link">
           本文へスキップ

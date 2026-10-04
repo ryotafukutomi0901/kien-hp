@@ -1,11 +1,15 @@
+/*
+ * モック実測: NEWSのパネル下端→カード上端 約16px（→1440px換算 約27px）、
+ * カード下端→最終CTAの帯 約9px（→約14px）。上下とも --space-5 にそろえる。
+ */
 .section {
-  padding-block: var(--space-5) var(--section-pad-block);
+  padding-block: var(--space-5);
   background: var(--color-bg-soft);
 }
 
 .grid {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-5); /* モック 2枚の間 約15px → 約24px */
 }
 
 @media (min-width: 1024px) {
