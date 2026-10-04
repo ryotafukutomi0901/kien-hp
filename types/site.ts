@@ -144,6 +144,8 @@ export interface SiteContent {
   company: Company;
   nav: Link[];
   contact: Link;
+  /** フッターのコピーライトの近くに置くリンク（プライバシーポリシー等） */
+  legal: Link[];
   social: SocialLinks;
   hero: HeroContent;
   services: ServicesContent;

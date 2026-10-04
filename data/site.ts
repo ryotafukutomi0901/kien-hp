@@ -1,5 +1,6 @@
 import type { SiteContent } from "@/types/site";
 
+import { privacyLink } from "./pages/privacy";
 import { about } from "./sections/about";
 import { events } from "./sections/events";
 import { finalCta } from "./sections/final-cta";
@@ -51,7 +52,10 @@ export const site: SiteContent = {
 
   contact: { label: "お問い合わせ", href: "/contact" },
 
-  // Instagramを始めたと旧サイトにあるがURLが不明。確認でき次第ここに入れる
+  // フッターのコピーライトの近くに出す
+  legal: [privacyLink],
+
+  // SNSは載せない（2026-10-04 CEO指示。旧サイトにあったInstagramは掲載しない）
   social: {},
 
   hero,

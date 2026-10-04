@@ -7,6 +7,7 @@ import { PageSection } from "@/components/page/PageSection";
 import { CallPanel } from "@/components/pages/contact/CallPanel";
 import { TelLink } from "@/components/common/TelLink";
 import { contactPage } from "@/data/pages/contact";
+import { privacyLink } from "@/data/pages/privacy";
 import { site } from "@/data/site";
 
 const { company } = site;
@@ -82,6 +83,11 @@ export default function Page() {
         {privacy.body.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
+        <div>
+          <ArrowLink href={privacyLink.href} tone="orange">
+            {`${privacyLink.label}を見る`}
+          </ArrowLink>
+        </div>
       </PageSection>
     </>
   );

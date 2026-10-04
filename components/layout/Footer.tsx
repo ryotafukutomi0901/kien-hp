@@ -9,13 +9,13 @@ import styles from "./Footer.module.css";
 
 /**
  * サイト共通フッター（参考モック 0,1678–869,1810）。
- * - 1024px以上: 左にロゴ・住所、右上にナビ7項目、右下にSNSと「ページ上部へ戻る」、最下部中央にコピーライト
- * - 640〜1023px: ロゴ＋住所／ナビ（4列）／コピーライト＋SNS・戻るボタン
- * - 640px未満: ロゴ→住所→ナビ（2列）→SNS・戻るボタン→コピーライト
+ * - 1024px以上: 左にロゴ・住所、右上にナビ7項目、右下にSNSと「ページ上部へ戻る」、最下部中央にプライバシーポリシー・コピーライト
+ * - 640〜1023px: ロゴ＋住所／ナビ（4列）／プライバシーポリシー・コピーライト＋SNS・戻るボタン
+ * - 640px未満: ロゴ→住所→ナビ（2列）→SNS・戻るボタン→プライバシーポリシー→コピーライト
  * 並び替えはCSSグリッドのエリアだけで行い、読み上げ順（DOM順）はどの幅でも同じにしている。
  */
 export function Footer() {
-  const { company, nav, social } = site;
+  const { company, nav, legal, social } = site;
   return (
     <footer className={styles.footer}>
       <Container className={styles.inner}>
@@ -69,9 +69,22 @@ export function Footer() {
             <span className="visually-hidden">ページ上部へ戻る</span>
           </a>
         </div>
-        <p className={styles.copyright}>
-          <small>{company.copyright}</small>
-        </p>
+        <div className={styles.bottom}>
+          {legal.length > 0 && (
+            <ul className={styles.legal} role="list">
+              {legal.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={styles.legalLink}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className={styles.copyright}>
+            <small>{company.copyright}</small>
+          </p>
+        </div>
       </Container>
     </footer>
   );

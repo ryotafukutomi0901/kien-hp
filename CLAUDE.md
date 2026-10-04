@@ -18,6 +18,7 @@ Tailwind・UIライブラリ・アニメーションライブラリは入れて�
 - 開発: `npm run dev -- --port 3461`（Claude desktop のプレビューは `.claude/launch.json` の url 設定でこのサーバに接続する。
   プレビュー側から起動すると Google Fonts を取得できずフォントが読めないため、サーバはシェルから起動する）
 - 検査: `npx tsc --noEmit` / `npm run lint` / `npm run build`
+- 内部リンク検査: `node scripts/check-links.mjs`（全ページの内部リンク先と #id の存在）
 - 撮影: `node scripts/shot.mjs <出力PNG> --width <幅> [--path /] [--full | --selector css]`
 - 仮画像の再生成: `python3 scripts/extract-placeholders.py`
 - ロゴ派生画像（ヘッダー用・フッター用・ファビコン・OGP）の再生成: `python3 scripts/make-logo-assets.py`（原本は `reference/logo/`）
@@ -25,14 +26,14 @@ Tailwind・UIライブラリ・アニメーションライブラリは入れて�
 ## ディレクトリ
 
 ```
-app/            ページ（トップ＋下層: services about events recruit news contact）
+app/            ページ（トップ＋下層: services about events recruit news contact privacy、not-found、sitemap・robots）
 components/     トップのセクション（hero services about events news recruit cta）／layout common icons／page（下層ページ共通部品）／pages（ページ専用）
 data/           site.ts（サイト全体）／sections/（トップの各セクション）／records/（会社行事・ニュース）／pages/（下層ページ）
 types/site.ts   内容の型
 styles/         tokens.css（デザイントークンの正本）/ base.css（リセット）
 public/images/  写真・ロゴ・葉っぱ（現在は素材シートからの仮切り出し）
 reference/      参考モック・素材シート・ロゴ原本・旧サイトの原文（old-site-text/）。実行時には使わない
-docs/           DESIGN.md / CONTENTS.md / CONTENT_SOURCE.md（内容の正本）/ PAGES.md / IMAGE_QUALITY.md / SECTION_HANDOFF.md / sections/
+docs/           DESIGN.md / CONTENTS.md / CONTENT_SOURCE.md（内容の正本）/ PAGES.md / IMAGE_QUALITY.md / IMAGE_PROMPTS.md / CLIENT_CHECKLIST.md（クライアント確認依頼書）/ SECTION_HANDOFF.md / sections/
 scripts/        仮画像の切り出し・撮影
 ```
 

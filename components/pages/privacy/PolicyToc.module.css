@@ -1,0 +1,58 @@
+/*
+ * 目次のカード。幅は本文の行の長さ（40em）より少し広い48emまで（2段組みで最も長い項目「開示・訂正・利用停止などのご請求」が1行に収まる幅）。
+ */
+.toc {
+  max-width: 48em;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+}
+
+.label {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text-muted);
+}
+
+.list {
+  margin-top: var(--space-1);
+}
+
+.item {
+  break-inside: avoid;
+}
+
+/* 目次の文字は本文と同じ大きさ（高齢の読者が押す前に読めるように、小リンクの --ui-meta より大きくする） */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  font-size: var(--t-note);
+  font-weight: 500;
+  color: var(--color-primary-text);
+}
+
+.link:hover > span {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.arrow {
+  flex-shrink: 0;
+  transform: rotate(180deg);
+}
+
+@media (min-width: 640px) {
+  .toc {
+    padding: var(--space-5) var(--space-6);
+  }
+
+  .list {
+    columns: 2;
+    column-gap: var(--space-6);
+  }
+}

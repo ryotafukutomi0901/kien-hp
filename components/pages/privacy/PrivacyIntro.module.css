@@ -1,0 +1,13 @@
+.intro {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.preamble {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 40em;
+  line-height: var(--lh-body);
+  overflow-wrap: anywhere; /* 折り返しは本文と同じ通常の和文の折り返し（PolicyText.module.css 参照） */
+  text-wrap: pretty;
+}

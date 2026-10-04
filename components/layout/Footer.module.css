@@ -172,10 +172,43 @@
   border-radius: var(--radius-pill);
 }
 
-/* ---- コピーライト ---- */
-.copyright {
+/* ---- プライバシーポリシー・コピーライト（グリッドの copy エリアにまとめて置く） ---- */
+.bottom {
   grid-area: copy;
-  margin-top: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* リンクは押せる高さ44pxの中央に字があるため、上の余白は従来（--space-5）より一段詰める */
+  margin-top: var(--space-3);
+}
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--space-4);
+}
+
+/* 小リンクの役割（--ui-meta）。オレンジ地に白（4.60:1）。ナビと区別するため常に下線を付ける */
+.legalLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding-inline: var(--space-2);
+  font-size: var(--ui-meta);
+  font-weight: 500;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-on-dark);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.legalLink:hover {
+  text-decoration-thickness: 2px;
+}
+
+.copyright {
   font-size: var(--ui-caption);
   font-weight: 500;
   letter-spacing: var(--ls-body);
@@ -210,8 +243,17 @@
     margin-inline-start: 0;
   }
 
-  .copyright {
+  /* 左の列に「プライバシーポリシー　© …」を1行で。リンクの字の左端をロゴ・住所にそろえる */
+  .bottom {
+    flex-direction: row;
+    flex-wrap: wrap;
     align-self: center;
+    column-gap: var(--space-5);
+    margin-top: var(--space-5);
+    margin-inline-start: calc(var(--space-2) * -1);
+  }
+
+  .copyright {
     text-align: start;
   }
 }
@@ -285,8 +327,14 @@
     translate: 0 var(--space-4);
   }
 
+  /* 最下部の中央に1行で。リンクの押せる高さの分だけ上の余白を詰め、字の位置を従来（--space-4）に近づける */
+  .bottom {
+    justify-content: center;
+    margin-top: var(--space-1);
+    margin-inline-start: 0;
+  }
+
   .copyright {
-    margin-top: var(--space-4);
     text-align: center;
   }
 }

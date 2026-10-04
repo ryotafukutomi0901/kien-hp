@@ -1,0 +1,247 @@
+/*
+ * 404（NotFoundView.tsx）
+ *   〜1023px: 見出し・説明・トップへ戻る → 主なページ（白いカード） → お電話 を縦に積む
+ *   1024px以上: 左の列に「見出し〜トップへ戻る」と「お電話」、右の列に「主なページ」
+ * 地は下層ページ冒頭（PageIntro）と同じオフホワイト。右上と左下に葉っぱ（ヒーローと同じ素材）を少しだけ。
+ */
+
+.section {
+  position: relative;
+  overflow: hidden; /* 画面外へはみ出す葉っぱを切る */
+  padding-block: var(--section-pad-block);
+  background: var(--color-bg-soft);
+}
+
+/* 字の背後に葉を入れないよう、モバイルは小さく角へ寄せる（ヒーローの葉と同じ考え方） */
+.leafTop {
+  top: calc(var(--space-6) * -1);
+  right: calc(var(--space-5) * -1);
+  width: 88px;
+}
+
+.leafBottom {
+  bottom: calc(var(--space-5) * -1);
+  left: calc(var(--space-5) * -1);
+  width: 96px;
+}
+
+.section .inner {
+  position: relative;
+  z-index: var(--z-content);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "intro"
+    "pages"
+    "tel";
+  gap: var(--space-8);
+}
+
+/* ---- 見出し・説明・トップへ戻る ---- */
+.intro {
+  grid-area: intro;
+  display: grid;
+  justify-items: start;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 40em;
+  margin-top: var(--space-5);
+  line-height: var(--lh-body);
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
+
+.lead {
+  font-size: var(--t-body);
+  font-weight: 500;
+  text-wrap: balance; /* 折り返すとき末尾の「あります。」だけが次の行に残らないよう、行の長さをそろえる */
+}
+
+.home {
+  margin-top: var(--space-6);
+}
+
+/* ---- 小見出し（主なページ・お電話）。カードの中の見出しなので --t-body の太字 ---- */
+.subTitle {
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+  color: var(--color-text);
+}
+
+/* ---- 主なページ ---- */
+/* モバイルは左右の余白を詰めて、説明文が細かく折り返さないようにする */
+.pages {
+  grid-area: pages;
+  padding: var(--space-5) var(--space-2) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.pages .subTitle {
+  padding-inline: var(--space-2);
+}
+
+.pageList {
+  margin-top: var(--space-2);
+}
+
+.pageList > li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.pageLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-10);
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.pageLink:hover {
+  background: var(--tone-orange-tint);
+}
+
+/*
+ * ロゴの周りの水彩の点。正円にせず、角ごとに丸みを変えて手描きの点に寄せる。
+ * 色はトーン色を地色に半分混ぜた淡い色（ToneMark の色面と同じ明るさ）。
+ */
+.dot {
+  flex-shrink: 0;
+  width: var(--space-5);
+  height: var(--space-5);
+  border-radius: 54% 46% 58% 42% / 46% 56% 44% 54%;
+  background: color-mix(in srgb, var(--dot-color) 50%, var(--color-bg));
+}
+
+.yellow {
+  --dot-color: var(--tone-yellow-base);
+}
+
+.green {
+  --dot-color: var(--tone-green-base);
+  border-radius: 46% 54% 44% 56% / 58% 42% 56% 44%;
+}
+
+.orange {
+  --dot-color: var(--tone-orange-base);
+  border-radius: 58% 42% 50% 50% / 50% 58% 42% 50%;
+}
+
+.blue {
+  --dot-color: var(--tone-blue-base);
+  border-radius: 44% 56% 52% 48% / 54% 46% 58% 42%;
+}
+
+.pageText {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: var(--space-1);
+}
+
+.pageLabel {
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  line-height: var(--lh-compact);
+  color: var(--color-text);
+}
+
+.pageDescription {
+  font-size: var(--t-note);
+  line-height: var(--lh-compact);
+  color: var(--color-text-muted);
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
+
+.pageArrow {
+  flex-shrink: 0;
+  color: var(--color-primary-text);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.pageLink:hover .pageArrow {
+  transform: translateX(3px);
+}
+
+.pageLink:hover .pageLabel {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+/* ---- お電話 ---- */
+.tel {
+  grid-area: tel;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  word-break: auto-phrase; /* 「お問い合わせ」等を語の途中で折り返さない */
+  overflow-wrap: anywhere;
+}
+
+.notice {
+  font-size: var(--t-note);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 640px) {
+  .leafTop {
+    top: calc(var(--space-7) * -1);
+    right: calc(var(--space-6) * -1);
+    width: 140px;
+  }
+
+  .leafBottom {
+    bottom: calc(var(--space-6) * -1);
+    left: calc(var(--space-6) * -1);
+    width: 130px;
+  }
+
+  .pages {
+    padding: var(--space-6) var(--space-5) var(--space-4);
+  }
+
+  .pageLink {
+    gap: var(--space-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  /*
+   * 右の「主なページ」は26rem固定（最も長い説明「ケアマネジャー・ヘルパー・家事支援スタッフの募集」が2行に収まる幅）。
+   * 残りを左の列に回し、1440px幅で説明の2段落目が1行に収まるようにする。
+   */
+  .section .inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "intro pages"
+      "tel   pages";
+    column-gap: var(--space-8);
+    row-gap: var(--space-8);
+    align-items: start;
+  }
+
+  /* お電話は左の列で、説明とボタンの下に区切り線をはさんで置く */
+  .tel {
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+@media (min-width: 1280px) {
+  .section .inner {
+    column-gap: var(--space-10);
+  }
+}

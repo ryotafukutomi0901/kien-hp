@@ -1,0 +1,89 @@
+/*
+ * プライバシーポリシーの本文。行の長さは40em（--t-note で約37字）まで。長い文書を高齢の読者が追いやすい長さに抑える。
+ * 文字は本文（--t-note）だけ。強調サイズは使わない（法務の文書なので、どこか一か所を大きく見せない）。
+ */
+.text {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 40em;
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+  /*
+   * 折り返しは他ページの本文と同じ通常の和文の折り返し（行末までそろって詰まる）。
+   * 文節で折り返す auto-phrase は長文だと右端が大きくガタつき、行数も増えるため使わない
+   */
+  overflow-wrap: anywhere;
+  text-wrap: pretty; /* 段落の最後の行に1〜2文字だけ残るのを避ける（未対応のブラウザでは通常の折り返し） */
+}
+
+/* ---- 箇条: オレンジの小さな丸 ---- */
+.list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.item {
+  position: relative;
+  padding-inline-start: 1.25em;
+}
+
+/* 丸の中心を1行目の行の中央（行の高さ1.9em の半分）にそろえる */
+.item::before {
+  content: "";
+  position: absolute;
+  top: 0.75em;
+  left: 0.3em;
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+}
+
+/* ---- 文中のリンク: 本文の行の高さは変えず、押せる範囲だけを上下に広げる（TelLink と同じ方式） ---- */
+.inlineLink {
+  position: relative;
+  color: var(--color-primary-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+
+.inlineLink::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  min-height: var(--tap-min);
+  height: 100%;
+  transform: translateY(-50%);
+}
+
+.inlineLink:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ---- 1行に単独で置くリンク（別サイト） ---- */
+.blockLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  font-weight: 700;
+  color: var(--color-primary-text);
+}
+
+.blockLink > span:first-child {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.blockLink:hover > span:first-child {
+  text-decoration-thickness: 2px;
+}
+
+.externalIcon {
+  flex-shrink: 0;
+}
