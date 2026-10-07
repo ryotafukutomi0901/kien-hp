@@ -12,5 +12,5 @@ export const news: NewsContent = {
     title: record.title,
     href: `/news#${record.id}`,
   })),
-  image: { src: "/images/news/news-fuji.jpg", alt: "", position: "62% 40%" },
+  image: { src: "/images/news/news-bg.jpg", alt: "", position: "70% 60%" },
 };

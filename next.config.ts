@@ -3,6 +3,10 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // 元画像が高解像度になったため、配信時に AVIF → WebP の順で変換する
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   // リポジトリ直下にも package-lock.json があるため、ワークスペースの根を明示する
   turbopack: {
     root: path.join(__dirname),

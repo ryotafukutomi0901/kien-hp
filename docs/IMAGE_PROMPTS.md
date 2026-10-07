@@ -1,5 +1,22 @@
 # トップページ 画像の配置案と生成プロンプト
 
+## 差し替えの進み具合（2026-10-07）
+
+生成画像を `reference/generated-originals/` に保存し、`python3 scripts/optimize-images.py` で最適化して `public/images/` に出力している（14.9MB → 0.79MB）。
+
+| 場所 | 状態 | 現在のファイル |
+|---|---|---|
+| サービス3枚（訪問介護・居宅介護支援・家事支援） | **差し替え済み** | `services/home-visit.jpg` `care-plan.jpg` `home-help.jpg`（予備2枚: `services/spare/`） |
+| お知らせ右の写真（No.10） | **差し替え済み** | `news/news-bg.jpg` |
+| 採用情報カード（No.11） | **差し替え済み** | `recruit/recruit.jpg` |
+| 最終CTA（No.13） | **差し替え済み** | `cta/cta-panorama.jpg` |
+| 私たちのこと 背景・楕円（No.4・5） | 未（素材シート由来の仮画像） | `about/about-fuji.jpg` |
+| 会社行事4枚（No.6〜9） | 未（仮画像） | `services/business-support.jpg` ほか |
+| スタッフの一日カード（No.12） | 未（仮画像） | `blog/blog.jpg` |
+
+原本が増えたら、`scripts/optimize-images.py` の `JOBS` に1行足して再実行し、`data/sections/*.ts` の `src` を書き換える。
+
+
 2026-10-04 作成。トップページのHTMLから実測した画像の数と、差し替え用の生成プロンプト（ヒーローの富士山は変更しない）。
 
 ## 現状（トップページの img 25枚）
@@ -108,6 +125,26 @@ Photorealistic flat-lay on a light wooden desk: a daily schedule notebook with t
 ### 13. 最終CTA（帯。左は空色〜白へフェードして文字を載せる）
 ```
 Photorealistic ultra-wide panorama of Mount Fuji at late afternoon from Fuji City: soft golden light on the snow cap, layered green hills and the town below, pale blue sky. Mount Fuji on the right third, the left half mostly open sky. Landscape 3:1.
+```
+
+## サービスカード3枚の追加案（帯の切り抜きを前提にした版）
+
+「私たちのサービス」の3事業カードに入れる写真の追加案。上の No.1〜3 と同じ場所の差し替え用で、どちらを使ってもよい。
+カードの写真は**横長の帯**（1440px幅の画面で約378×110px、およそ3.4:1）に切り抜かれる。元画像は3:2で生成し、**見せたいものを画面の上から40〜60%の高さの帯に収める**。上下の端に大事なものを置かない。保存先と最小サイズは No.1〜3 と同じ（`public/images/services/` の `home-visit.jpg` `care-plan.jpg` `home-help.jpg`、1200×800以上）。人物は顔を出さない。
+
+### A. 訪問介護（`home-visit.jpg`）
+```
+Photorealistic, soft morning light through a sheer curtain in a Japanese home. Close crop on a caregiver's hands in navy sleeves resting gently over an elderly person's hands on a wooden table, a cup of tea and a small coral flower beside them. Faces completely out of frame. The hands and tea sit in a horizontal band across the middle of the image, with calm blurred beige background above and below. Warm, quiet, trustworthy. Landscape 3:2.
+```
+
+### B. 居宅介護支援（`care-plan.jpg`）
+```
+Photorealistic, bright daylight at a wooden table in a Japanese living room. Over-the-shoulder view of a care manager's hands and an elderly couple's hands around an open care plan notebook (no readable text), a pen, reading glasses and a cup of green tea. No faces visible. The notebook and hands form a horizontal band across the middle of the frame, soft beige blur above and below, a touch of yellow from a flower. Calm and reliable. Landscape 3:2.
+```
+
+### C. 家事支援（`home-help.jpg`）
+```
+Photorealistic, bright morning light in a tidy Japanese kitchen counter. A row of simple homemade dishes (rice, miso soup, grilled fish, greens) on a light wooden counter, with a housekeeping staff member's hands in a navy apron arranging a bowl; a stack of neatly folded small children's clothes at the edge. No faces. Everything sits in a horizontal band across the middle of the image, soft white and beige blur above and below, coral and green accents. Warm and helpful. Landscape 3:2.
 ```
 
 ## 葉っぱ（装飾）について

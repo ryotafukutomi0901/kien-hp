@@ -9,7 +9,7 @@ export const promos: PromoCard[] = [
     icon: "clipboard",
     tone: "green",
     cta: { label: "採用情報を見る", href: "/recruit" },
-    image: { src: "/images/recruit/recruit.jpg", alt: "", position: "40% 10%" },
+    image: { src: "/images/recruit/recruit.jpg", alt: "", position: "28% 50%" },
   },
   {
     title: "スタッフの一日",

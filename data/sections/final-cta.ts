@@ -5,5 +5,5 @@ import type { FinalCtaContent } from "@/types/site";
 export const finalCta: FinalCtaContent = {
   title: ["この地域に、", "なくてはならない会社へ。"],
   cta: { label: "お問い合わせはこちら", href: "/contact" },
-  image: { src: "/images/cta/cta-fuji.jpg", alt: "", position: "67% 54%" },
+  image: { src: "/images/cta/cta-panorama.jpg", alt: "", position: "70% 55%" },
 };

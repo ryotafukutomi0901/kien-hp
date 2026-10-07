@@ -21,6 +21,7 @@ Tailwind・UIライブラリ・アニメーションライブラリは入れて�
 - 内部リンク検査: `node scripts/check-links.mjs`（全ページの内部リンク先と #id の存在）
 - 撮影: `node scripts/shot.mjs <出力PNG> --width <幅> [--path /] [--full | --selector css]`
 - 仮画像の再生成: `python3 scripts/extract-placeholders.py`
+- 生成画像の最適化（原本 `reference/generated-originals/` → `public/images/`）: `python3 scripts/optimize-images.py`
 - ロゴ派生画像（ヘッダー用・フッター用・ファビコン・OGP）の再生成: `python3 scripts/make-logo-assets.py`（原本は `reference/logo/`）
 
 ## ディレクトリ
