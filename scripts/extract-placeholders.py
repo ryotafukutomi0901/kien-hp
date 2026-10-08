@@ -22,8 +22,6 @@ CROPS = [
     ("decor/leaf-bottom-left.png", (494, 204, 632, 322), True),
     ("decor/leaf-bottom-right.png", (670, 226, 832, 324), True),
     ("decor/leaf-small.png", (866, 232, 1002, 322), True),
-    ("hero/hero-fuji.jpg", (27, 413, 357, 556), False),
-    ("about/about-fuji.jpg", (595, 415, 869, 556), False),
     ("services/business-support.jpg", (472, 658, 658, 761), False),
     ("services/home-nursing.jpg", (687, 658, 873, 761), False),
     ("staff/staff-group-indoor.jpg", (903, 658, 995, 762), False),

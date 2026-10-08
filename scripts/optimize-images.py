@@ -24,6 +24,9 @@ JOBS = [
     ("news-bg.png", "news/news-bg.jpg", 1400),
     ("recruit.png", "recruit/recruit.jpg", 900),
     ("cta-panorama.png", "cta/cta-panorama.jpg", 2000),
+    ("hero.png", "hero/hero.jpg", 1916),  # 原本が1916px幅。それ以上には大きくしない
+    ("about-bg.png", "about/about-bg.jpg", 1800),
+    ("about-oval.png", "about/about-oval.jpg", 1300),
 ]
 
 

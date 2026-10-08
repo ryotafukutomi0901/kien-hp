@@ -6,10 +6,10 @@ export const hero: HeroContent = {
   title: ["人を大切にする", "会社になる。"],
   lead: ["富士市の居宅介護支援・", "訪問介護・家事支援。", "ご家族の安心を支えます。"],
   cta: { label: "私たちの想いを見る", href: "/about#company" },
-  // 仮画像（モックの素材シートからの切り出し）。写真が確定したら差し替える（docs/IMAGE_QUALITY.md）
+  // 生成画像（reference/generated-originals/hero.png を scripts/optimize-images.py で最適化）
   image: {
-    src: "/images/hero/hero-fuji.jpg",
+    src: "/images/hero/hero.jpg",
     alt: "",
-    position: "66% 20%",
+    position: "75% 40%",
   },
 };

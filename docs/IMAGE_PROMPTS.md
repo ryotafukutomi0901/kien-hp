@@ -5,24 +5,20 @@
 生成画像を `reference/generated-originals/` に保存し、`python3 scripts/optimize-images.py` で最適化して `public/images/` に出力している（14.9MB → 0.79MB）。
 
 ### 差し替え済み
-サービス3枚（`services/home-visit.jpg` `care-plan.jpg` `home-help.jpg`。予備2枚は `services/spare/`）、お知らせ右の写真（`news/news-bg.jpg`）、採用情報カード（`recruit/recruit.jpg`）、最終CTA（`cta/cta-panorama.jpg`）。
+サービス3枚（`services/home-visit.jpg` `care-plan.jpg` `home-help.jpg`。予備2枚は `services/spare/`）、お知らせ右の写真（`news/news-bg.jpg`）、採用情報カード（`recruit/recruit.jpg`）、最終CTA（`cta/cta-panorama.jpg`）、**ヒーロー（`hero/hero.jpg`）、私たちのこと背景（`about/about-bg.jpg`）、同・楕円（`about/about-oval.jpg`）**（2026-10-08）。
 
 ### 画質が荒いまま残っている箇所（トップページ。実測）
 
-すべて素材シート（モック添付の1536×1024）から切り出した仮画像で、幅92〜330px。次の6か所が対象。
+すべて素材シート（モック添付の1536×1024）から切り出した仮画像で、幅92〜186px。次の3種類が残っている。
 
 | # | 場所（画面上の位置） | 現在のファイル | 元サイズ | 表示サイズ（1440px幅） | 拡大率 | 使うプロンプト |
 |---|---|---|---|---|---|---|
-| 0 | ヒーロー（最上部の全幅写真） | `hero/hero-fuji.jpg` | 330×143 | 1584×684 | **4.8倍** | **No.0**（任意。下の注意） |
-| 4 | 私たちのこと: 背景（ぼかして使う全幅） | `about/about-fuji.jpg` | 274×141 | 1555×397 | **5.7倍** | No.4 |
-| 5 | 私たちのこと: 右の楕円写真 | `about/about-fuji.jpg`（背景と同じ写真） | 274×141 | 588×332 | 2.4倍 | No.5 |
 | 6〜9 | 会社行事カード4枚（トップ。`/events` には写真なし） | `services/business-support.jpg` `staff/staff-group-outdoor.jpg` `services/home-nursing.jpg` `staff/staff-table.jpg` | 92〜186px幅 | 262×126 | 1.4〜2.8倍 | No.6〜9 |
 | 12 | 採用情報の右隣「スタッフの一日」カードの写真 | `blog/blog.jpg` | 156×96 | 237×178 | 1.9倍 | No.12 |
 | 葉 | 葉っぱの装飾（トップ・事業所・404に計9か所） | `decor/leaf-*.png` 5種 | 74〜162px幅 | 128〜314px | 2〜4倍 | 葉っぱ6種 |
 
-- ファイル名の「about-fuji」は旧名。差し替え後は `about/about-bg.jpg` と `about/about-oval.jpg` に分け、使い回しをなくす。
 - 会社行事の写真は、画像が入るとトップの4件の記事に順に当てはまる。記事の実際の写真が届いたら置き換える（下の注意）。
-- 使われていない仮画像（`staff/staff-group-indoor.jpg` `staff/staff-meeting.jpg` `decor/leaf-small.jpg`）は、差し替え完了後に削除する。
+- 使われていない仮画像（`staff/staff-group-indoor.jpg` `staff/staff-meeting.jpg` `decor/leaf-small.png`）は、差し替え完了後に削除する。
 - 原本が増えたら、`scripts/optimize-images.py` の `JOBS` に1行足して再実行し、`data/sections/*.ts` の `src` を書き換える。
 
 ### 富士山の使用ルール（使いすぎを避ける）
