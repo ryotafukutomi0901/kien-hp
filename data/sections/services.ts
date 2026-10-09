@@ -1,14 +1,13 @@
 import type { ServicesContent } from "@/types/site";
 
 // 担当: Sub-Agent 03（Services）。写真の position と配列の改行位置はこのファイルで調整する
-// 3事業は旧サイト「事業内容」「喜援ホームヘルプサービス」の原文から。写真は生成画像（reference/generated-originals/ を scripts/optimize-images.py で最適化）
+// 文言は旧サイトの原文のまま（総合HP「事業内容」・トップ紹介文）。配列の区切りは改行位置だけで、つなげると原文。見出しは原文の「事業内容」。写真は生成画像（reference/generated-originals/ を scripts/optimize-images.py で最適化）
 export const services: ServicesContent = {
-  title: "私たちのサービス",
-  lead: "あなたの暮らしに、寄り添う3つのサービス",
+  title: "事業内容",
   items: [
     {
       title: "訪問介護事業",
-      description: ["見守りや入浴介助、", "服薬管理など、ご自宅での", "生活を支えます。"],
+      description: ["見守りや入浴介助、", "服薬管理等の介護支援から、", "掃除・洗濯や食事の用意、", "おむつ交換等の家事支援で", "サポートいたします！"],
       icon: "house",
       tone: "yellow",
       image: {
@@ -20,7 +19,7 @@ export const services: ServicesContent = {
     },
     {
       title: "居宅介護支援事業",
-      description: ["在宅医や歯科医師、", "福祉用具業者と常に連携。", "ケアマネジャー6人在籍。"],
+      description: ["常に在宅医や歯科医師、", "福祉用具業者と連携して", "動いているので、", "安心してご利用いただけます。", "現在ケアマネージャー6人在籍。"],
       icon: "person",
       tone: "green",
       image: {
@@ -32,7 +31,7 @@ export const services: ServicesContent = {
     },
     {
       title: "家事支援事業",
-      description: ["お掃除・育児のお手伝い・", "お食事の用意。", "1時間2,500円～。"],
+      description: ["介護で培われた細やかな気配り等を", "活かし、介護ヘルパーそれぞれの", "スキルを利用したサービスです。", "1時間2500円～承っております。"],
       icon: "sun",
       tone: "orange",
       image: {

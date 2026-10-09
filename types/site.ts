@@ -64,7 +64,8 @@ export interface ServiceItem {
 
 export interface ServicesContent {
   title: string;
-  lead: string;
+  /** 見出しの下の一文（任意。原文に無ければ省く） */
+  lead?: string;
   items: ServiceItem[];
 }
 

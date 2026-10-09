@@ -71,16 +71,16 @@ const mapQuery = encodeURIComponent(company.address);
 
 export const aboutPage: AboutPageContent = {
   metadata: {
-    title: "事業所・会社概要",
+    title: "会社概要",
     description: `${companyName}の会社概要（ご挨拶・経営理念・喜援の3つの方針）と、水戸島訪問介護事業所・水戸島居宅介護支援事業所のご案内です。${company.address}、新富士駅から徒歩7分。駐車場あり。`,
   },
 
-  title: "事業所・会社概要",
+  title: "会社概要",
 
   /** ページ冒頭のページ内リンク */
   jumpLinks: [
     { label: "会社概要", href: "#company" },
-    { label: "事業所・アクセス", href: "#offices" },
+    { label: "アクセス", href: "#offices" },
   ],
 
   /** 求人サイトの全ページ末尾の注記 */
@@ -161,7 +161,7 @@ export const aboutPage: AboutPageContent = {
 
   offices: {
     id: "offices",
-    title: "事業所・アクセス",
+    title: "アクセス",
 
     list: {
       title: "事業所",

@@ -169,7 +169,7 @@ export const privacyPage: PrivacyPageContent = {
           type: "paragraph",
           text: [
             "「",
-            { label: "事業所・会社概要", href: "/about#offices" },
+            { label: "アクセス", href: "/about#offices" },
             "」のページでは、地図を表示するためにGoogleマップを埋め込んでいます。このページをご覧になると、Googleがその利用に関する情報を収集する場合があります。くわしくは、Googleのプライバシーポリシーをご覧ください。",
           ],
         },

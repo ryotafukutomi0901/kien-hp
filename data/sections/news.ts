@@ -4,7 +4,7 @@ import type { NewsContent } from "@/types/site";
 // 担当: Sub-Agent 06（News）。写真の position はこのファイルで調整する
 // 一覧は data/records/news.ts（旧サイトのニュース全2件）。右側の写真は仮画像で装飾
 export const news: NewsContent = {
-  title: "お知らせ",
+  title: "ニュース",
   more: { label: "一覧を見る", href: "/news" },
   items: newsRecords.map((record) => ({
     date: record.date,

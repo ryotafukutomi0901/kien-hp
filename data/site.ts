@@ -41,13 +41,15 @@ export const site: SiteContent = {
   },
 
   nav: [
-    { label: "トップ", href: "/" },
-    { label: "サービス", href: "/services" },
-    { label: "事業所", href: "/about#offices" },
-    { label: "会社行事", href: "/events" },
-    { label: "採用情報", href: "/recruit" },
-    { label: "お知らせ", href: "/news" },
+    // 旧サイトのナビの文言と順（ホーム／会社概要／事業内容／アクセス／採用情報／INFO［ニュース・会社行事］）に合わせる。
+    // 「お問い合わせ」はヘッダーのボタン（contact）、「INFO」は下位の2項目をそのまま並べている
+    { label: "ホーム", href: "/" },
     { label: "会社概要", href: "/about#company" },
+    { label: "事業内容", href: "/services" },
+    { label: "アクセス", href: "/about#offices" },
+    { label: "採用情報", href: "/recruit" },
+    { label: "ニュース", href: "/news" },
+    { label: "会社行事", href: "/events" },
   ],
 
   contact: { label: "お問い合わせ", href: "/contact" },

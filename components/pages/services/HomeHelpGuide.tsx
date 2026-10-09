@@ -61,7 +61,11 @@ export function HomeHelpGuide({ homeHelp }: { homeHelp: HomeHelp }) {
       </div>
       <div className={styles.item}>
         <SubHeading tone="orange">{cancel.title}</SubHeading>
-        <FeeTable table={cancel.table} />
+        {cancel.body.map((sentence) => (
+          <p key={sentence} className={styles.text}>
+            {sentence}
+          </p>
+        ))}
       </div>
       <div className={styles.item}>
         <div className={styles.phrased}>

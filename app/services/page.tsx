@@ -11,7 +11,7 @@ import introStyles from "@/components/pages/services/ServicesIntro.module.css";
 import { servicesPage } from "@/data/pages/services";
 
 export const metadata: Metadata = {
-  title: "サービス",
+  title: "事業内容",
   // 総合HPトップ紹介文から（「洗濯」を含む文は CONTENT_SOURCE.md 9章#4 により使わない）
   description: "富士市にて訪問・居宅介護事業、家事支援事業を行っております。訪問介護、居宅介護、家事代行なら喜援！",
 };
@@ -27,7 +27,7 @@ export default function Page() {
 
   return (
     <>
-      <PageIntro title="サービス">
+      <PageIntro title="事業内容">
         <p className={introStyles.lead}>{servicesPage.intro}</p>
         <ServiceJumpNav label={servicesPage.navLabel} services={services} />
       </PageIntro>

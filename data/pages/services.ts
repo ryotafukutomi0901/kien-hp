@@ -10,7 +10,7 @@ import type { IconName, Tone } from "@/types/site";
  * CONTENT_SOURCE.md 9章の扱い（公開ページには注記を書かない）:
  *   #3 事業所名は原文の「水戸島」のまま。事業所ごとの所在地は載せない
  *   #4 家事支援の内容はホームヘルプの3つ。「洗濯」は書かない
- *      （そのため総合HPトップ紹介文のうち「掃除・洗濯や〜家事支援でサポートいたします！」の文は導入文に使わない）
+ *      （2026-10-09 クライアントの希望「旧サイトの文章は要約・改修せず、そのまま使う」により、この文は原文の全文を訪問介護の紹介に使う。「洗濯」の食い違いはクライアントに確認する）
  *   #8 予約フォームは未実装。ご予約はお電話と /contact へ案内する
  *   #9 支援地域は事業ごと（訪問介護=富士・富士宮市、家事支援=富士市内のみ）
  *   #11 重要事項説明書のリンクは置かない（PDF未入手）
@@ -75,7 +75,8 @@ export interface ServicesPageContent {
     menu: { title: string; items: HomeHelpMenuItem[]; excludedLabel: string };
     fee: { title: string; note: string; table: FeeTableContent };
     coverage: { title: string; items: { term: string; detail: string }[] };
-    cancel: { title: string; table: FeeTableContent };
+    /** 原文の「※注意事項」の文をそのまま（表にしない） */
+    cancel: { title: string; body: string[] };
     /** 固有名詞が長く自動の文節判定では不自然に切れるため、折り返してよい位置で区切った配列で持つ（つなげると原文） */
     partner: { title: string[]; body: string[] };
     reserve: { title: string; body: string; tel: string };
@@ -96,7 +97,7 @@ export const servicesPage: ServicesPageContent = {
       tone: "yellow",
       icon: "house",
       // 総合HPトップ紹介文「見守りや入浴介助、服薬管理等の介護支援から、〜でサポートいたします！」の介護支援の部分
-      lead: "見守りや入浴介助、服薬管理等の介護支援でサポートいたします。",
+      lead: "見守りや入浴介助、服薬管理等の介護支援から、掃除・洗濯や食事の用意、おむつ交換等の家事支援でサポートいたします！",
       office: {
         name: "水戸島訪問介護事業所",
         designationNumber: "2272303468",
@@ -156,8 +157,8 @@ export const servicesPage: ServicesPageContent = {
             "毎日大変なお食事の用意を代行します！",
             "バランスの取れた食事を提案し、健康を考えながら手間をなくしてご自宅での時間をゆっくりと！",
           ],
-          notes: ["お客様とご家族への支援となります。"],
-          excluded: "特別な手間をかける料理（お正月料理等）、来客の応接（飲物や食事の手配）は対象外です。",
+          // 原文は「※特別な手間をかける料理（お正月料理等）、来客の応接（飲物や食事の手配）は対象外です。お客様とご家族への支援となります。」の1つながり
+          excluded: "特別な手間をかける料理（お正月料理等）、来客の応接（飲物や食事の手配）は対象外です。お客様とご家族への支援となります。",
         },
       ],
     },
@@ -178,19 +179,15 @@ export const servicesPage: ServicesPageContent = {
       items: [
         { term: "対応エリア", detail: "富士市内" },
         { term: "対応日", detail: "祝祭日を除く月曜日〜金曜日" },
-        { term: "対応時間", detail: "9:00〜17:00" },
+        { term: "対応時間", detail: "9：00〜17：00" },
       ],
     },
     cancel: {
-      title: "キャンセルについて",
-      table: {
-        caption: "キャンセル料",
-        headers: ["キャンセルの時期", "キャンセル料"],
-        rows: [
-          { label: "サービス提供の2日前まで", value: "無料" },
-          { label: "サービス提供の前日以降", value: "2,000円" },
-        ],
-      },
+      title: "※注意事項",
+      body: [
+        "サービス提供前日以降のキャンセルをされる場合は、キャンセル料2,000円頂戴します。",
+        "2日前までのキャンセルに関してはキャンセル料は頂いておりませんのでご安心ください。",
+      ],
     },
     partner: {
       title: ["はぐくむFUJI", "家事育児サポート事業", "協力事業所"],
@@ -208,7 +205,7 @@ export const servicesPage: ServicesPageContent = {
     reserve: {
       title: "ご予約",
       // 原文「お電話でも承っております。」「お気軽にお電話ください。」。予約フォームは未実装のためお電話を案内する
-      body: "ご予約はお電話で承っております。お気軽にお電話ください。",
+      body: "ご予約いただけるようでしたら、下記のお電話番号にお気軽にお問合せください。",
       tel: site.company.tel,
     },
   },

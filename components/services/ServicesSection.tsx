@@ -17,14 +17,14 @@ export function ServicesSection() {
   // デスクトップの列数。4事業はモックどおり2×2、それ以外は事業数ぶん（最大3列）
   const columns = services.items.length === 4 ? 2 : Math.min(services.items.length, 3);
   // 「、」の直後で区切り、狭い幅ではそこで折り返させる（文言は data のまま）
-  const leadPhrases = services.lead.split(/(?<=、)/);
+  const leadPhrases = services.lead?.split(/(?<=、)/);
   return (
     <section className={styles.section} aria-labelledby="services-title">
       <LeafDecoration variant="bottom-left" className={styles.leaf} />
       <Container>
         <SectionTitle
           id="services-title"
-          subtitle={leadPhrases.map((phrase) => (
+          subtitle={leadPhrases?.map((phrase) => (
             <span key={phrase} className={styles.phrase}>
               {phrase}
             </span>

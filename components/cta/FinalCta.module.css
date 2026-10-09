@@ -127,7 +127,8 @@
 /* ---- desktop: 帯の高さ約140（1440px時）。ボタンは見出しの右隣、帯の縦中央 ---- */
 @media (min-width: 1024px) {
   .section {
-    padding-block: var(--space-5);
+    /* 見出しが原文どおり3行になったので、傾きで上下にはみ出す分を含めて余白を広げる */
+    padding-block: var(--space-7);
   }
 
   /*
@@ -147,6 +148,6 @@
 
   /* モックは見出しの文字の塊が帯の中央より少し上にある（ボタンは中央）。4pxだけ持ち上げる */
   .title {
-    transform: translateY(calc(var(--space-1) * -1)) rotate(-5deg);
+    transform: rotate(-4deg);
   }
 }

@@ -8,7 +8,7 @@ import { newsRecords } from "@/data/records/news";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "お知らせ",
+  title: "ニュース",
   description: "株式会社喜援（きえん）からのお知らせです。定期研修や事業所移転完了のお知らせを掲載しています。",
 };
 
@@ -16,16 +16,16 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <PageIntro title="お知らせ">
+      <PageIntro title="ニュース">
         <p>
           {site.company.legalForm}
           {site.company.name}からのお知らせです。
         </p>
-        <RecordYearNav records={newsRecords} label="お知らせ" />
+        <RecordYearNav records={newsRecords} label="ニュース" />
       </PageIntro>
       <RecordYearSections
         records={newsRecords}
-        label="お知らせ"
+        label="ニュース"
         footer={
           <div>
             <Button href="/events" variant="outline">
