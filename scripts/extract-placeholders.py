@@ -22,12 +22,6 @@ CROPS = [
     ("decor/leaf-bottom-left.png", (494, 204, 632, 322), True),
     ("decor/leaf-bottom-right.png", (670, 226, 832, 324), True),
     ("decor/leaf-small.png", (866, 232, 1002, 322), True),
-    ("services/business-support.jpg", (472, 658, 658, 761), False),
-    ("services/home-nursing.jpg", (687, 658, 873, 761), False),
-    ("staff/staff-group-indoor.jpg", (903, 658, 995, 762), False),
-    ("staff/staff-group-outdoor.jpg", (997, 658, 1089, 762), False),
-    ("staff/staff-meeting.jpg", (1117, 660, 1303, 764), False),
-    ("staff/staff-table.jpg", (1330, 660, 1512, 763), False),
     ("recruit/recruit.jpg", (333, 854, 483, 950), False),
     ("blog/blog.jpg", (515, 854, 671, 950), False),
 ]
