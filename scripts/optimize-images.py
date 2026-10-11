@@ -23,6 +23,8 @@ JOBS = [
     ("generated-originals/services-home-visit-alt2.png", "services/spare/home-visit-alt2.jpg", 1200),
     ("generated-originals/news-bg.png", "news/news-bg.jpg", 1400),
     ("generated-originals/recruit.png", "recruit/recruit.jpg", 900),
+    # 9枚が並んだ一覧画像（staff-day-sheet-9tiles.png）の予定表の1枚を切り出したもの。元が553px幅なので、それ以上には大きくしない
+    ("generated-originals/staff-day.png", "recruit/staff-day.jpg", 553),
     ("generated-originals/cta-panorama.png", "cta/cta-panorama.jpg", 2000),
     ("generated-originals/hero.png", "hero/hero.jpg", 1916),  # 原本が1916px幅。それ以上には大きくしない
     ("generated-originals/about-bg.png", "about/about-bg.jpg", 1800),

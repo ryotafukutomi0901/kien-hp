@@ -1,6 +1,6 @@
 /*
- * 事業の目印（ToneMark.tsx）。大きさは呼び出し側で --tone-mark-size を指定する（部品の寸法なので余白スケールの外）。
- * 色面と点はトーン色を地色に半分混ぜた淡い色（ロゴの水彩の点に近い明るさ）。線は本文と同じ紺。
+ * 事業・職種の目印（ToneMark.tsx）。大きさは呼び出し側で --tone-mark-size を指定する（部品の寸法なので余白スケールの外）。
+ * 輪の色はトーン色を地色に少し混ぜたもの（ロゴの水彩の点に近い明るさ）。漢字は本文と同じ紺。
  */
 .mark {
   display: block;
@@ -16,16 +16,36 @@
   overflow: visible;
 }
 
-.blob {
-  fill: color-mix(in srgb, var(--mark-base) 50%, var(--color-bg));
+.ring {
+  fill: color-mix(in srgb, var(--mark-base) 88%, var(--color-bg));
+  /* 小さく表示しても輪が細く消えないよう、同じ色の縁で一回り太くする */
+  stroke: color-mix(in srgb, var(--mark-base) 88%, var(--color-bg));
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+/* 輪の太い書き始めに通す地色の細い線（筆の割れ）。DateStamp と同じ見せ方 */
+.dry {
+  fill: none;
+  stroke: var(--color-bg);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.55;
 }
 
 .dot {
-  fill: color-mix(in srgb, var(--mark-dot) 50%, var(--color-bg));
+  fill: color-mix(in srgb, var(--mark-dot) 70%, var(--color-bg));
 }
 
 .glyph {
-  color: var(--color-text);
+  fill: var(--color-text);
+  stroke: var(--color-text);
+  stroke-width: 1.6; /* 手書きの筆圧に近づけ、小さくても読めるようにする */
+  stroke-linejoin: round;
+  paint-order: stroke;
+  font-family: var(--font-heading);
+  font-size: 46px;
+  font-weight: 600;
 }
 
 /* 添える点はロゴの配色（黄・緑・桃）から、自分以外の色を選ぶ */

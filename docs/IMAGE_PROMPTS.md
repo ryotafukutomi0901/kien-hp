@@ -7,6 +7,9 @@
 ### 差し替え済み
 サービス3枚（`services/home-visit.jpg` `care-plan.jpg` `home-help.jpg`。予備2枚は `services/spare/`）、お知らせ右の写真（`news/news-bg.jpg`）、採用情報カード（`recruit/recruit.jpg`）、最終CTA（`cta/cta-panorama.jpg`）、**ヒーロー（`hero/hero.jpg`）、私たちのこと背景（`about/about-bg.jpg`）、同・楕円（`about/about-oval.jpg`）**（2026-10-08）。
 
+### 2026-10-11 更新
+スタッフの一日カード（No.12）を差し替え（`recruit/staff-day.jpg`。9枚が並んだ一覧画像の予定表の1枚を切り出したため、元が553px幅と小さい。単体の高解像度画像が入ったら置き換える）。会社行事4枚は旧サイトの写真に差し替え済み。
+
 ### 画質が荒いまま残っている箇所（トップページ。実測）
 
 すべて素材シート（モック添付の1536×1024）から切り出した仮画像で、幅92〜186px。次の3種類が残っている。

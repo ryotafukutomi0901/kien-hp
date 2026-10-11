@@ -17,6 +17,6 @@ export const promos: PromoCard[] = [
     icon: "document",
     tone: "orange",
     cta: { label: "1日の流れを見る", href: "/recruit#day" },
-    image: { src: "/images/blog/blog.jpg", alt: "", position: "100% 30%" },
+    image: { src: "/images/recruit/staff-day.jpg", alt: "", position: "40% 50%" },
   },
 ];

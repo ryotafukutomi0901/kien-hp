@@ -23,7 +23,6 @@ CROPS = [
     ("decor/leaf-bottom-right.png", (670, 226, 832, 324), True),
     ("decor/leaf-small.png", (866, 232, 1002, 322), True),
     ("recruit/recruit.jpg", (333, 854, 483, 950), False),
-    ("blog/blog.jpg", (515, 854, 671, 950), False),
 ]
 
 
