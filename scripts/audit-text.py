@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE = "http://localhost:3461"
-PAGES = ["/", "/services", "/about", "/events", "/recruit", "/news", "/contact"]  # /privacy・404 は新規作成のため対象外
+PAGES = ["/", "/services/home-visit", "/services/care-plan", "/services/home-help", "/about", "/events", "/recruit", "/news", "/contact"]  # /privacy・404 は新規作成のため対象外
 
 
 def strip(s: str) -> str:

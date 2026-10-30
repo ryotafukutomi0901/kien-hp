@@ -1,0 +1,19 @@
+/*
+ * 会社行事の一覧ページ（app/events）と下層ページ（app/events/[id]）の本文の地と余白。
+ * 地は下層ページの節（PageSection の plain）と同じ半透明の白で、全ページの固定背景（色の丸）を淡く透かす。
+ */
+.page {
+  padding-block: var(--space-8) var(--space-10);
+  background: var(--veil);
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-10);
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding-block: var(--space-9) var(--space-12);
+  }
+}

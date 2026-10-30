@@ -14,6 +14,9 @@ import type { IconName, Tone } from "@/types/site";
  *   #8 予約フォームは未実装。ご予約はお電話と /contact へ案内する
  *   #9 支援地域は事業ごと（訪問介護=富士・富士宮市、家事支援=富士市内のみ）
  *   #11 重要事項説明書のリンクは置かない（PDF未入手）
+ *
+ * 2026-10-21 引き継ぎで3事業を独立ページにした（/services は一覧、/services/home-visit・care-plan・home-help）。
+ * 家事支援の料金表は PriceGuide（components/page/PriceGuide.tsx）が家事支援以外の全ページにも出す。値はここの fee だけを参照する。
  */
 
 export type ServiceId = "home-visit" | "care-plan" | "home-help";
@@ -72,13 +75,36 @@ export interface ServicesPageContent {
   navLabel: string;
   services: ServiceSummary[];
   homeHelp: {
+    /**
+     * 「喜援ホームヘルプサービスについて」（ホームヘルプの旧サイト トップ・サービスページの原文。2026-10-28 に全ページを巡回して取り込み）
+     * catch はトップの見出し、lead はトップの副見出し、body はサービスページの紹介文（段落・行ごと、原文のまま）
+     */
+    about: {
+      title: string;
+      catch: string;
+      lead: string;
+      body: string[];
+    };
     menu: { title: string; items: HomeHelpMenuItem[]; excludedLabel: string };
     fee: { title: string; note: string; table: FeeTableContent };
     coverage: { title: string; items: { term: string; detail: string }[] };
     /** 原文の「※注意事項」の文をそのまま（表にしない） */
     cancel: { title: string; body: string[] };
-    /** 固有名詞が長く自動の文節判定では不自然に切れるため、折り返してよい位置で区切った配列で持つ（つなげると原文） */
-    partner: { title: string[]; body: string[] };
+    /**
+     * はぐくむFUJI（富士市）の案内。家事支援事業のページの中の1節として置く（2026-10-21 引き継ぎ 06:
+     * 「はぐくむ富士→家事支援事業となるようページ表示を変更する」）。
+     * title・body は固有名詞が長く自動の文節判定では不自然に切れるため、折り返してよい位置で区切った配列で持つ（つなげると原文）。
+     */
+    hagukumu: {
+      title: string[];
+      body: string[];
+      /** 旧サイトの「詳しくは、富士市 家事・育児サポートの『サービス内容』をご覧ください。」 */
+      note: string;
+      /** 登録済みの方: お問い合わせへ（2026-10-21 打ち合わせ） */
+      registered: { text: string; contact: { label: string; href: string } };
+      /** まだ登録していない方: 行政サービス（富士市）のページでご登録のうえ、お問い合わせへ */
+      unregistered: { text: string; links: { label: string; href: string }[] };
+    };
     reserve: { title: string; body: string; tel: string };
   };
   contactLabel: string;
@@ -133,6 +159,18 @@ export const servicesPage: ServicesPageContent = {
 
   // 喜援ホームヘルプサービス「サービス」ページの原文（見出しは PAGES.md の3つの名前）
   homeHelp: {
+    about: {
+      title: "喜援ホームヘルプサービスについて",
+      catch: "忙しくて育児が大変！疲れて家事に手が回らない！そんなあなたへ！",
+      lead: "長年の介護とスタッフの個々のスキルを活かしたサービスを心を込めて！",
+      body: [
+        "女性の社会進出が進み、共働きが当たり前になった現代で「忙しくて育児が大変！」「疲れて家事に手が回らない！」ということが増え、つい後回しにしたり無理をしたりする方が多くなってまいりました。また、一人暮らしや高齢化で「できないこと」も増えております。",
+        "そこで弊社では、そんな方々の手助けがしたいと思い、「家事支援サービス」を始めました。",
+        "疲れを癒す時間が欲しい！たまの贅沢のために！",
+        "そんなあなたに、喜援のサポートをご利用ください！",
+        "長年の介護経験とスタッフ個々のスキルを活かしたサービスを提供いたします！",
+      ],
+    },
     menu: {
       title: "サービス内容",
       excludedLabel: "対象外",
@@ -168,10 +206,9 @@ export const servicesPage: ServicesPageContent = {
       table: {
         caption: "家事支援の料金",
         headers: ["時間", "料金"],
-        rows: [
-          { label: "1回1時間", value: "2,500円" },
-          { label: "1回2時間", value: "5,000円" },
-        ],
+        // 「1回2時間 5,000円」は載せない（2026-10-21 引き継ぎ 05「2時間5,000円は非表示」）。
+        // 1時間2,500円も正しい金額かどうかは田中さんに確認中（docs/CLIENT_CHECKLIST.md）。確定したらここだけ直す
+        rows: [{ label: "1回1時間", value: "2,500円" }],
       },
     },
     coverage: {
@@ -189,7 +226,7 @@ export const servicesPage: ServicesPageContent = {
         "2日前までのキャンセルに関してはキャンセル料は頂いておりませんのでご安心ください。",
       ],
     },
-    partner: {
+    hagukumu: {
       title: ["はぐくむFUJI", "家事育児サポート事業", "協力事業所"],
       body: [
         "はぐくむFUJI",
@@ -201,6 +238,22 @@ export const servicesPage: ServicesPageContent = {
         "ご利用いただけます！",
         "ぜひご活用ください！",
       ],
+      note: "詳しくは、富士市 家事・育児サポートの「サービス内容」をご覧ください。",
+      registered: {
+        text: "はぐくむFUJIに登録済みの方は、こちらからお問い合わせください。",
+        contact: { label: "お問い合わせ", href: site.contact.href },
+      },
+      unregistered: {
+        text: "ご利用をご希望で、まだ登録されていない方は、こちらからご登録のうえ、お問い合わせください。",
+        // 富士市の公式ページ（外部サイト）。2026-10-28 に、旧ホームヘルプサイトにあった「はぐくむFUJI家事育児サポート事業ページ」
+        // へのリンク（転送先 p001498）を確認して差し替えた。この事業の利用は、富士市への利用申請（電子申請）→ 利用者証の郵送 →
+        // 事業者（喜援）へ連絡、の流れ（富士市のページより）。10-27 に入れた p001523（子育てガイド）・p001528（子育て応援アプリ）は
+        // この事業の案内ではないため外した
+        links: [
+          { label: "はぐくむFUJI家事育児サポート事業（富士市）", href: "https://www.city.fuji.shizuoka.jp/1023150000/p001498.html" },
+          { label: "利用申請はこちら（富士市の電子申請）", href: "https://logoform.jp/form/5KXT/480451" },
+        ],
+      },
     },
     reserve: {
       title: "ご予約",

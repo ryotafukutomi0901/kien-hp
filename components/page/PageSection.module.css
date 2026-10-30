@@ -4,12 +4,13 @@
   scroll-margin-top: var(--space-3);
 }
 
+/* 2026-10-28: 全ページの固定背景（色の丸）を透かす。plain は半透明の白、soft は透明 */
 .plain {
-  background: var(--color-bg);
+  background: var(--veil);
 }
 
 .soft {
-  background: var(--color-bg-soft);
+  background: transparent;
 }
 
 .body {

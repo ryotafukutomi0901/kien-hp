@@ -1,0 +1,58 @@
+/*
+ * 一覧の頭の「最近の行事」（手本: ハウステンボス採用サイトのお知らせの「トピックス」）
+ *   中央の見出し → カード3列（767px以下は1列）→ 一覧との区切り線
+ *   見出しは1文字ずつ、文字の高さぶん下から出る（手本と同じ 0.6s cubic-bezier(.87,0,.13,1)、0.1s 待って 0.05s ずつ）
+ */
+.topics {
+  display: grid;
+  gap: var(--space-7);
+  padding-bottom: var(--space-10);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  font-size: var(--t-heading-sm);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+}
+
+/* 見出し全体は下から出さず、文字だけを動かす（サイト共通の出現の動きを打ち消す） */
+:global(html[data-reveal-ready]) .title[data-reveal]:not(:global(.is-revealed)) {
+  opacity: 1;
+  transform: none;
+}
+
+.char {
+  display: inline-block;
+  transition:
+    transform 0.6s cubic-bezier(0.87, 0, 0.13, 1),
+    opacity 0.8s ease;
+  transition-delay: calc(0.1s + var(--i) * 0.05s);
+}
+
+:global(html[data-reveal-ready]) .title:not(:global(.is-revealed)) .char {
+  opacity: 0;
+  transform: translateY(101%);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8) var(--space-5);
+}
+
+/* 3件を1段に並べる。767px以下は1枚の幅が狭く題が細かく折り返すので1列 */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .char {
+    transition: none;
+  }
+}

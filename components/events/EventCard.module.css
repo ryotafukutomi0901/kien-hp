@@ -1,70 +1,93 @@
-/* スタッフ紹介のカード。リンク領域は写真＋タイトル、日付はその下（リンク外） */
+/* 会社行事のカード（手本の「Works」: 色の面・角丸20px・写真は上に角丸付き・下に名前と日付） */
 .card {
-  display: flex;
-  flex-direction: column;
+  --card-bg: var(--logo-yellow);
+
+  height: 100%;
 }
+
+.yellow { --card-bg: var(--logo-yellow); }
+.green { --card-bg: var(--logo-mint); }
+.orange { --card-bg: var(--logo-coral); }
+.blue { --card-bg: var(--logo-pink); }
 
 .link {
-  display: grid;
-  gap: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  color: var(--color-text);
+  transition: transform var(--duration-base) var(--ease-spring);
 }
 
-/* モック実測 約158×76（→262×126）。比率 約2.08:1 */
+.link:hover {
+  transform: translateY(-4px) rotate(-0.6deg);
+}
+
+.label {
+  font-size: var(--ui-caption);
+  font-weight: 700;
+  letter-spacing: var(--ls-en);
+}
+
 .media {
   position: relative;
-  aspect-ratio: 25 / 12;
+  display: block;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: var(--radius-sm);
-  background: var(--color-border); /* 画像の読み込み前に枠が消えないように */
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
 }
 
 .image {
   object-fit: cover;
-  transition: transform var(--duration-base) var(--ease-out);
+  transition: transform 900ms var(--ease-out);
+}
+
+.link:hover .image {
+  transform: scale(1.05);
 }
 
 .title {
   font-size: var(--t-note);
-  font-weight: 500;
-  line-height: var(--lh-body);
+  line-height: var(--lh-compact);
   letter-spacing: var(--ls-body);
-  color: var(--color-text);
-  text-underline-offset: var(--space-1);
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
-/* 改行位置は data/sections/events.ts の配列で決める */
-.line {
-  display: block;
-}
-
-/* タイトルとの間は行ボックスの余白だけで足りる（モックの字面間 約15px） */
-.date {
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   margin-top: auto;
+}
+
+.date {
   font-size: var(--ui-meta);
-  line-height: var(--lh-body);
+  font-weight: 700;
   letter-spacing: var(--ls-ui);
-  color: var(--color-text-muted);
 }
 
-@media (hover: hover) {
-  .link:hover .image {
-    transform: scale(1.03);
-  }
-
-  .link:hover .title {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-  }
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--ui-meta);
+  font-weight: 700;
 }
 
-/* キーボード操作でも hover と同じ手がかり（フォーカスリングは base.css） */
-.link:focus-visible .title {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .link:hover .image {
-    transform: none;
-  }
+.moreIcon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  font-size: var(--ui-meta);
+  line-height: 1;
 }

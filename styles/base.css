@@ -19,10 +19,12 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
+  font-weight: var(--fw-body);
   font-size: var(--t-note);
   line-height: var(--lh-body);
   letter-spacing: var(--ls-body);
-  font-feature-settings: "palt" 0;
+  font-feature-settings: "palt" 1; /* 手本と同じく、和文の約物を詰めて組む */
+  font-synthesis: none; /* 和文（けいなんむぎまるJP）は太さが1つ。太字の指定で字を太らせず、差は文字サイズだけにする */
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
@@ -50,8 +52,27 @@ h1,
 h2,
 h3,
 h4 {
-  font-weight: 600;
   line-height: var(--lh-heading);
+}
+
+/*
+ * 見出し（h1〜h4）の書体と太さはサイト全体で1つに固定する（2026-10-21 打ち合わせ「H1,2,3でフォントは統一厳守。
+ * フォントサイズだけで調整」）。各コンポーネントのCSSが font-family / font-weight を指定しても上書きされるよう !important を使う。
+ * 見出しの大きさの差は文字サイズ（--t-*）だけで付ける。和文は本文も同じ書体・同じ太さ（2026-10-28 けいなんむぎまるJP）。
+ */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading) !important;
+  font-weight: var(--fw-heading) !important;
+}
+
+/* 折り返した最後の行に1〜2文字だけ残らないよう、行の長さを整える（2026-10-21 引き継ぎ 04。対応していないブラウザは従来どおり） */
+p,
+li,
+dd {
+  text-wrap: pretty;
 }
 
 a {
@@ -106,6 +127,32 @@ button {
 
 .skip-link:focus {
   transform: none;
+}
+
+/* 白い地の帯（トップの流れる欧文など、セクションの間に挟む部品用） */
+.band-white {
+  padding-block: 0 var(--space-9);
+  background: var(--veil);
+}
+
+/*
+ * スクロールで現れる演出（components/common/Reveal.tsx）。JSが動いてから隠すので、JSが無くても内容は読める。
+ * data-reveal="up"（既定）は下から、"scale" は少し小さい状態から現れる。--reveal-delay で順番に出す。
+ */
+html[data-reveal-ready] [data-reveal]:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(var(--space-7));
+}
+
+html[data-reveal-ready] [data-reveal="scale"]:not(.is-revealed) {
+  transform: scale(0.92);
+}
+
+[data-reveal] {
+  transition:
+    opacity var(--duration-reveal) var(--ease-out),
+    transform var(--duration-reveal) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
 @media (prefers-reduced-motion: reduce) {

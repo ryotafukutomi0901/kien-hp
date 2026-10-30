@@ -6,6 +6,7 @@ import { events } from "./sections/events";
 import { finalCta } from "./sections/final-cta";
 import { hero } from "./sections/hero";
 import { news } from "./sections/news";
+import { philosophyMarquee, recruitMarquee } from "./sections/marquee";
 import { promos } from "./sections/promos";
 import { services } from "./sections/services";
 
@@ -45,11 +46,60 @@ export const site: SiteContent = {
     // 「お問い合わせ」はヘッダーのボタン（contact）、「INFO」は下位の2項目をそのまま並べている
     { label: "ホーム", href: "/" },
     { label: "会社概要", href: "/about#company" },
-    { label: "事業内容", href: "/services" },
+    // 事業内容: マウスを乗せると3事業のタブが開く（2026-10-28 CEO指示。一覧ページ /services は廃止）。
+    // href はトップの事業内容の節。子項目はトップの事業カードと同じ data/sections/services.ts から作る
+    {
+      label: "事業内容",
+      href: "/#services",
+      children: services.items.map((item) => ({
+        label: item.title,
+        href: item.link.href,
+        tone: item.tone,
+        icon: item.icon,
+      })),
+    },
     { label: "アクセス", href: "/about#offices" },
     { label: "採用情報", href: "/recruit" },
     { label: "ニュース", href: "/news" },
     { label: "会社行事", href: "/events" },
+  ],
+
+  footerNav: [
+    {
+      en: "Company",
+      title: "会社案内",
+      links: [
+        { label: "会社概要", href: "/about#company" },
+        { label: "アクセス", href: "/about#offices" },
+      ],
+    },
+    {
+      en: "Service",
+      title: "事業内容",
+      links: [
+        { label: "訪問介護事業", href: "/services/home-visit" },
+        { label: "居宅介護支援事業", href: "/services/care-plan" },
+        { label: "家事支援事業", href: "/services/home-help" },
+      ],
+    },
+    {
+      en: "Recruit",
+      title: "採用情報",
+      links: [
+        { label: "採用情報 TOP", href: "/recruit" },
+        { label: "スタッフの一日", href: "/recruit#day" },
+        { label: "よくあるご質問", href: "/recruit#faq" },
+      ],
+    },
+    {
+      en: "Information",
+      title: "お知らせ",
+      links: [
+        { label: "ニュース", href: "/news" },
+        { label: "会社行事", href: "/events" },
+        { label: "お問い合わせ", href: "/contact" },
+      ],
+    },
   ],
 
   contact: { label: "お問い合わせ", href: "/contact" },
@@ -57,8 +107,19 @@ export const site: SiteContent = {
   // フッターのコピーライトの近くに出す
   legal: [privacyLink],
 
-  // SNSは載せない（2026-10-04 CEO指示。旧サイトにあったInstagramは掲載しない）
-  social: {},
+  // Instagram: 2026-10-04 は「載せない」だったが、2026-10-21 引き継ぎで「Instagramへつながる導線を整える」に変わった。
+  // アカウントのURLが未入手のため未設定（旧サイトのHTMLにもリンクが無い）。URLを入れると、トップの Instagram の列が出て、
+  // ヒーローのカードとフッターの Official SNS（未入手の間は仮のリンク）が本物のリンクになる。確認事項は docs/CLIENT_CHECKLIST.md。
+  social: {
+    // instagram: "https://www.instagram.com/（アカウント名）/",
+  },
+
+  // トップの Instagram の列の文言。旧サイトの「インスタグラムを始めました！よろしければフォローをお願いします！」から
+  instagram: {
+    title: "Instagram",
+    body: ["インスタグラムを始めました！", "よろしければフォローをお願いします！"],
+    cta: "Instagramを見る",
+  },
 
   hero,
   services,
@@ -67,4 +128,6 @@ export const site: SiteContent = {
   news,
   promos,
   finalCta,
+  marquees: { philosophy: philosophyMarquee, recruit: recruitMarquee },
+  recruitEn: "Recruit",
 };

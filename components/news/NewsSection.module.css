@@ -1,94 +1,126 @@
 /*
- * トップのNEWS（モック (0,1325)-(869,1465)）。
- * 上下の余白はこのセクションでは持たない。上は Staff の下余白、下は Recruit/Blog の上余白で
- * 区切り線・パネルまでの間隔が決まる（モック実測: 線の上 約33px／パネルの下 約26px）。
+ * お知らせ（手本: 日本テレビアートの「News」。白い地）
+ *   1024px以上: 左に見出し（約300px）、右に一覧。一覧の行は 正方形（200px）｜日付・件名・もっとみる、行の間に区切り線
  */
 .section {
-  background: var(--color-bg-soft);
+  padding-block: var(--section-pad-block);
+  background: var(--veil);
 }
 
-/*
- * Staff との区切り線（コンテナ幅・1px）。見出しはモックどおり線のすぐ下に詰める（線→字面の上端 約16px）。
- * 「一覧を見る →」は見出しとベースラインをそろえる。
- */
-.head {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap; /* 320px幅など見出しと並ばない幅では「一覧を見る」を次の行の右端へ送る */
-  justify-content: space-between;
-  column-gap: var(--space-4);
+.inner {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.main {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.list > li + li {
   border-top: 1px solid var(--color-border);
 }
 
-/*
- * 矢印の右端をパネルの角丸の内側にそろえる（モック実測）。
- * ArrowLink のタップ領域（min-height 44px）は保ったまま、上下にはみ出す分を負のマージンで相殺し、
- * 見出し行の高さ＝見出しの行高にする（はみ出し分で見出しとパネルの間隔が広がらないように）。
- */
-.more {
-  margin-inline: auto var(--space-2);
-  margin-block: calc((1lh - var(--tap-min)) / 2);
-  white-space: nowrap;
+.row {
+  display: grid;
+  grid-template-columns: calc(var(--space-12) - var(--space-4)) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-5);
+  padding-block: var(--space-5);
+  color: var(--color-text);
 }
 
-.panel {
-  position: relative;
-  margin-top: var(--space-2); /* 見出しの字面の下端→パネル 約18px（モック実測 約20px） */
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+.thumb {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  background: var(--thumb-bg);
+  transition: transform var(--duration-base) var(--ease-spring);
+}
+
+.row:hover .thumb {
+  transform: rotate(-4deg) scale(1.03);
+}
+
+.yellow { --thumb-bg: var(--logo-yellow); }
+.green { --thumb-bg: var(--logo-mint); }
+.orange { --thumb-bg: var(--logo-coral); }
+.blue { --thumb-bg: var(--logo-pink); }
+
+/* 手本は正方形の中に一回り小さい写真。こちらは白い角丸の中に会社のマーク */
+.thumbMark {
+  display: grid;
+  place-items: center;
+  width: 62%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
   background: var(--color-bg);
 }
 
-/* ---- モバイル: 写真はパネル上部の細い帯。下端を白へフェードして一覧につなぐ ---- */
-.media {
-  position: relative;
-  height: var(--space-9);
-  overflow: hidden;
-  border-radius: calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0 0; /* 枠線の内側の角丸 */
-  mask-image: linear-gradient(to bottom, #000 35%, transparent);
+.thumbImage {
+  width: 46%;
+  height: auto;
 }
 
-.image {
-  object-fit: cover;
+.text {
+  display: grid;
+  gap: var(--space-2);
 }
 
-.list {
-  padding-inline: var(--space-4);
+.date {
+  font-size: var(--ui-meta);
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text-muted);
 }
 
-/*
- * ---- タブレット以上: 写真をパネル右側に重ね、左端を白へフェードする ----
- * 写真の幅（--photo-w）はパネル幅に対する比率。リンクの右端も同じ値で内側へ寄せ、文字とフォーカスリングが写真に潜らないようにする。
- * 行間の線はリストの右端まで引き、写真のフェード部分で自然に消える（不透明な部分では写真の下に隠れる）。
- */
+.title {
+  font-size: var(--t-body);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+  letter-spacing: var(--ls-body);
+}
+
+.row:hover .title {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: var(--space-3);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.all {
+  display: flex;
+  justify-content: center;
+}
+
 @media (min-width: 640px) {
-  .panel {
-    container-type: inline-size;
-    --photo-w: 25cqi; /* 定義書: タブレットは25%程度 */
-  }
-
-  .media {
-    position: absolute;
-    inset-block: -1px; /* 写真を枠線の上まで広げ、右側の枠を写真で隠す（モックでは写真が角まで届く） */
-    right: -1px;
-    width: var(--photo-w);
-    height: auto;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    mask-image: linear-gradient(to right, transparent, #000 30%);
-  }
-
-  .list {
-    --news-row-inset-end: calc(var(--photo-w) + var(--space-5));
-    padding-inline: var(--space-5) 0;
+  .row {
+    grid-template-columns: calc(var(--space-12) + var(--space-5)) minmax(0, 1fr);
+    gap: var(--space-7);
   }
 }
 
 @media (min-width: 1024px) {
-  .panel {
-    --photo-w: 31cqi; /* モック: 226/724px。1440幅で約372px */
+  .inner {
+    grid-template-columns: calc(var(--space-12) * 2.3) minmax(0, 1fr);
+    align-items: start;
   }
 
-  .media {
-    mask-image: linear-gradient(to right, transparent, #000 22%); /* モック実測: 写真幅の約2割で不透明になる */
+  .row {
+    grid-template-columns: calc(var(--space-12) + var(--space-9)) minmax(0, 1fr);
   }
 }

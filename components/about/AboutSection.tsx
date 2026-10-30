@@ -1,60 +1,78 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 import { Button } from "@/components/common/Button";
+import { ScrollDrift } from "@/components/motion/ScrollDrift";
 import { Container } from "@/components/common/Container";
-import { LeafDecoration } from "@/components/common/LeafDecoration";
 import { SectionTitle } from "@/components/common/SectionTitle";
+import { aboutPage } from "@/data/pages/about";
 import { site } from "@/data/site";
 
 import styles from "./AboutSection.module.css";
 
 /**
- * 私たちのこと（モック y900〜1120）。
- * 全幅のぼかした富士山＋左を白く霞ませた背景の上に、左にテキスト列、右に白枠の楕円写真。
- * モバイルは 見出し→本文→ボタン→楕円写真 の1列。
+ * 経営理念（手本: 日本テレビアートの「Who We Are」）。トップでは Hero の直後（2026-10-21 引き継ぎ）。
+ * 中央揃えの大きな欧文＋日本語の見出し（ほかの節と同じ SectionTitle。2026-10-29 CEO指摘「経営理念だけH2ちっちゃくない？」で小さなラベルから変更）
+ * → 中央に大きく理念の3か条 → 横に流れる色のタイル（写真入り）→ ご挨拶の文 → 会社案内へ。
+ * ご挨拶の文は /about と同じ原文（data/pages/about.ts）を使う。
  */
 export function AboutSection() {
   const { about } = site;
+  const { greeting } = aboutPage.company;
+  // タイルの列は途切れなく流すため2回描く（2回目は読み上げない）
+  const tiles = [...about.gallery, ...about.gallery];
   return (
     <section className={styles.section} aria-labelledby="about-title">
-      <div className={styles.background} aria-hidden="true">
-        {/* ぼかして使うので、表示幅の半分の解像度で足りる */}
-        <Image
-          src={about.background.src}
-          alt=""
-          fill
-          sizes="50vw"
-          className={styles.backgroundImage}
-          style={{ objectPosition: about.background.position }}
-        />
-      </div>
-      <LeafDecoration variant="bottom-left" className={styles.leafLeft} />
-      <LeafDecoration variant="single" className={styles.leafRight} />
-      <Container className={styles.inner}>
-        <div className={styles.text}>
-          <SectionTitle id="about-title">{about.title}</SectionTitle>
-          <p className={styles.body}>
-            {about.body.map((line) => (
-              <span key={line} className={styles.line}>
-                {line}
-              </span>
+      <Container>
+        <div data-reveal>
+          <SectionTitle id="about-title" en={about.en} align="center">
+            {about.title}
+          </SectionTitle>
+        </div>
+        <ol className={styles.principles}>
+          {about.body.map((line, i) => (
+            <li key={line} data-reveal style={{ "--reveal-delay": `${i * 120}ms` } as CSSProperties}>
+              {line}
+            </li>
+          ))}
+        </ol>
+      </Container>
+
+      <div className={styles.gallery} aria-hidden="true">
+        {/* CSS の無限の流れに、スクロールでの横の動き（GSAP）を重ねる */}
+        <ScrollDrift distance={320}>
+          <ul className={styles.galleryTrack}>
+            {tiles.map((tile, i) => (
+              <li key={`${tile.image.src}-${i}`} className={`${styles.tile} ${styles[tile.shape]} ${styles[tile.tone]}`}>
+                <span className={styles.tilePhoto}>
+                  <Image
+                    src={tile.image.src}
+                    alt=""
+                    fill
+                    sizes="240px"
+                    className={styles.tileImage}
+                    style={{ objectPosition: tile.image.position }}
+                  />
+                </span>
+              </li>
             ))}
+          </ul>
+        </ScrollDrift>
+      </div>
+
+      <Container className={styles.message}>
+        <p className={styles.motto} data-reveal>
+          {greeting.motto}
+        </p>
+        {[greeting.opening, ...greeting.body].map((paragraph) => (
+          <p key={paragraph} className={styles.paragraph} data-reveal>
+            {paragraph}
           </p>
-          <Button href={about.cta.href} size="lg" className={styles.cta}>
+        ))}
+        <div className={styles.cta} data-reveal>
+          <Button href={about.cta.href} variant="white" size="lg">
             {about.cta.label}
           </Button>
-        </div>
-        <div className={styles.photo}>
-          <div className={styles.photoInner}>
-            <Image
-              src={about.photo.src}
-              alt={about.photo.alt}
-              fill
-              sizes="(min-width: 1280px) 612px, (min-width: 1024px) 50vw, (min-width: 640px) 45vw, 100vw"
-              className={styles.photoImage}
-              style={{ objectPosition: about.photo.position }}
-            />
-          </div>
         </div>
       </Container>
     </section>

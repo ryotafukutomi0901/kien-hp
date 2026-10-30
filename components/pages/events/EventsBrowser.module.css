@@ -1,0 +1,125 @@
+/*
+ * 会社行事の一覧（手本: ハウステンボス採用サイトのお知らせ）
+ *   1024px以上: 左に分類の目次（画面に付いてくる）、右にカード3列
+ *   640〜1023px: 上に開閉式の目次、カード2列 / 639px以下: カード1列
+ *   下にページ送り（丸いボタン。いまのページはコーラル）
+ *   カードは画面に入ると下からふわっと出る（手本と同じ 0.8s・同じ緩急、列ごとに 0.15s ずつ遅らせる）
+ */
+.browser {
+  --ease-reveal: cubic-bezier(0.33, 1, 0.68, 1); /* 手本の出現の緩急 */
+  --ease-card: cubic-bezier(0.16, 1, 0.3, 1);
+
+  display: grid;
+  gap: var(--space-7);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8) var(--space-5);
+}
+
+.cell {
+  transition:
+    opacity 0.8s var(--ease-reveal),
+    transform 0.8s var(--ease-reveal);
+}
+
+/* JS が動いてから隠す（JS が無い環境では最初から見える） */
+.ready .cell:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(var(--space-8));
+}
+
+/* ---- ページ送り ---- */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+}
+
+.pageButton {
+  display: grid;
+  place-items: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  border: 1px solid var(--color-text);
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--t-body);
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    background-color 0.4s var(--ease-card),
+    border-color 0.4s var(--ease-card);
+}
+
+.pageButton[aria-current="page"] {
+  border-color: var(--logo-coral);
+  background: var(--logo-coral);
+}
+
+.prevIcon {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .pageButton:not([aria-current="page"]):hover {
+    background: var(--color-bg-gray);
+  }
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cell:nth-child(2n) {
+    transition-delay: 0.15s;
+  }
+
+  .pageButton {
+    width: var(--space-9);
+    height: var(--space-9);
+  }
+}
+
+@media (min-width: 1024px) {
+  .browser {
+    grid-template-columns: calc(var(--space-12) * 2) minmax(0, 1fr);
+    gap: var(--space-9);
+    align-items: start;
+  }
+
+  /* 目次は画面に付いてくる（ヘッダーの下） */
+  .side {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-5));
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cell:nth-child(2n) {
+    transition-delay: 0s;
+  }
+
+  .cell:nth-child(3n + 2) {
+    transition-delay: 0.15s;
+  }
+
+  .cell:nth-child(3n) {
+    transition-delay: 0.3s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell,
+  .pageButton {
+    transition: none;
+  }
+}

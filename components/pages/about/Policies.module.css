@@ -9,8 +9,8 @@
   flex-shrink: 0;
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill);
-  background: var(--color-primary-strong);
-  color: var(--color-on-dark);
+  background: var(--color-action);
+  color: var(--color-on-action);
   font-size: var(--ui-meta);
   font-weight: 700;
   line-height: var(--lh-compact);
@@ -45,15 +45,15 @@
   gap: var(--space-3);
 }
 
-/* ①〜③の丸数字。白文字×--color-primary-strong で4.6:1 */
+/* ①〜③の丸数字。紺文字×--color-action で6.7:1 */
 .badge {
   display: grid;
   place-items: center;
   width: var(--space-7);
   height: var(--space-7);
   border-radius: var(--radius-pill);
-  background: var(--color-primary-strong);
-  color: var(--color-on-dark);
+  background: var(--color-action);
+  color: var(--color-on-action);
   font-size: var(--t-note);
   font-weight: 700;
   line-height: 1;

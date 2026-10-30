@@ -67,7 +67,7 @@ export const contactPage: ContactPageContent = {
     area: "富士市内",
     days: "祝祭日を除く月曜日〜金曜日",
     hours: "9:00〜17:00",
-    detail: { label: "家事支援のサービス・料金を見る", href: "/services#home-help" },
+    detail: { label: "家事支援のサービス・料金を見る", href: "/services/home-help" },
   },
   privacy: {
     // 原文の見出しは「個人情報の取り扱いについて」（ホームヘルプ）。375pxで末尾の「て」だけが次の行に落ちるため「について」を省いている

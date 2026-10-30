@@ -1,0 +1,265 @@
+/*
+ * めくれる事業カード（2026-10-28 CEOが示したカード。動き: 奥行き1000px、Y軸で180度回転、1.3秒、裏面は隠す）
+ * 見た目もCEOの2つ目の案に合わせる: 面は120度の斜めのグラデーションで、右下に濃い色の帯が斜めに入る。細い枠、角丸1rem。
+ * 元の案のコーラル×ビスクを、事業ごとのロゴの色（--face-bg）と、その淡い色（--face-tint）に置き換えた。
+ * 元の案は文字がコーラル（表）・白（裏）だが、淡い地では読めない（AA未達）ため、文字はほぼ黒にしている。
+ *   表: 中央にはんこと事業名（h3。日本語だけ）。表の全面が透明なボタンで、押すとめくれる
+ *   裏: 写真（角丸）、事業名（＋家事支援は「はぐくむFUJI 協力事業所」の札）、説明（原文）、「詳しく見る →」と「戻る」
+ * 高さは表と裏で同じ（重ねて回すため）。裏の写真が残りの高さを受け持ち、文が長いときは写真が縮む。
+ */
+.card {
+  --face-bg: var(--logo-yellow);
+  --face-tint: var(--tone-yellow-tint);
+  --card-h: 460px;
+
+  height: var(--card-h);
+  perspective: 1000px;
+}
+
+.yellow { --face-bg: var(--logo-yellow); --face-tint: var(--tone-yellow-tint); }
+.green { --face-bg: var(--logo-mint); --face-tint: var(--tone-green-tint); }
+.orange { --face-bg: var(--logo-coral); --face-tint: var(--tone-orange-tint); }
+.blue { --face-bg: var(--logo-pink); --face-tint: var(--tone-blue-tint); }
+
+.inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 1.3s var(--ease-out); /* 2026-10-28 CEO指示で 0.8秒 → 1.3秒（0.5秒遅く） */
+  transform-style: preserve-3d;
+}
+
+/* めくる: タップ（.flipped）・キーボードで裏に移ったとき（:focus-within）・マウスを乗せたとき（hover のある端末だけ） */
+.flipped .inner,
+.card:has(.back :focus-visible) .inner {
+  transform: rotateY(180deg);
+}
+
+@media (hover: hover) {
+  .card:hover .inner {
+    transform: rotateY(180deg);
+  }
+}
+
+/*
+ * 見えていない面はタップ・クリックを受け取らない。
+ * 裏返った面も当たり判定が残るため、これが無いと「表をタップしたのに裏の『詳しく見る』が押される」ことが起きる。
+ */
+.back {
+  pointer-events: none;
+}
+
+.flipped .front,
+.card:has(.back :focus-visible) .front {
+  pointer-events: none;
+}
+
+.flipped .back,
+.card:has(.back :focus-visible) .back {
+  pointer-events: auto;
+}
+
+@media (hover: hover) {
+  .card:hover .front {
+    pointer-events: none;
+  }
+
+  .card:hover .back {
+    pointer-events: auto;
+  }
+}
+
+.front,
+.back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--face-bg);
+  border-radius: 1rem;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  box-shadow: 0 8px 14px rgb(29 29 29 / 0.12);
+}
+
+/* ---- 表 ---- */
+/* 元の案: linear-gradient(120deg, bisque 60%, #ffe7de 88%, #ffd3c3 40%, coral(60%) 48%)。
+   位置が逆順の色は手前の位置まで繰り上がるので、右下の角に濃い色の帯が斜めにくっきり入る */
+.front {
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: linear-gradient(
+    120deg,
+    var(--face-tint) 60%,
+    color-mix(in srgb, var(--face-bg) 30%, var(--color-bg)) 88%,
+    color-mix(in srgb, var(--face-bg) 55%, var(--color-bg)) 40%,
+    color-mix(in srgb, var(--face-bg) 85%, transparent) 48%
+  );
+  color: var(--color-text);
+  text-align: center;
+}
+
+.stamp {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.mark {
+  --tone-mark-size: 84px;
+}
+
+.names {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--t-heading-sm);
+  line-height: var(--lh-heading);
+}
+
+/* 表の全面を覆う透明なボタン（文字は読み上げ専用）。押すとめくれる */
+.flip {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 1rem;
+}
+
+.flip:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -4px;
+}
+
+/* ---- 裏 ---- */
+/* 元の案: linear-gradient(120deg, #ffae91 30%, coral 88%, bisque 40%, #ffb9a0 78%)。裏は表より濃い色で、斜めの帯が入る */
+.back {
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--face-bg) 55%, var(--color-bg)) 30%,
+    var(--face-bg) 88%,
+    var(--face-tint) 40%,
+    color-mix(in srgb, var(--face-bg) 70%, var(--color-bg)) 78%
+  );
+  color: var(--color-text);
+  transform: rotateY(180deg);
+}
+
+.photo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 110px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--face-tint);
+}
+
+.image {
+  object-fit: cover;
+}
+
+/* 写真の無いカード（はぐくむFUJI）: 色の面に大小の丸 */
+.photoDecor i {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.photoDecor i:nth-child(1) { right: 10%; bottom: 12%; width: 38%; aspect-ratio: 1; background: var(--logo-yellow); }
+.photoDecor i:nth-child(2) { left: 14%; top: 18%; width: 22%; aspect-ratio: 1; background: var(--logo-mint); }
+.photoDecor i:nth-child(3) { left: 46%; top: 12%; width: 10%; aspect-ratio: 1; background: var(--color-bg); }
+
+.backTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline: var(--space-2);
+  font-size: var(--ui-button);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+/* 家事支援の「はぐくむFUJI 協力事業所」の札 */
+.badge {
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  font-size: var(--ui-caption);
+  letter-spacing: var(--ls-ui);
+}
+
+.description {
+  flex: 0 0 auto;
+  padding-inline: var(--space-2);
+  font-size: var(--t-note);
+  line-height: var(--lh-compact);
+  word-break: auto-phrase;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-inline: var(--space-2);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  font-size: var(--ui-button-sm);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding-inline: var(--space-2);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* マウスで乗せてめくる端末では「戻る」は要らない（離せば戻る） */
+@media (hover: hover) {
+  .backButton {
+    display: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .card {
+    --card-h: 480px;
+  }
+}
+
+/* 動きを減らす設定では、回さずに切り替える */
+@media (prefers-reduced-motion: reduce) {
+  .inner {
+    transition: none;
+  }
+}

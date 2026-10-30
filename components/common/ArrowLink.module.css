@@ -9,17 +9,40 @@
   color: var(--color-text);
 }
 
-.arrow {
-  transition: transform var(--duration-fast) var(--ease-out);
+/* 矢印（GrowArrow）。軸は 12px → 24px に伸びる。箱の幅は伸びたあとの長さで取っておく */
+.arrowBox {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  width: 24px;
+  height: 14px;
 }
 
-.link:hover .arrow {
-  transform: translateX(3px);
+.shaft {
+  position: relative;
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: width 0.45s var(--ease-power3-out);
 }
 
-.link:hover span {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.shaft::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  border-radius: 1px;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+:hover > .arrowBox .shaft,
+:focus-visible > .arrowBox .shaft {
+  width: 24px;
 }
 
 .yellow {

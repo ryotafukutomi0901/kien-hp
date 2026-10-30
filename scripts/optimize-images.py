@@ -21,13 +21,12 @@ JOBS = [
     ("generated-originals/services-home-help.png", "services/home-help.jpg", 1200),
     ("generated-originals/services-home-visit-alt1.png", "services/spare/home-visit-alt1.jpg", 1200),
     ("generated-originals/services-home-visit-alt2.png", "services/spare/home-visit-alt2.jpg", 1200),
-    ("generated-originals/news-bg.png", "news/news-bg.jpg", 1400),
     ("generated-originals/recruit.png", "recruit/recruit.jpg", 900),
     # 9枚が並んだ一覧画像（staff-day-sheet-9tiles.png）の予定表の1枚を切り出したもの。元が553px幅なので、それ以上には大きくしない
     ("generated-originals/staff-day.png", "recruit/staff-day.jpg", 553),
-    ("generated-originals/cta-panorama.png", "cta/cta-panorama.jpg", 2000),
     ("generated-originals/hero.png", "hero/hero.jpg", 1916),  # 原本が1916px幅。それ以上には大きくしない
-    ("generated-originals/about-bg.png", "about/about-bg.jpg", 1800),
+    # ヒーローの大きな写真（「人を大切にする会社になる」）。撮影写真が届くまでは訪問介護の生成画像を使う。原本が1536px幅
+    ("generated-originals/services-home-visit.png", "hero/hero-people.jpg", 1536),
     ("generated-originals/about-oval.png", "about/about-oval.jpg", 1300),
     # 旧サイトの会社行事の写真（クライアント自身の写真。トップの最新4件）。縦長の写真も元の比率のまま出し、切り抜きはサイト側で行う
     ("old-site-images/2026-07-26-curry-party.jpg", "events/2026-07-26-curry-party.jpg", 1000),
@@ -36,10 +35,25 @@ JOBS = [
     ("old-site-images/2026-04-28-dementia-training.jpg", "events/2026-04-28-dementia-training.jpg", 1000),
 ]
 
+# 会社行事の下層ページ（/events/<id>）の写真。旧サイトの各記事に載っていた全53枚（クライアント自身の写真。2026-10-28 取り込み）。
+# 原本は reference/old-site-images/events/<記事のid>/01.jpg… （向きを直し長辺2400pxまでに縮めたもの。白い余白が焼き込まれた2枚は切り落とし済み）。
+# 拡大表示でも粗くならないよう、長辺1600pxで出す。
+EVENT_PHOTOS = sorted((SRC / "old-site-images" / "events").glob("*/*.jpg"))
+EVENT_LONG_SIDE = 1600
+
+
+def event_jobs() -> list[tuple[str, str, int]]:
+    jobs = []
+    for path in EVENT_PHOTOS:
+        w, h = Image.open(path).size
+        width = min(w, round(w * EVENT_LONG_SIDE / max(w, h)))
+        jobs.append((str(path.relative_to(SRC)), f"events/{path.parent.name}/{path.name}", width))
+    return jobs
+
 
 def main() -> None:
     total_before = total_after = 0
-    for src_name, dest_rel, width in JOBS:
+    for src_name, dest_rel, width in JOBS + event_jobs():
         src = SRC / src_name
         dest = OUT / dest_rel
         dest.parent.mkdir(parents=True, exist_ok=True)

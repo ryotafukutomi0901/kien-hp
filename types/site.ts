@@ -39,8 +39,18 @@ export interface Company {
 }
 
 export interface SocialLinks {
+  /** Instagram のURL。未設定の間は、トップの Instagram の列とフッターのアイコンを出さない（URLは未入手: docs/CLIENT_CHECKLIST.md） */
   instagram?: string;
   facebook?: string;
+}
+
+/** トップの Instagram の列の文言 */
+export interface InstagramContent {
+  title: string;
+  /** 改行位置ごとに分けた案内文 */
+  body: string[];
+  /** ボタンの文言 */
+  cta: string;
 }
 
 export interface HeroContent {
@@ -48,7 +58,12 @@ export interface HeroContent {
   title: string[];
   lead: string[];
   cta: Link;
+  /** 2つ目のボタン（枠のボタン） */
+  secondaryCta?: Link;
+  /** 大きく置く写真（「人を大切にする会社になる」に合う人物の写真。docs/PHOTO_SHOTLIST.md #1） */
   image: ImageAsset;
+  /** 写真の角に添える丸いバッジの文字（円に沿って回る欧文の飾り） */
+  badge: string;
 }
 
 export interface ServiceItem {
@@ -64,6 +79,7 @@ export interface ServiceItem {
 
 export interface ServicesContent {
   title: string;
+  en: string;
   /** 見出しの下の一文（任意。原文に無ければ省く） */
   lead?: string;
   items: ServiceItem[];
@@ -71,10 +87,12 @@ export interface ServicesContent {
 
 export interface AboutContent {
   title: string;
+  en: string;
+  /** 経営理念の3か条（大きく中央に置く） */
   body: string[];
   cta: Link;
-  background: ImageAsset;
-  photo: ImageAsset;
+  /** 横に流れる色のタイル（手本の「Who We Are」の下のタイルの列）。写真はタイルの中に小さく入れる */
+  gallery: { image: ImageAsset; tone: Tone; shape: "wide" | "tall" | "square" }[];
 }
 
 export interface EventPost {
@@ -97,8 +115,33 @@ export interface DatedRecord {
   image?: ImageAsset;
 }
 
+/** 会社行事の分類（記事の内容で分けたもの。一覧の絞り込みと、写真・日付の横の札に使う） */
+export type EventCategory = "meal" | "training" | "celebration" | "season" | "gift";
+
+/** 会社行事の写真1枚。ファイルは /images/events/<記事のid>/01.jpg … の並び順（data/records/events.ts の eventPhotoSrc） */
+export interface EventPhoto {
+  alt: string;
+  width: number;
+  height: number;
+}
+
+/** 会社行事の1件。DatedRecord に、分類・写真・下層ページ（/events/<id>）だけの本文を足したもの */
+export interface EventRecord extends DatedRecord {
+  /** 先頭が主な分類（写真の上の札）。2つ目以降は日付の横の小さな札 */
+  categories: EventCategory[];
+  /** 旧サイトの記事に載っていた写真（全部） */
+  photos: EventPhoto[];
+  /** 一覧のカードに出す写真の番号（0始まり。省略で先頭） */
+  cover?: number;
+  /** 一覧のカードでの写真の位置（object-position） */
+  coverPosition?: string;
+  /** 下層ページの本文。旧サイトの詳しいページに一覧の抜粋と違う本文があるときだけ持つ（無ければ body を出す） */
+  detail?: string[];
+}
+
 export interface EventsContent {
   title: string;
+  en: string;
   more: Link;
   posts: EventPost[];
 }
@@ -112,9 +155,9 @@ export interface NewsItem {
 
 export interface NewsContent {
   title: string;
+  en: string;
   more: Link;
   items: NewsItem[];
-  image: ImageAsset;
 }
 
 export interface PromoCard {
@@ -123,13 +166,17 @@ export interface PromoCard {
   icon: IconName;
   tone: Tone;
   cta: Link;
+  /** 2つ目のボタン（任意。枠線のボタンで並べる） */
+  secondaryCta?: Link;
   image: ImageAsset;
 }
 
 export interface FinalCtaContent {
+  en: string;
+  /** 「お問い合わせ」（欧文の下の日本語） */
+  heading: string;
   title: string[];
   cta: Link;
-  image: ImageAsset;
 }
 
 export interface SeoContent {
@@ -140,14 +187,37 @@ export interface SeoContent {
   siteUrl: string;
 }
 
+/** 横に流れる大きな欧文の帯（手本の「We are the creative group…」型）。言葉の間に写真の丸いタイルを挟む */
+export interface MarqueeContent {
+  /** 文の切れ目ごと。切れ目に images を順に挟む */
+  segments: string[];
+  images: { image: ImageAsset; tone: Tone }[];
+  /** 欧文の意味（読み上げ用。帯そのものは飾りなので読み上げない） */
+  label: string;
+}
+
+/** ヘッダーのナビの1項目。children があると、マウスを乗せたときに子項目のタブが開く（事業内容 → 3事業） */
+export interface NavItem extends Link {
+  children?: (Link & { tone?: Tone; icon?: IconName })[];
+}
+
+export interface FooterGroup {
+  en: string;
+  title: string;
+  links: Link[];
+}
+
 export interface SiteContent {
   seo: SeoContent;
   company: Company;
-  nav: Link[];
+  nav: NavItem[];
+  /** フッターのサイトマップ（手本: 欧文の見出しの下に日本語のリンク） */
+  footerNav: FooterGroup[];
   contact: Link;
   /** フッターのコピーライトの近くに置くリンク（プライバシーポリシー等） */
   legal: Link[];
   social: SocialLinks;
+  instagram: InstagramContent;
   hero: HeroContent;
   services: ServicesContent;
   about: AboutContent;
@@ -155,4 +225,7 @@ export interface SiteContent {
   news: NewsContent;
   promos: PromoCard[];
   finalCta: FinalCtaContent;
+  marquees: { philosophy: MarqueeContent; recruit: MarqueeContent };
+  /** 採用セクションの欧文ラベル */
+  recruitEn: string;
 }

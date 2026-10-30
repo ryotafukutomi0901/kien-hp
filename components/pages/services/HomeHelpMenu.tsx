@@ -2,25 +2,24 @@ import { Notice } from "@/components/page/Notice";
 import type { HomeHelpMenuItem } from "@/data/pages/services";
 
 import styles from "./HomeHelpMenu.module.css";
-import { SubHeading } from "./SubHeading";
 
-/** 家事支援の3つのサービス。各カードの末尾に「対象外」を Notice で添える（高さが違ってもそろえて下に置く） */
+/**
+ * 家事支援の3つのサービス。各カードの末尾に「対象外」を Notice で添える（高さが違ってもそろえて下に置く）。
+ * 節の見出し（h2「サービス内容」）は呼び出し側の PageSection が持つので、ここは h3 のカードだけ。
+ */
 export function HomeHelpMenu({
-  title,
   items,
   excludedLabel,
 }: {
-  title: string;
   items: HomeHelpMenuItem[];
   excludedLabel: string;
 }) {
   return (
     <div className={styles.block}>
-      <SubHeading tone="orange">{title}</SubHeading>
       <ul className={styles.grid}>
         {items.map((item) => (
           <li key={item.title} className={styles.card}>
-            <h4 className={styles.title}>{item.title}</h4>
+            <h3 className={styles.title}>{item.title}</h3>
             <div className={styles.description}>
               {item.description.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>

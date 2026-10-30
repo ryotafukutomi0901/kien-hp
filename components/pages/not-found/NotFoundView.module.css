@@ -9,21 +9,10 @@
   position: relative;
   overflow: hidden; /* 画面外へはみ出す葉っぱを切る */
   padding-block: var(--section-pad-block);
-  background: var(--color-bg-soft);
+  background: transparent;
 }
 
 /* 字の背後に葉を入れないよう、モバイルは小さく角へ寄せる（ヒーローの葉と同じ考え方） */
-.leafTop {
-  top: calc(var(--space-6) * -1);
-  right: calc(var(--space-5) * -1);
-  width: 88px;
-}
-
-.leafBottom {
-  bottom: calc(var(--space-5) * -1);
-  left: calc(var(--space-5) * -1);
-  width: 96px;
-}
 
 .section .inner {
   position: relative;
@@ -196,17 +185,6 @@
 }
 
 @media (min-width: 640px) {
-  .leafTop {
-    top: calc(var(--space-7) * -1);
-    right: calc(var(--space-6) * -1);
-    width: 140px;
-  }
-
-  .leafBottom {
-    bottom: calc(var(--space-6) * -1);
-    left: calc(var(--space-6) * -1);
-    width: 130px;
-  }
 
   .pages {
     padding: var(--space-6) var(--space-5) var(--space-4);

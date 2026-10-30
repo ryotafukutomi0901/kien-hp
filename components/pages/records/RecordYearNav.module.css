@@ -33,6 +33,34 @@
   background: var(--tone-orange-tint);
 }
 
+/* マウスを乗せると、ぷるんと弾む（ページ内へ飛ぶ小さなピルの動き。採用ページの目次と同じ。2026-10-29） */
+.link:hover,
+.link:focus-visible {
+  animation: jelly 0.6s var(--ease-out);
+}
+
+@keyframes jelly {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  30% {
+    transform: scale(1.08, 0.9);
+  }
+
+  50% {
+    transform: scale(0.95, 1.05);
+  }
+
+  70% {
+    transform: scale(1.03, 0.97);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
 .count {
   font-weight: 500;
   color: var(--color-text-muted);

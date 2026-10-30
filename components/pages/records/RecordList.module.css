@@ -206,7 +206,7 @@
 }
 
 /*
- * ページ内リンク（/events#<id>）で着地した記事。枠を濃いオレンジ（白地で5.0:1）の2重線にする。
+ * ページ内リンク（/news#<id>）で着地した記事。枠を濃いオレンジ（白地で5.0:1）の2重線にする。
  * :target は直接アクセス・<a href="#...">、[data-current] は next/link からの遷移（RecordHashHighlight が付ける）
  */
 .card:target,

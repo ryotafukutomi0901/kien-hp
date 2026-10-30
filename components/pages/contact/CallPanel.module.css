@@ -18,7 +18,7 @@
   justify-items: stretch;
 }
 
-/* 主CTA。白文字×--color-primary-strong は 4.60:1（どの文字サイズでもAA） */
+/* 主CTA。パステルの地×紺文字は 5.9〜6.7:1（どの文字サイズでもAA） */
 .call {
   display: flex;
   flex-direction: column;
@@ -27,15 +27,41 @@
   min-height: var(--space-10);
   padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-pill);
-  background: var(--color-primary-strong);
-  color: var(--color-on-dark);
+  background: var(--color-action);
+  color: var(--color-on-action);
   box-shadow: var(--shadow-button);
   text-align: center;
   transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .call:hover {
-  background: var(--color-primary-strong-hover);
+  background: var(--color-action-hover);
+}
+
+/* マウスを乗せると、電話の絵が鳴っているように小刻みに揺れる（採用ページの電話ボタンと同じ。2026-10-29） */
+.call:hover .icon,
+.call:focus-visible .icon {
+  animation: ring 0.9s ease-in-out;
+}
+
+@keyframes ring {
+  0%,
+  70%,
+  100% {
+    transform: rotate(0);
+  }
+
+  10%,
+  30%,
+  50% {
+    transform: rotate(-14deg);
+  }
+
+  20%,
+  40%,
+  60% {
+    transform: rotate(14deg);
+  }
 }
 
 .callLabel {

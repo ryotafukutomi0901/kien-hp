@@ -1,0 +1,137 @@
+/*
+ * 会社行事の下層ページ（app/events/[id]。手本: ハウステンボス採用サイトの記事）
+ *   冒頭の題の下に 日付・分類の札
+ *   1024px以上: 左に分類の目次（画面に付いてくる）、右に写真・本文・前後の行事・「一覧に戻る」
+ *   1023px以下: 目次（開閉式）を上に、その下に本文
+ */
+/* 題は折り返すとき行の長さをそろえ、「ー」や小さな仮名で行を始めない（狭い画面で「ー」1文字だけが次の行に残らないように） */
+.title {
+  display: block;
+  line-break: strict;
+  text-wrap: balance;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* 一覧のカードの日付と同じ見た目 */
+.date {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.article {
+  display: grid;
+  gap: var(--space-10);
+  min-width: 0;
+}
+
+/* ---- 前後の行事 ---- */
+.neighbors {
+  display: grid;
+  gap: var(--space-4);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--color-border);
+}
+
+.neighbor {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.neighbor.end {
+  flex-direction: row-reverse;
+  text-align: end;
+}
+
+.neighborThumb {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--space-10);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-gray);
+  isolation: isolate;
+}
+
+.neighborImage {
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neighborText {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.neighborLabel,
+.neighborDate {
+  color: var(--color-text-muted);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.neighborTitle {
+  font-size: var(--t-note);
+  line-height: var(--lh-compact);
+  word-break: auto-phrase;
+}
+
+.back {
+  display: flex;
+  justify-content: center;
+}
+
+@media (hover: hover) {
+  .neighbor:hover .neighborImage {
+    transform: scale(1.1);
+  }
+}
+
+@media (min-width: 768px) {
+  .neighbors {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* 「次の行事」だけのとき（いちばん古い記事）も右の列に置く */
+  .neighbor.end {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: calc(var(--space-12) * 2) minmax(0, 1fr);
+    gap: var(--space-9);
+    align-items: start;
+  }
+
+  .side {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-5));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neighborImage {
+    transition: none;
+  }
+}

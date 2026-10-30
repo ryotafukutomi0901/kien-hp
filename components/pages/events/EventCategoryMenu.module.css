@@ -1,0 +1,165 @@
+/*
+ * 会社行事の分類の目次（手本: ハウステンボス採用サイトのお知らせの「カテゴリー」）
+ *   PC（1024px以上）: 白い角丸のパネル。「カテゴリー」の下にコーラルの線、分類を細い線で区切って縦に並べる
+ *   1023px以下: 同じ中身を開閉式にする（手本と同じく、見出しの右の矢印が開くと上を向く）
+ *   選んでいない分類は薄い色、選んでいる分類はほぼ黒＋コーラルの点（色の変化は手本と同じ 0.4s・同じ緩急）
+ */
+.menu {
+  --ease-menu: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel {
+  display: none;
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.label {
+  position: relative;
+  padding-bottom: var(--space-3);
+  font-size: var(--t-body);
+  line-height: var(--lh-compact);
+  letter-spacing: var(--ls-heading);
+}
+
+.panel .label::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--logo-coral);
+}
+
+.list {
+  display: grid;
+}
+
+.item + .item {
+  border-top: 1px solid var(--color-border);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding-block: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--ui-button);
+  letter-spacing: var(--ls-ui);
+  text-align: start;
+  transition: color 0.4s var(--ease-menu);
+}
+
+/* 選んでいる分類の印（手本の四角の印を、ロゴの点に置き換えたもの） */
+.link::before {
+  content: "";
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.25;
+  transition:
+    opacity 0.4s var(--ease-menu),
+    background-color 0.4s var(--ease-menu);
+}
+
+.link[aria-pressed="true"],
+.link[aria-current] {
+  color: var(--color-text);
+}
+
+.link[aria-pressed="true"]::before,
+.link[aria-current]::before {
+  background: var(--logo-coral);
+  opacity: 1;
+}
+
+.itemLabel {
+  flex: 1;
+}
+
+.count {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--color-text);
+  }
+
+  .link:hover::before {
+    opacity: 1;
+  }
+}
+
+/* ---- 1023px以下: 開閉式 ---- */
+.drawer {
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary .label {
+  padding-bottom: 0;
+}
+
+.current {
+  flex: 1;
+  color: var(--color-text-muted);
+  font-size: var(--ui-button);
+}
+
+.chevron {
+  flex-shrink: 0;
+  transform: rotate(0deg);
+  transition: transform 0.4s var(--ease-menu);
+}
+
+.drawer[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.drawer .list {
+  margin-inline: var(--space-5);
+  padding-block: var(--space-2) var(--space-4);
+  border-top: 2px solid var(--logo-coral);
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    display: block;
+  }
+
+  .drawer {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .link::before,
+  .chevron {
+    transition: none;
+  }
+}

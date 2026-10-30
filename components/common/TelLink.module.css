@@ -6,7 +6,7 @@
   font-weight: 700;
   letter-spacing: var(--ls-ui);
   font-variant-numeric: tabular-nums;
-  color: var(--color-primary-text);
+  color: var(--tel-color, var(--color-primary-text)); /* 色の面の上では親が --tel-color で文字色に合わせる */
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;

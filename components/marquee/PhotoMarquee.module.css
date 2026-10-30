@@ -1,0 +1,77 @@
+/*
+ * 横に流れる大きな欧文（手本: 1440幅で字高約110px、言葉の間に色のタイル 220×150・角丸20px・中に写真）
+ */
+.marquee {
+  overflow: hidden;
+  padding-block: var(--space-5);
+  color: var(--color-text);
+}
+
+.dark {
+  color: var(--color-on-dark);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.marquee:hover .track {
+  animation-play-state: paused;
+}
+
+/* GSAP が動き始めたら CSS のアニメーションは止める（MarqueeTrack が data-motion="gsap" を付ける） */
+.track[data-motion="gsap"] {
+  animation: none;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.run {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-6);
+  padding-inline-end: var(--space-6);
+}
+
+.word {
+  font-size: calc(var(--t-en) * 1.4);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--ls-en);
+  white-space: nowrap;
+}
+
+/* 色のタイルの中に、一回り小さい写真（手本と同じ入れ子） */
+.chip {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: calc(var(--t-en) * 2.6);
+  height: calc(var(--t-en) * 1.75);
+  border-radius: var(--radius-lg);
+  background: var(--chip-bg);
+}
+
+.chipPhoto {
+  position: relative;
+  width: 62%;
+  height: 52%;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.chipImage {
+  object-fit: cover;
+}
+
+.yellow { --chip-bg: var(--logo-yellow); }
+.green { --chip-bg: var(--logo-mint); }
+.orange { --chip-bg: var(--logo-coral); }
+.blue { --chip-bg: var(--logo-pink); }

@@ -1,0 +1,36 @@
+/*
+ * 会社行事の分類の札（手本: ハウステンボス採用サイトのお知らせの札。手本は色の面に白文字だが、
+ * ロゴの色は明るく白文字が読めないので、色の面にほぼ黒の文字にする）
+ */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--pill-bg, var(--color-bg-gray));
+  color: var(--color-text);
+  font-size: var(--ui-meta);
+  line-height: var(--lh-compact);
+  letter-spacing: var(--ls-ui);
+  white-space: nowrap;
+}
+
+.pill[data-category="meal"] {
+  --pill-bg: var(--logo-coral);
+}
+
+.pill[data-category="training"] {
+  --pill-bg: var(--logo-mint);
+}
+
+.pill[data-category="celebration"] {
+  --pill-bg: var(--logo-pink);
+}
+
+.pill[data-category="season"] {
+  --pill-bg: var(--logo-yellow);
+}
+
+.pill[data-category="gift"] {
+  --pill-bg: var(--color-bg-gray);
+}

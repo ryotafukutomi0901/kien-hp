@@ -12,6 +12,7 @@ import { OfficeList } from "@/components/pages/about/OfficeList";
 import { Philosophy } from "@/components/pages/about/Philosophy";
 import { Policies } from "@/components/pages/about/Policies";
 import { aboutPage } from "@/data/pages/about";
+import { PriceGuide } from "@/components/page/PriceGuide";
 
 export const metadata: Metadata = {
   title: aboutPage.metadata.title,
@@ -27,7 +28,7 @@ export default function Page() {
 
   return (
     <>
-      <PageIntro title={aboutPage.title}>
+      <PageIntro title={aboutPage.title} en="Company">
         <JumpLinks links={aboutPage.jumpLinks} />
       </PageIntro>
 
@@ -61,6 +62,7 @@ export default function Page() {
           </AboutBlock>
         </AboutBlockStack>
       </PageSection>
+      <PriceGuide />
     </>
   );
 }

@@ -9,10 +9,10 @@ import styles from "./RecordList.module.css";
 const TONES = ["coral", "yellow", "green", "pink"] as const;
 
 /**
- * 会社行事・お知らせの記事（/events・/news で共用）。
+ * お知らせの記事（/news。2026-10-28 まで /events でも共用）。
  * 写真の無い記事を「はがき」のようなカードにし、日付をロゴの筆の輪のスタンプで見せる。
  *
- * - 各記事は <article id={record.id}>。トップの「/events#<id>」「/news#<id>」の着地点で、
+ * - 各記事は <article id={record.id}>。トップの「/news#<id>」の着地点で（会社行事は 2026-10-28 から下層ページ /events/<id> を持つので使わない）、
  *   着地した記事は :target（直接アクセス）／[data-current]（next/link からの遷移。RecordHashHighlight）で強調する
  * - 見出しは既定で h3（年の節 h2 の下）。年で分けずに使う場合は headingLevel="h2"
  * - DOM は 写真 → 見出し → 本文 → 日付 の順（見出しで移動したとき本文から読めるように）。スタンプの位置はCSSで上に置く

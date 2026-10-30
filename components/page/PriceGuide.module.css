@@ -1,0 +1,44 @@
+/*
+ * 家事支援の料金帯（全ページ共通）。左に見出しとボタン、右に料金表（1024px以上）。モバイルは見出し→ボタン→表の縦積み。
+ * 地は淡いイエロー（半透明）、表は白い角丸の面（手本: 日本テレビアートの白いカード）。各ページの最後（お問い合わせの帯の前）に置く。
+ */
+.section {
+  padding-block: var(--space-10);
+  background: color-mix(in srgb, var(--tone-yellow-tint) 72%, transparent); /* 淡いイエローを半透明に */
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.table {
+  overflow: hidden;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-11);
+  }
+
+  .inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--space-9);
+  }
+}

@@ -1,9 +1,141 @@
+/*
+ * 下層ページの冒頭（手本: 日本テレビアートの下層ページ）
+ *   グレーの地、左上にパンくず（Home ・ 現在地）、その下に大きな欧文（--t-en）と日本語の見出し
+ *   右上にロゴの4色の丸（飾り）
+ */
 .intro {
-  padding-block: var(--section-pad-block);
-  background: var(--color-bg-soft);
+  position: relative;
+  overflow: clip;
+  padding-block: var(--space-6) var(--space-10);
+  background: transparent; /* 固定背景の色の丸を透かす */
+}
+
+.inner {
+  position: relative;
+  z-index: var(--z-content);
+  display: grid;
+  gap: var(--space-8);
+}
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--ui-meta);
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text-muted);
+}
+
+.crumbs li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.crumbs li + li::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.crumbs [aria-current] {
+  color: var(--color-text);
 }
 
 .body {
-  margin-top: var(--space-5);
   font-size: var(--t-note);
+}
+
+/* ロゴの周りに散る点を思わせる飾り（右上）。文字には重ねない */
+.decor i {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.decor i:nth-child(1) {
+  top: calc(var(--space-6) * -1);
+  right: calc(var(--space-8) * -1);
+  width: 160px;
+  height: 160px;
+  background: var(--logo-yellow);
+}
+
+.decor i:nth-child(2) {
+  top: var(--space-10);
+  right: var(--space-9);
+  width: 56px;
+  height: 56px;
+  background: var(--logo-coral);
+}
+
+.decor i:nth-child(3) {
+  top: var(--space-5);
+  right: calc(var(--space-12) + var(--space-8));
+  width: 28px;
+  height: 28px;
+  background: var(--logo-mint);
+}
+
+.decor i:nth-child(4) {
+  top: calc(var(--space-12) + var(--space-5));
+  right: var(--space-5);
+  width: 36px;
+  height: 36px;
+  background: var(--logo-pink);
+}
+
+@media (max-width: 639px) {
+  .decor i:nth-child(1) {
+    width: 110px;
+    height: 110px;
+  }
+
+  .decor i:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .intro {
+    padding-block: var(--space-7) var(--space-12);
+  }
+
+  .decor i:nth-child(1) {
+    top: var(--space-9);
+    right: 8%;
+    width: 260px;
+    height: 260px;
+  }
+
+  .decor i:nth-child(2) {
+    top: var(--space-6);
+    right: calc(8% + 280px);
+    width: 72px;
+    height: 72px;
+  }
+
+  .decor i:nth-child(3) {
+    top: calc(var(--space-12) + var(--space-11));
+    right: calc(8% + 240px);
+    width: 40px;
+    height: 40px;
+  }
+
+  .decor i:nth-child(4) {
+    top: var(--space-5);
+    right: 4%;
+    width: 48px;
+    height: 48px;
+  }
 }

@@ -28,13 +28,6 @@
   color: var(--color-text);
 }
 
-.leaf {
-  right: var(--space-4);
-  bottom: calc(var(--space-4) * -1);
-  width: var(--space-8);
-  opacity: 0.85;
-}
-
 .prose {
   display: grid;
   gap: var(--space-3);
@@ -47,8 +40,4 @@
     padding: var(--space-7) var(--space-10) var(--space-7) var(--space-7);
   }
 
-  .leaf {
-    right: var(--space-6);
-    width: var(--space-9);
-  }
 }

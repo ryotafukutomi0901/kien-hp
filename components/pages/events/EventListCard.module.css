@@ -1,0 +1,89 @@
+/*
+ * 会社行事の一覧のカード（手本: ハウステンボス採用サイトのお知らせのカード）
+ *   角丸の写真（3:2）の左上に主な分類の札 → 日付とほかの分類 → 題
+ *   マウスを乗せると写真が1.1倍にゆっくり寄り、下の文字が薄くなる（手本と同じ 0.4s・同じ緩急）
+ */
+.card {
+  --ease-card: cubic-bezier(0.16, 1, 0.3, 1); /* 手本のカードの緩急（素早く出てゆっくり止まる） */
+
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  border-radius: var(--radius-lg);
+}
+
+.card:focus-visible {
+  outline-offset: var(--space-1);
+}
+
+.media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-gray);
+  /* Safari で角丸の外へ拡大した写真がはみ出さないように */
+  isolation: isolate;
+}
+
+.image {
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.4s var(--ease-card);
+}
+
+.lower {
+  display: grid;
+  gap: var(--space-2);
+  transition: opacity 0.4s var(--ease-card);
+}
+
+/* DOM は 題 → 日付 の順。見た目は 日付 → 題 */
+.meta {
+  order: -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+}
+
+/* トップの会社行事カード（EventCard）の日付と同じ見た目 */
+.date {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.title {
+  font-size: var(--t-body);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+  word-break: auto-phrase; /* 語の途中で折り返さない（対応していないブラウザでは通常の折り返し） */
+}
+
+/* 主な分類の札は写真の左上に重ねる */
+.primary {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+}
+
+@media (hover: hover) {
+  .card:hover .image {
+    transform: scale(1.1);
+  }
+
+  /* 手本は 0.5。喜援は文字のコントラストを AA（4.5:1）に保つため 0.62（白地で 4.7:1） */
+  .card:hover .lower {
+    opacity: 0.62;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .lower {
+    transition: none;
+  }
+}

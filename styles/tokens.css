@@ -1,10 +1,14 @@
 /*
  * kien-hp デザイントークン（単一情報源）
  *
- * 値の根拠は docs/DESIGN.md。参考モック（reference/mock.png, 幅869px）を
- * デスクトップ1440px相当（約1.66倍）に換算して決めている。
+ * 2026-10-27: デザインの手本を株式会社日本テレビアートのサイト（https://www.ntvart.co.jp/）に切り替えた（CEO指示）。
+ * 2026-10-28: CEO指示「ポップ、パステル、淡さがほしい」。地を暖かい白に、黒い面・黒いボタンをやめ、ヒーローの色の丸を
+ * 全ページの固定背景にした（components/background/）。セクションの地は半透明（--veil）にして背景を透かす。
+ * 手本の「白と淡いグレーの地 × ほぼ黒の文字 × 鮮やかな色の面 × 大きな欧文ラベル × 角丸のピル」という型を、
+ * 喜援のロゴの4色（コーラル・ピンク・イエロー・ミント）で組み直している。手本の画像・文章・ロゴ・コードは使わない。
+ * 分析と置き換えの対応は docs/REFERENCE_NTVART.md。
+ *
  * セクションのCSSはここにある変数だけを参照し、色・余白・文字サイズを直書きしない。
- * 値を足す・変える場合は統括エージェントに報告してからここを編集する。
  *
  * ブレークポイント（CSS変数はメディアクエリに使えないため、各CSSでこの値を直接書く）
  *   tablet  : min-width: 640px
@@ -13,71 +17,116 @@
  */
 
 :root {
-  /* ---- Color: brand ---- */
-  --color-primary: #fe764f;          /* 参考画像のメインオレンジ。装飾・アイコン・見出しマーク用 */
-  --color-primary-strong: #cc4a22;   /* 白文字を載せるボタン地。#fe764fでは白文字が2.65:1でAA未達のため */
-  --color-primary-strong-hover: #b13d1a;
-  --color-primary-text: #c2461f;     /* オレンジの文字（リンク等）。白・各トーン地で4.6:1以上 */
-  --color-secondary: #75b880;        /* サブ（グリーン）。見出し下の筆線など */
-  --color-accent: #3baced;           /* アクセント（ブルー） */
-  --color-base: #fdead1;             /* ベース（ベージュ）。見出しマーカー等 */
+  /*
+   * ---- Color: ロゴの4色（白背景に重ねた見た目の値）----
+   * 手本は色の面に白文字を載せているが、ロゴの4色は明るいため、面の上の文字は「ほぼ黒」（--color-ink）にする。
+   * ほぼ黒の文字とのコントラスト: コーラル5.8:1／ピンク8.0:1／イエロー12.6:1／ミント11.3:1（すべてAA）。
+   */
+  --logo-coral: #ec746c;
+  --logo-pink: #ec9cac;
+  --logo-yellow: #fcdc7c;
+  --logo-mint: #bcdcbc;
 
-  /* ---- Color: neutral ---- */
-  --color-text: #2b3a4a;             /* 見出し・本文。白地で11.6:1 */
-  --color-text-muted: #5c616d;       /* 注記・日付。白地で6.2:1 */
+  /* ---- Color: neutral（手本の実測: 文字 #1d1d1d、地 #ffffff / #eceef1）---- */
+  --color-ink: #1d1d1d;
+  --color-text: var(--color-ink);    /* 白地で16.9:1、グレー地で14.5:1 */
+  --color-text-muted: #5f6472;       /* 日付・注記。白地で5.9:1、グレー地で5.1:1 */
   --color-bg: #ffffff;
-  --color-bg-soft: #fdfdfb;          /* セクション地のごく薄いオフホワイト */
-  --color-border: #e8e6e1;
-  --color-footer-bg: var(--color-primary-strong);   /* ボタンと同じオレンジ（2026-10-04 CEO指示。モックは紺 #2e3d48） */
-  --color-footer-text: var(--color-on-dark);        /* 白。オレンジ地で4.60:1 */
+  --color-page: #fcf8f4;             /* 全ページの地（暖かい白）。固定背景（SiteBackground）の色 */
+  --color-bg-gray: #f4eee8;          /* 淡い暖色のグレー。ピル・小さな面（手本の #eceef1 を暖かく淡くしたもの） */
+  --color-bg-soft: var(--color-bg-gray);
+  --veil: rgb(255 255 255 / 0.62);        /* セクションの半透明の地。背景の丸を淡く透かす */
+  --veil-strong: rgb(255 255 255 / 0.84); /* 文字の多いセクション・フッター */
+  --color-dark: var(--color-ink);    /* 黒文字の地にするときだけ使う（2026-10-28 以降、黒い面は使わない） */
   --color-on-dark: #ffffff;
+  --color-on-dark-muted: #bfc3cc;    /* 黒地の注記。9.6:1 */
+  --color-border: #e6ddd4;           /* 一覧の区切り線（暖色の淡いグレー） */
   --color-focus: #2f6f9e;
 
-  /* ---- Color: service tones（サービス4種・採用/ブログカードの色分け） ---- */
-  --tone-yellow-base: #febf49;
-  --tone-yellow-tint: #fef9ec;
-  --tone-yellow-text: #c2461f;       /* 参考画像でも黄色カードのリンクはオレンジ */
-  --tone-green-base: #6eb47b;
-  --tone-green-tint: #f0f8f2;
-  --tone-green-text: #3a7a47;
-  --tone-orange-base: #fd6e48;
-  --tone-orange-tint: #fff6ee;
-  --tone-orange-text: #c2461f;
-  --tone-blue-base: #3ba9ea;
-  --tone-blue-tint: #eef9ff;
-  --tone-blue-text: #2f6f9e;
+  /* 役割の別名（既存のCSSが参照している名前） */
+  --color-primary: var(--logo-coral);   /* 装飾・目印（文字には使わない） */
+  --color-primary-text: #b83a33;        /* コーラル系の文字（リンク・強調）。白地5.6:1、グレー地4.9:1 */
+  --color-secondary: var(--logo-mint);
+  --color-accent: var(--logo-pink);
+  --color-base: #fff6d9;
 
-  /* ---- Typography: family ---- */
-  --font-heading: var(--font-klee), "Hiragino Maru Gothic ProN", sans-serif;
-  --font-body: var(--font-zen-maru), "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  /* ---- Color: ボタン（手本の黒いピルを、ロゴのコーラルに置き換え。文字はほぼ黒で5.8:1）---- */
+  --color-action: var(--logo-coral);
+  --color-action-hover: #f08a82;        /* 明るくする。ほぼ黒の文字で7.0:1 */
+  --color-on-action: var(--color-ink);
+  --color-pill: var(--color-bg-gray);   /* 白地の上の「もっとみる」 */
+  --color-pill-hover: #ebe2d9;
+
+  --color-footer-bg: var(--color-bg);
+  --color-footer-text: var(--color-text);
+
+  /* ---- Color: 事業・職種の色分け（名前は旧来のまま。orange=コーラル、blue=ピンク）---- */
+  --tone-yellow-base: var(--logo-yellow);
+  --tone-yellow-tint: #fff6d9;
+  --tone-yellow-text: var(--color-text);
+  --tone-green-base: var(--logo-mint);
+  --tone-green-tint: #eaf6ea;
+  --tone-green-text: var(--color-text);
+  --tone-orange-base: var(--logo-coral);
+  --tone-orange-tint: #fde6e3;
+  --tone-orange-text: var(--color-text);
+  --tone-blue-base: var(--logo-pink);
+  --tone-blue-tint: #fdeaef;
+  --tone-blue-text: var(--color-text);
 
   /*
-   * ---- Typography: size（handbook/02_quality/web_design_standard.md 第2条の3トークン） ----
-   * 区分ごとに個別値を持つ（第5条2項）。下のメディアクエリで上書きする。
-   * --t-display はヒーローのメインコピー専用の例外（第6条）。参考画像の主コピーが
-   * セクション見出しの約1.8倍あり、--t-headingでは再現できないため。
+   * ---- Typography: family ----
+   * 欧文=Ubuntu（手本の日本テレビアートと同じ）、和文=けいなんむぎまるJP（2026-10-28 CEO指示「日本語は見出し・本文を問わずこれで」。styles/fonts.css）。
+   * 1つの指定に「Ubuntu → けいなんむぎまるJP」の順で並べ、英数字はUbuntu、日本語はけいなんむぎまるJPで出す。
+   * 見出し（h1〜h3）・本文・ボタンはすべてこの1つの指定で、見出し・小見出し・本文の差は文字サイズだけで付ける（2026-10-21 打ち合わせ）。
+   * けいなんむぎまるJPは太さが1つだけ。太字の指定があっても和文は太らせない（base.css の font-synthesis）
    */
-  --t-display: 2.25rem;
-  --t-heading: 1.625rem;
-  --t-heading-sm: 1.375rem;          /* 小見出し（スタッフ紹介・NEWSの三角マーク見出し、Final CTAの見出し）。第6条の例外。モックで--t-headingの約0.8倍 */
-  --t-body: 1.0625rem;
+  --font-sans: var(--font-ubuntu), "Keinan Mugimaru JP", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-sans);
+  --fw-heading: 700;
+  --fw-body: 400;
+
+  /*
+   * ---- Typography: size ----
+   * 本文の3トークン（--t-heading / --t-body / --t-note）に加え、手本の型に必要な例外を3つ持つ（web_design_standard 第6条）:
+   *   --t-display : ヒーローの主コピー（手本 80px）
+   *   --t-en      : セクションの欧文ラベル「Service」「News」など（手本 64〜80px）
+   *   --t-lead    : 中央に大きく置く理念・紹介文（手本 24px）
+   *
+   * 見出し・小見出し・本文は太さを変えず、文字サイズの段差だけで見分けがつくようにする（2026-10-28 CEO指示。和文が1太さの
+   * けいなんむぎまるJPになったため）。隣り合う段は 1.25倍以上あける（スマホ → 1280px以上）:
+   *   ページの見出し h1  --t-heading     30 → 48px
+   *   見出し h2          --t-heading-sm  24 → 32px
+   *   小見出し h3・h4     --t-body        19 → 21px（強調の一文・電話番号・料金なども同じ大きさ）
+   *   本文               --t-note        15 → 16px
+   */
+  --t-display: 2.5rem;
+  --t-en: 2.75rem;
+  --t-heading: 1.875rem;
+  --t-heading-sm: 1.5rem;
+  --t-lead: 1.0625rem;
+  --t-body: 1.1875rem;
   --t-note: 0.9375rem;
 
-  /* ---- Typography: UIラベル（第3条。役割ごとに1種類） ---- */
+  /* ---- Typography: UIラベル（役割ごとに1種類）---- */
   --ui-nav: 0.875rem;
   --ui-button: 0.9375rem;
   --ui-button-sm: 0.875rem;
-  --ui-meta: 0.875rem;               /* 日付・カテゴリ・「一覧を見る」等の小リンク */
-  --ui-caption: 0.75rem;             /* コピーライト等 */
+  --ui-meta: 0.8125rem;              /* 日付・カテゴリ・小リンク */
+  --ui-caption: 0.75rem;
+  --ui-label: 0.875rem;              /* 欧文の小ラベル（「Who We Are」型） */
 
-  --lh-heading: 1.5;
-  --lh-body: 1.9;
-  --lh-compact: 1.5;                 /* カード内の短い本文（採用・ブログ等）。モック実測で行送りが詰まっている箇所用 */
-  --ls-heading: 0.12em;
-  --ls-body: 0.06em;
-  --ls-ui: 0.08em;
+  --lh-display: 1.25;
+  --lh-heading: 1.45;
+  --lh-body: 1.85;
+  --lh-compact: 1.5;
+  --ls-heading: 0.04em;
+  --ls-body: 0.04em;
+  --ls-ui: 0.04em;
+  --ls-en: 0.01em;
 
-  /* ---- Spacing（8pxベースのスケール。これ以外の値で余白を作らない） ---- */
+  /* ---- Spacing（8pxベースのスケール。これ以外の値で余白を作らない）---- */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -90,68 +139,104 @@
   --space-10: 80px;
   --space-11: 96px;
   --space-12: 128px;
+  --space-13: 160px;
 
-  /* ---- Layout ---- */
-  --container-max: 1200px;           /* 参考画像のサービスカード群の外幅 */
-  --header-max: calc(var(--container-max) + var(--space-10) * 2); /* ヘッダーは本文より左右80pxずつ広い（モック実測） */
+  /* ---- Layout（手本: 1440幅で左右80px、本文1280px）---- */
+  --container-max: 1280px;
+  --header-max: var(--container-max);
   --container-pad: var(--space-5);
-  --section-pad-block: var(--space-9);
+  --section-pad-block: var(--space-10);
   --header-height: 64px;
 
-  /* ---- Shape ---- */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
+  /* ---- Shape（手本: 色の面は角丸 約20〜24px、ボタンは完全なピル）---- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
   --radius-pill: 999px;
-  --shadow-card: 0 2px 12px rgb(43 58 74 / 0.06);
-  --shadow-button: 0 4px 12px rgb(204 74 34 / 0.24);
+  --shadow-card: 0 8px 24px rgb(29 29 29 / 0.06);
+  --shadow-float: 0 20px 48px rgb(29 29 29 / 0.16);
+  --shadow-button: none;
 
-  --tap-min: 44px;                   /* タップ領域の最小値（WCAG 2.5.5 / Apple HIG） */
+  --tap-min: 44px;
 
   /* ---- Button ---- */
   --button-h-sm: 40px;
   --button-h-md: 48px;
-  --button-h-lg: 56px;
+  --button-h-lg: 64px;
 
   /* ---- Motion ---- */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --duration-fast: 160ms;
-  --duration-base: 240ms;
+  --duration-base: 280ms;
+  --duration-reveal: 900ms;
+
+  /*
+   * ---- Motion: トップを開いたときのヒーローの登場（2026-10-28 CEO指示「日本テレビアートのヒーローの動きを喜援版で」）----
+   * 手本と同じ順番・時間（docs/REFERENCE_NTVART.md 第5節）。0秒は lib/intro.ts の合図（data-intro="play"）。
+   * 同心円が広がる → 色の丸が中央から飛び出す → 写真が飛んでくる → 見出しが1文字ずつ → ボタン → Instagram のカード
+   */
+  --ease-power3-inout: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --ease-power3-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-back-out: cubic-bezier(0.175, 0.885, 0.32, 1.275);  /* 少し行き過ぎて戻る */
+  --ease-fade: cubic-bezier(0.26, 0.16, 0.1, 1);
+  --intro-rings-for: 2s;
+  --intro-dots-at: 1.125s;        /* BackgroundDots も読む */
+  --intro-dots-for: 2s;
+  --intro-photo-at: 1.75s;
+  --intro-photo-for: 3s;
+  --intro-text-at: 2.9s;
+  --intro-char-for: 0.6s;
+  --intro-char-step: 0.05s;       /* 1文字ずつずらす間隔 */
+  --intro-actions-at: 4.6s;
+  --intro-notice-at: 5s;
+  --intro-notice-for: 1s;
 
   /* ---- Layer ---- */
   --z-decor: 1;
   --z-content: 2;
+  --z-float: 40;
   --z-header: 50;
   --z-menu: 60;
 }
 
 @media (min-width: 640px) {
   :root {
-    --t-display: 2.75rem;
-    --t-heading: 1.75rem;
-    --t-heading-sm: 1.5rem;
-    --t-body: 1.125rem;
+    --t-display: 3.5rem;
+    --t-en: 3.5rem;
+    --t-heading: 2.125rem;
+    --t-heading-sm: 1.625rem;
+    --t-lead: 1.125rem;
+    --t-body: 1.25rem;
     --container-pad: var(--space-7);
-    --section-pad-block: var(--space-10);
+    --section-pad-block: var(--space-11);
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --t-display: 3.5rem;
-    --t-heading: 2rem;
+    --t-display: 4.5rem;
+    --t-en: 4.25rem;
+    --t-heading: 2.5rem;
     --t-heading-sm: 1.75rem;
+    --t-lead: 1.375rem;
     --t-body: 1.25rem;
     --t-note: 1rem;
-    --section-pad-block: var(--space-11);
-    --header-height: 96px;
+    --section-pad-block: var(--space-12);
+    --header-height: 86px;
   }
 }
 
 @media (min-width: 1280px) {
   :root {
-    --t-display: 4rem;
-    --t-heading: 2.25rem;
+    --t-display: 5rem;
+    --t-en: 4.75rem;
+    --t-heading: 3rem;
     --t-heading-sm: 2rem;
+    --t-lead: 1.5rem;
+    --t-body: 1.3125rem;
+    --container-pad: var(--space-10);
+    --section-pad-block: var(--space-13);
   }
 }

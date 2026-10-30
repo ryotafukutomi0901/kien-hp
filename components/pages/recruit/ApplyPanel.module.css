@@ -31,8 +31,8 @@
   min-height: var(--tap-min);
   padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-pill);
-  background: var(--color-primary-strong);
-  color: var(--color-on-dark);
+  background: var(--color-action);
+  color: var(--color-on-action);
   box-shadow: var(--shadow-button);
   line-height: 1;
   white-space: nowrap;
@@ -40,10 +40,37 @@
 }
 
 .tel:hover {
-  background: var(--color-primary-strong-hover);
+  background: var(--color-action-hover);
+}
+
+/* マウスを乗せると、「TEL」が鳴っている電話のように小刻みに揺れる（お問い合わせページの電話ボタンと同じ。2026-10-29） */
+.tel:hover .telLabel,
+.tel:focus-visible .telLabel {
+  animation: ring 0.9s ease-in-out;
+}
+
+@keyframes ring {
+  0%,
+  70%,
+  100% {
+    transform: rotate(0);
+  }
+
+  10%,
+  30%,
+  50% {
+    transform: rotate(-14deg);
+  }
+
+  20%,
+  40%,
+  60% {
+    transform: rotate(14deg);
+  }
 }
 
 .telLabel {
+  display: inline-block;
   font-size: var(--ui-button);
   font-weight: 700;
   letter-spacing: var(--ls-ui);

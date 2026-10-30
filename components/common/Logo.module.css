@@ -8,6 +8,8 @@
  */
 
 .logo {
+  --logo-name-size: 1.5rem; /* 社名の字の大きさ（ロゴの部品の寸法。本文の文字サイズトークンとは別） */
+
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -34,7 +36,7 @@
 }
 
 .legal {
-  margin-top: calc((var(--t-heading) - var(--legal-size) * 1.4) / 2);
+  margin-top: calc((var(--logo-name-size) - var(--legal-size) * 1.4) / 2);
   font-size: var(--legal-size);
   font-weight: 700;
   line-height: 1.4;
@@ -43,8 +45,8 @@
 }
 
 .main {
-  font-size: var(--t-heading);
-  font-weight: 500;
+  font-size: var(--logo-name-size);
+  font-weight: 700;
   line-height: 1;
   letter-spacing: var(--ls-ui);
   white-space: nowrap;
@@ -63,11 +65,13 @@
 
 @media (min-width: 1024px) {
   .logo {
-    gap: var(--space-6);
+    --logo-name-size: 1.75rem;
+
+    gap: var(--space-4);
   }
 
   .markImage {
-    width: 72px;
+    width: 56px;
   }
 
   .name {

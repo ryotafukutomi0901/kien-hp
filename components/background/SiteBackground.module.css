@@ -1,0 +1,41 @@
+/* 全ページの固定背景。本文の後ろ（z-index: -1）に、画面いっぱいに固定する */
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-page);
+}
+
+/* 白い同心円（手本の中心の白い円と、外側の2段の淡い輪）。画面の中央に置く */
+.rings {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 255 255 / 0.95) 0 min(20vmax, 300px),
+    rgb(255 255 255 / 0.6) min(20vmax, 300px) min(34vmax, 500px),
+    rgb(255 255 255 / 0.32) min(34vmax, 500px) min(50vmax, 720px),
+    transparent min(50vmax, 720px)
+  );
+}
+
+/* トップを開いたときの登場（lib/intro.ts）: 同心円が中央の点から広がる（手本: 2秒、power3.inOut） */
+:global(html[data-intro="wait"]) .rings {
+  opacity: 0;
+  transform: scale(0);
+}
+
+:global(html[data-intro="play"]) .rings {
+  transition:
+    transform var(--intro-rings-for) var(--ease-power3-inout),
+    opacity var(--intro-rings-for) var(--ease-power3-inout);
+}
+
+.dots {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

@@ -28,9 +28,28 @@
   border-color: var(--jump-base);
 }
 
-.link:hover .label {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+/* マウスを乗せると、目印の顔が首をかしげる（左へ傾いてから右へ揺れて戻る。2026-10-29。ボタンの種類ごとに動きを変えた1つ） */
+.link:hover .mark,
+.link:focus-visible .mark {
+  animation: tilt 0.8s var(--ease-out);
+}
+
+@keyframes tilt {
+  0% {
+    transform: rotate(0);
+  }
+
+  30% {
+    transform: rotate(-16deg);
+  }
+
+  65% {
+    transform: rotate(9deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
 }
 
 .yellow {
@@ -58,17 +77,16 @@
   --tone-mark-size: var(--space-7);
 }
 
-/* 同じページの下へ移動するので、矢印は下向き */
+/* 別のページへ移動するので、矢印は右向き */
 .arrow {
   flex-shrink: 0;
   margin-left: auto;
   color: var(--color-text-muted);
-  transform: rotate(90deg);
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .link:hover .arrow {
-  transform: rotate(90deg) translateX(3px);
+  transform: translateX(3px);
 }
 
 @media (min-width: 640px) {

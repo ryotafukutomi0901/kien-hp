@@ -3,7 +3,6 @@ import { Fragment } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Container } from "@/components/common/Container";
-import { LeafDecoration } from "@/components/common/LeafDecoration";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { TelLink } from "@/components/common/TelLink";
 import { ArrowRightIcon } from "@/components/icons";
@@ -42,8 +41,6 @@ export interface NotFoundContent {
 export function NotFoundView({ content, tel }: { content: NotFoundContent; tel: string }) {
   return (
     <section className={styles.section} aria-labelledby="not-found-title">
-      <LeafDecoration variant="top-right" className={styles.leafTop} />
-      <LeafDecoration variant="bottom-left" className={styles.leafBottom} />
 
       <Container className={styles.inner}>
         <div className={styles.intro}>

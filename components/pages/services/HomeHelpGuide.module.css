@@ -22,49 +22,110 @@
   font-size: var(--t-note);
 }
 
+.wide {
+  grid-column: 1 / -1;
+}
+
 /* 区切り（<wbr>）の位置でだけ折り返す。区切りの間が1行に収まらない幅では、そこだけ途中で折り返す */
 .phrased {
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
 
-/* ---- 表 ---- */
-.table {
-  width: 100%;
-  border-collapse: collapse;
+/* ---- 喜援ホームヘルプサービスについて（旧サイトの紹介文）---- */
+.about {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--tone-orange-tint);
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
+
+.aboutCatch {
+  font-size: var(--t-heading-sm);
+  font-weight: 700;
+  line-height: var(--lh-heading);
+  text-wrap: balance;
+}
+
+.aboutLead {
+  font-size: var(--t-body);
+  font-weight: 700;
+}
+
+.aboutBody {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 44em;
   font-size: var(--t-note);
 }
 
-.table th,
-.table td {
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-border);
-  text-align: left;
-  vertical-align: middle;
+/* ---- はぐくむFUJI（富士市）の案内 ---- */
+.hagukumu {
+  display: grid;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--tone-green-base) 40%, var(--color-bg));
+  border-radius: var(--radius-lg);
+  background: var(--tone-green-tint);
 }
 
-.table thead th {
-  border-bottom-color: color-mix(in srgb, var(--tone-orange-base) 35%, var(--color-bg));
-  background: var(--tone-orange-tint);
-  font-size: var(--ui-meta);
-  font-weight: 700;
-  letter-spacing: var(--ls-ui);
+.hagukumuIntro {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
 }
 
-.table tbody th {
-  font-weight: 500;
+.hagukumuWays {
+  display: grid;
+  gap: var(--space-4);
 }
 
-.table .valueCol,
-.table .value {
-  text-align: right;
-  white-space: nowrap;
+.way {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
 }
 
-.value {
+/* 「登録済みの方」「まだ登録されていない方」の見出し。h3 の下の区分なので段落の太字で示す */
+.wayLabel {
   font-size: var(--t-body);
   font-weight: 700;
-  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-heading);
+}
+
+.externalList {
+  display: grid;
+  gap: var(--space-1);
+}
+
+/* 外部サイトへのリンク。押せる高さ（44px以上）を確保し、下線で文字リンクと分かるようにする */
+.externalLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  color: var(--color-primary-text);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.externalLink::after {
+  content: "↗";
+  margin-inline-start: var(--space-1);
+}
+
+.externalLink:hover {
+  text-decoration-thickness: 2px;
 }
 
 /* ---- ご予約 ---- */
@@ -109,12 +170,30 @@
     padding: var(--space-6);
   }
 
+  .hagukumu {
+    padding: var(--space-6);
+  }
+
+  .about {
+    padding: var(--space-8);
+  }
+
+  /* 「登録済みの方」「まだ登録されていない方」は、タブレット以上で2列に並べる */
+  .hagukumuWays {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
   .reserve {
     padding: var(--space-6);
   }
 }
 
 @media (min-width: 1024px) {
+  .hagukumu {
+    padding: var(--space-6) var(--space-8);
+  }
+
   .guide {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-5);

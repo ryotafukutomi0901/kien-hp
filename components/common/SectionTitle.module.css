@@ -1,70 +1,92 @@
+/*
+ * セクション見出し（手本: 日本テレビアート）
+ *   欧文ラベル型: 「Our Service」（Ubuntu 700、64〜80px）の下に「わたしたちが…」（和文 700、16px）
+ *   日本語見出し型: 大きな和文（--t-heading）／小見出し（ロゴの色の丸＋--t-heading-sm）
+ */
 .root {
   display: grid;
   justify-items: start;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  color: var(--color-text);
+}
+
+.center {
+  justify-items: center;
+  text-align: center;
+}
+
+.onDark {
+  color: var(--color-on-dark);
 }
 
 .title {
-  color: var(--color-text);
-  letter-spacing: var(--ls-heading);
-  /* 狭い幅で1文字だけ次の行に残らないよう文節で折り返す。auto-phrase だけだと長い語で横にはみ出すので overflow-wrap を併用 */
+  /* 狭い幅で1文字だけ次の行に残らないよう文節で折り返す。長い語で横にはみ出さないよう overflow-wrap を併用 */
   word-break: auto-phrase;
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
-.text {
-  position: relative;
-  display: inline-block;
+/* ---- 欧文ラベル型 ---- */
+.withEn .title {
+  display: grid;
+  gap: var(--space-3);
 }
 
-.subtitle {
-  /* 狭い幅で末尾1文字だけが次の行に落ちないよう、文節で折り返し行の長さをそろえる */
-  word-break: auto-phrase;
-  overflow-wrap: anywhere;
-  text-wrap: balance;
-  font-size: var(--t-note);
-  font-weight: 500;
+.center.withEn .title {
+  justify-items: center;
+}
+
+.en {
+  font-size: var(--t-en);
+  line-height: 1.05;
+  letter-spacing: var(--ls-en);
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.ja {
+  font-size: var(--ui-button);
+  line-height: var(--lh-heading);
   letter-spacing: var(--ls-heading);
-  color: var(--color-text);
 }
 
-/* ---- brush: 手書き見出し。ペン線は末尾の2〜3文字の下から右へ少しはみ出す（モック実測） ---- */
+/* ---- 日本語の大見出し ---- */
 .brush .title {
-  font-family: var(--font-heading);
   font-size: var(--t-heading);
-  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
 }
 
-.brush .stroke {
-  position: absolute;
-  right: -0.5em;
-  bottom: -0.05em;
-  width: 2.6em;
-  height: 0.38em;
-}
-
-/* ---- mark: 左上がオレンジ・右下が淡い緑に分かれた正方形のマーク＋ゴシック ---- */
+/* ---- 小見出し（ロゴの点のような色の丸を左に置く）---- */
 .mark .title {
-  font-family: var(--font-body);
   font-size: var(--t-heading-sm);
-  font-weight: 500;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
 }
 
 .mark .text {
   display: inline-flex;
-  align-items: center;
-  gap: 0.3em;
+  align-items: baseline;
+  gap: 0.45em;
 }
 
 .mark .text::before {
   content: "";
   flex-shrink: 0;
-  width: 0.72em;
-  height: 0.72em;
-  background: linear-gradient(
-    135deg,
-    var(--color-primary) 0 50%,
-    color-mix(in srgb, var(--color-secondary) 28%, var(--color-bg)) 50% 100%
-  );
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: var(--logo-coral);
+  box-shadow: 0.35em -0.3em 0 -0.18em var(--logo-yellow);
+  transform: translateY(-0.05em);
+}
+
+.subtitle {
+  max-width: 44em;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
 }

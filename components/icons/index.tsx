@@ -36,6 +36,14 @@ export function ArrowRightIcon(props: IconProps) {
   );
 }
 
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M6 9l6 6 6-6" />
+    </Svg>
+  );
+}
+
 export function ArrowUpIcon(props: IconProps) {
   return (
     <Svg {...props}>

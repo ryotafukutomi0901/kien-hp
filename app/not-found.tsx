@@ -25,7 +25,7 @@ const content: NotFoundContent = {
     title: "主なページ",
     // 説明はリンク先のページにある内容だけ（docs/CONTENT_SOURCE.md）
     items: [
-      { label: "事業内容", href: "/services", description: "訪問介護・居宅介護支援・家事支援", tone: "yellow" },
+      { label: "事業内容", href: "/#services", description: "訪問介護・居宅介護支援・家事支援", tone: "yellow" },
       { label: "アクセス", href: "/about#offices", description: "事業所の一覧・所在地・地図", tone: "green" },
       { label: "採用情報", href: "/recruit", description: "ケアマネジャー・ヘルパー・家事支援スタッフの募集", tone: "orange" },
       { label: site.contact.label, href: site.contact.href, description: "お電話でのご相談・家事支援のご予約", tone: "blue" },

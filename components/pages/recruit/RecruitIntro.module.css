@@ -96,3 +96,31 @@
   border-color: var(--color-primary-text);
   color: var(--color-primary-text);
 }
+
+/* マウスを乗せると、ぷるんと弾む（ページ内へ飛ぶ小さなピルの動き。ニュースの年の目次と同じ。2026-10-29） */
+.tocLink:hover,
+.tocLink:focus-visible {
+  animation: jelly 0.6s var(--ease-out);
+}
+
+@keyframes jelly {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  30% {
+    transform: scale(1.08, 0.9);
+  }
+
+  50% {
+    transform: scale(0.95, 1.05);
+  }
+
+  70% {
+    transform: scale(1.03, 0.97);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}

@@ -6,6 +6,7 @@ import { RecordYearNav } from "@/components/pages/records/RecordYearNav";
 import { RecordYearSections } from "@/components/pages/records/RecordYearSections";
 import { newsRecords } from "@/data/records/news";
 import { site } from "@/data/site";
+import { PriceGuide } from "@/components/page/PriceGuide";
 
 export const metadata: Metadata = {
   title: "ニュース",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <PageIntro title="ニュース">
+      <PageIntro title="ニュース" en="News">
         <p>
           {site.company.legalForm}
           {site.company.name}からのお知らせです。
@@ -34,6 +35,7 @@ export default function Page() {
           </div>
         }
       />
+      <PriceGuide />
     </>
   );
 }

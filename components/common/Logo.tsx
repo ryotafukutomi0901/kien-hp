@@ -30,7 +30,14 @@ export function Logo({
   return (
     <Link href="/" className={classes} aria-label={`${company.legalForm} ${company.name} トップへ`}>
       {mark && (
-        <Image src={mark.src} alt="" width={LOGO_MARK_WIDTH} height={LOGO_MARK_HEIGHT} className={styles.markImage} />
+        <Image
+          src={mark.src}
+          alt=""
+          width={LOGO_MARK_WIDTH}
+          height={LOGO_MARK_HEIGHT}
+          loading="eager" // ヘッダーのロゴは全ページで最初の画面に出る
+          className={styles.markImage}
+        />
       )}
       <span className={styles.name}>
         <span className={styles.legal}>{company.legalForm}</span>

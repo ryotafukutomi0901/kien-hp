@@ -1,46 +1,42 @@
-import Image from "next/image";
-
-import { BrushStroke } from "@/components/common/BrushStroke";
 import { Button } from "@/components/common/Button";
 import { Container } from "@/components/common/Container";
+import { TelLink } from "@/components/common/TelLink";
 import { site } from "@/data/site";
 
 import styles from "./FinalCta.module.css";
 
 /**
- * ページ最後の問い合わせ帯（定義書 docs/sections/08-final-cta.md）。
- * 淡い空色の地に、右から富士山の写真が溶け込む。左に手書きの見出し2行（右上がり）、その右にボタン。
- * 写真は装飾なので空alt＋aria-hidden。見出しはh2で、ルートの aria-labelledby から参照する。
+ * ページ最後のお問い合わせ（手本: 日本テレビアートの「Contact Us!」の帯）。
+ * ロゴのコーラルの面に、下線付きの大きな欧文「Contact Us!」、その下に「お問い合わせ」、経営理念の結びの一文、ボタンと電話。
+ * 欧文は飾り（aria-hidden）。見出し（h2）の読み上げは「お問い合わせ」。
  */
 export function FinalCta() {
-  const { finalCta } = site;
-  const lastLine = finalCta.title.length - 1;
+  const { finalCta, company } = site;
   return (
     <section className={styles.section} aria-labelledby="final-cta-title">
-      <div className={styles.media} aria-hidden="true">
-        <Image
-          src={finalCta.image.src}
-          alt=""
-          fill
-          sizes="(min-width: 1024px) 432px, (min-width: 640px) 36vw, 100vw"
-          className={styles.image}
-          style={{ objectPosition: finalCta.image.position }}
-        />
-      </div>
       <Container className={styles.inner}>
-        <h2 id="final-cta-title" className={styles.title}>
-          {finalCta.title.map((line, i) => (
+        <h2 id="final-cta-title" className={styles.heading} data-reveal>
+          <span className={styles.en} aria-hidden="true">
+            {finalCta.en}
+          </span>
+          <span className={styles.ja}>{finalCta.heading}</span>
+        </h2>
+        <p className={styles.message} data-reveal>
+          {finalCta.title.map((line) => (
             <span key={line} className={styles.line}>
               {line}
-              {/* モックの1行目末尾（読点の右）の小さなペン先と、2行目「ともに。」の下のペン線 */}
-              {i === 0 && lastLine > 0 && <BrushStroke className={styles.flick} />}
-              {i === lastLine && <BrushStroke className={styles.stroke} />}
             </span>
           ))}
-        </h2>
-        <Button href={finalCta.cta.href} size="md" className={styles.button}>
-          {finalCta.cta.label}
-        </Button>
+        </p>
+        <div className={styles.actions} data-reveal>
+          <Button href={finalCta.cta.href} size="lg">
+            {finalCta.cta.label}
+          </Button>
+          <p className={styles.tel}>
+            <span className={styles.telLabel}>TEL</span>
+            <TelLink tel={company.tel} size="large" />
+          </p>
+        </div>
       </Container>
     </section>
   );

@@ -1,6 +1,7 @@
 /*
  * 事業・職種の目印（ToneMark.tsx）。大きさは呼び出し側で --tone-mark-size を指定する（部品の寸法なので余白スケールの外）。
- * 輪の色はトーン色を地色に少し混ぜたもの（ロゴの水彩の点に近い明るさ）。漢字は本文と同じ紺。
+ * 輪の色はトーン色を地色に少し混ぜたもの（ロゴの水彩の点に近い明るさ）。
+ * 顔の線は輪と同じ系統の濃い色（--mark-face）。装飾なので文字のコントラスト基準の対象外だが、白い円の上で見える濃さにしてある。
  */
 .mark {
   display: block;
@@ -37,34 +38,45 @@
   fill: color-mix(in srgb, var(--mark-dot) 70%, var(--color-bg));
 }
 
-.glyph {
-  fill: var(--color-text);
-  stroke: var(--color-text);
-  stroke-width: 1.6; /* 手書きの筆圧に近づけ、小さくても読めるようにする */
-  stroke-linejoin: round;
-  paint-order: stroke;
-  font-family: var(--font-heading);
-  font-size: 46px;
-  font-weight: 600;
+/* 顔（ToneMark.tsx の FaceLines）。目・口の線は丸い端で、ロゴの顔の線に合わせる */
+.line {
+  fill: none;
+  stroke: var(--mark-face);
+  stroke-linecap: round;
 }
 
-/* 添える点はロゴの配色（黄・緑・桃）から、自分以外の色を選ぶ */
+.fill {
+  fill: var(--mark-face);
+}
+
+.mouth {
+  fill: var(--mark-face);
+  stroke: var(--mark-face);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+/* 添える点はロゴの配色（黄・緑・桃）から、自分以外の色を選ぶ。顔の色はトーン色を濃くしたもの（この部品の中だけで使う） */
 .yellow {
   --mark-base: var(--tone-yellow-base);
+  --mark-face: #d39e1c;
   --mark-dot: var(--tone-green-base);
 }
 
 .green {
   --mark-base: var(--tone-green-base);
+  --mark-face: #6c9c6c;
   --mark-dot: var(--tone-orange-base);
 }
 
 .orange {
   --mark-base: var(--tone-orange-base);
+  --mark-face: #e0645b;
   --mark-dot: var(--tone-yellow-base);
 }
 
 .blue {
   --mark-base: var(--tone-blue-base);
+  --mark-face: #d9728a;
   --mark-dot: var(--tone-yellow-base);
 }

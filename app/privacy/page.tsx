@@ -39,7 +39,12 @@ export default function Page() {
 
   return (
     <>
-      <PageIntro title={privacyPage.title}>
+      {/* 320px幅で「ー」だけが次の行に残らないよう、「プライバシー」と「ポリシー」の間で折り返せるようにする */}
+      <PageIntro
+        title={privacyPage.title === "プライバシーポリシー" ? <>プライバシー<wbr />ポリシー</> : privacyPage.title}
+        crumbLabel={privacyPage.title}
+        en="Privacy Policy"
+      >
         <PrivacyIntro preamble={privacyPage.preamble(companyName)}>
           <PolicyToc label={privacyPage.tocLabel} items={sections.map(({ id, title }) => ({ id, title }))} />
         </PrivacyIntro>

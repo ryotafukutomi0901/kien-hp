@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  // 一覧ページ /services は 2026-10-28 に廃止（CEO指示）。古いリンクはトップの事業内容の節へ
+  async redirects() {
+    return [{ source: "/services", destination: "/#services", permanent: true }];
+  },
   // リポジトリ直下にも package-lock.json があるため、ワークスペースの根を明示する
   turbopack: {
     root: path.join(__dirname),

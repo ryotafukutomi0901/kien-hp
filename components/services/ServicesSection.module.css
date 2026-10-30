@@ -1,80 +1,65 @@
 /*
- * 私たちのサービス（Sub-Agent 03）
- *
- * 上: --section-pad-block のまま。Heroの写真と波はこの上余白の中へ重なってくる（Hero.module.css の
- *     --hero-bleed がこの値を前提にしている）ので、ここを詰めると見出しが写真に隠れる。値を変えるときはHeroと同時に。
- * 下: カード下端→About まで モック22px→1440で約37px → --space-7（--section-pad-block の例外）
+ * 事業内容（手本: 日本テレビアートの「Our Service」。白い地）
+ *   見出し行: 左に欧文の大見出し、右に紹介文（1024px以上は横並び）
+ *   めくれるカード: モバイル1列／タブレット2列／1280px以上4列（同じ大きさ）。最後に横長の「All Services」
  */
 .section {
-  position: relative;
-  overflow-x: clip; /* 葉っぱを画面の左端からのぞかせる */
-  padding-block: var(--section-pad-block) var(--space-7);
-  background: var(--color-bg-soft);
+  scroll-margin-top: var(--space-3); /* ヘッダーの「事業内容」から飛んだときの着地（ヘッダー分は html の scroll-padding-top） */
+  padding-block: var(--section-pad-block);
+  background: var(--veil);
 }
 
-/*
- * 見出しの左外側の葉っぱ（モック: x0〜57・見出しの字の上28px〜下45px、茎は画面の左端で切れる）。
- * 見出しにかぶせないことを優先し、置く場所がない幅では出さない。
- *   〜639   : 見出しの左上（Heroの波の下の白地）に小さく。モバイルのHeroは左下に葉っぱを置かないので重ならない
- *   640〜1279: 出さない。見出しの左の余白が40pxしかなく、すぐ上にHeroの左端の葉っぱがある
- *   1280〜  : 見出しの左外側。右端を「コンテナの左端 − 24px」に合わせ、1440でモックと同じ位置になる。
- *             見出しが画面の左端に近い幅（〜1340）でも約50pxは見えるよう、左への逃がしを -88px で止める
- */
-.leaf {
-  top: 0;
-  left: calc(var(--space-4) * -1);
-  width: 64px;
+.head {
+  display: grid;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.lead {
+  max-width: 40em;
+  font-size: var(--t-note);
+  line-height: var(--lh-body);
+  word-break: auto-phrase;
+  text-wrap: pretty;
 }
 
 .grid {
   display: grid;
-  gap: var(--space-5);
-  margin-top: var(--space-6);
+  gap: var(--space-4);
 }
 
-/* サブ見出しが折り返す幅では「、」の後ろで折り返す（375で「ス」1文字だけが2行目に落ちるのを防ぐ） */
-.phrase {
-  display: inline-block;
+.cell {
+  min-width: 0;
 }
 
-/*
- * 事業の数はクライアントごとに違う（モックの華護は4事業・2×2、喜援は3事業）。
- * タブレットは2列で、奇数枚のときは最後の1枚を全幅に伸ばす。デスクトップは --service-columns 列（ServicesSection.tsx が事業数から決める）。
- */
 @media (min-width: 640px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: 1fr; /* 全カードの高さをそろえる（説明の行数が違ってもリンク位置がそろう） */
+    gap: var(--space-5);
   }
 
-  .grid > :last-child:nth-child(odd) {
+  /* タブレットの2列で3枚目が1枚だけ残るときは、全幅にせず左に置く（カードの縦横比を保つ） */
+
+  .full {
     grid-column: 1 / -1;
-  }
-
-  .leaf {
-    display: none;
   }
 }
 
 @media (min-width: 1024px) {
+  .head {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--space-10);
+  }
+}
+
+/* めくれるカードは同じ大きさで並べる: モバイル1列／タブレット2列／1024px以上3列（3事業） */
+@media (min-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(var(--service-columns, 3), minmax(0, 1fr));
-    column-gap: var(--space-6); /* モック 列間21px→約32px、行間13px→約24px */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .grid > :last-child:nth-child(odd) {
     grid-column: auto;
-  }
-}
-
-@media (min-width: 1280px) {
-  .leaf {
-    --leaf-w: 140px; /* モックの見えている部分 57×73px → 1440で約94×121px（左側は画面外） */
-    --content-left: max(var(--container-pad), (100% - var(--container-max)) / 2);
-
-    display: block;
-    top: calc(var(--section-pad-block) - var(--space-6)); /* 見出しの字の上端より約45px上（モック28px×1.657） */
-    left: max(calc(var(--content-left) - var(--leaf-w) - var(--space-5)), calc(var(--space-9) * -1 - var(--space-5)));
-    width: var(--leaf-w);
   }
 }

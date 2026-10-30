@@ -1,347 +1,287 @@
 /*
- * フッター（参考モック実測 → 1440px換算、docs/DESIGN.md 6章 Footer）
- *   高さ 132 → 219。地は --color-footer-bg（CEO指示でボタンと同じオレンジ。モックは紺 #2e3c48）
- *   ロゴ: 左上、上端 16 → 26。ヘッダーのロゴの約0.9倍（全体幅 156 → 141）
- *   ナビ: 7項目を右寄せで横一列。字の間隔 約31 → 51、中心は社名「華護」の行の高さ（ロゴ全体の中心より約6px上）
- *   住所: ロゴの下。字幅がナビの約1.25倍あり --ui-meta では小さすぎるため --t-note。色はほぼ白（実測 #f1f5f7）
- *   SNS: 住所と同じ行の右端。見た目 約32px、中心間隔 35.5 → 59
- *   戻るボタン: 直径 26 → 44、SNSの中心より約19px下。コンテンツ幅の右端から16pxはみ出した位置に置く
- *   コピーライト: 中央、中心 +105 → 174。色はやや暗いグレー（実測 #ced5da）＝ --color-footer-text
+ * フッター（手本: 日本テレビアート。白い地）
+ *   上段: 左にロゴ、右に欧文の見出し（Ubuntu 700）＋日本語のリンク（先頭に小さな丸）の列
+ *   中段: 区切り線の下に所在地・電話
+ *   下段: 上下を線で挟んだ段に、左 Official SNS、右 プライバシーポリシー・Page Top（グレーのピル）。その下にコピーライト
+ *
+ * マウスを乗せたときの動き（2026-10-28 CEO指示「フッターは文字の大きさ・配置はそのまま、動きだけ手本に」）。
+ * 時間と緩急は手本の実測（docs/REFERENCE_NTVART.md 第6節）。乗せるとすぐ（0.1s）、離すとゆっくり（1s）戻る。
+ *   サイトマップのリンク: 先頭の丸が黒く塗られ、文字が右へ寄り、下線が左から引かれる。離すと下線は右へ縮んで消える
+ *   プライバシーポリシー: 今の下線が右へ消え、続けて新しい下線が左から引かれる
+ *   Page Top: 地がコーラルに変わる（手本は黒。黒い面は使わない方針なのでボタンの色に置き換え）
+ * マウスの無い端末（タッチ）では動かさない。動きを減らす設定では base.css が時間を 0 にする。
  */
-
 .footer {
-  /* 戻るボタンのはみ出し量を「フッター幅」から計算するため（100cqi = スクロールバーを除いた幅） */
-  container-type: inline-size;
-  --to-top-size: var(--tap-min); /* 戻るボタンの直径＝タップ領域の最小値（モック 26 → 43） */
+  --hover-in: 0.1s;
+  --hover-out: 1s;
+  --hover-swap: 0.2s;
+  --ease-glide: cubic-bezier(0.43, 0.05, 0.17, 1);
 
-  padding-block: var(--space-8) var(--space-6);
-  background: var(--color-footer-bg);
+  padding-block: var(--space-9) var(--space-7);
+  background: var(--veil-strong);
   color: var(--color-footer-text);
 }
 
-/* 既定のフォーカスリング（--color-focus 紺）はオレンジ地で見えにくいため、フッター内だけ白にする（4.6:1） */
-.footer :focus-visible {
-  outline-color: var(--color-on-dark);
-}
-
-/*
- * .footer を付けて詳細度を上げ、Container の同じ詳細度の指定より確実に優先させる。
- * 並びはグリッドのエリアで切り替え、DOM順（ロゴ→住所→ナビ→SNS・戻る→コピーライト）は変えない。
- */
-.footer .inner {
+.top {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    "logo"
-    "address"
-    "nav"
-    "utility"
-    "copy";
+  gap: var(--space-8);
 }
 
-/* ヘッダーのロゴの0.9倍（モック実測）。zoom はレイアウト上の大きさごと縮むので、周りの余白計算が狂わない */
 .logo {
-  grid-area: logo;
   justify-self: start;
-  zoom: 0.9;
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-7) var(--space-5);
+}
+
+.groupTitle {
+  margin-bottom: var(--space-3);
+  font-size: var(--ui-button);
+  font-weight: 700;
+  letter-spacing: var(--ls-en);
+}
+
+.links {
+  display: grid;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  font-size: var(--ui-meta);
+  letter-spacing: var(--ls-ui);
+}
+
+/* 手本のリンク先頭の小さな丸 */
+.link::before {
+  content: "";
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  transition:
+    background-color var(--hover-out) var(--ease-fade),
+    border-color var(--hover-out) var(--ease-fade);
+}
+
+.linkText {
+  position: relative;
+  display: inline-block;
+  transition: transform var(--hover-out) var(--ease-glide);
+}
+
+/* 文字の下線。ふだんは長さ0。右端を軸に縮むので、離すと右へ消える */
+.linkText::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--hover-out) var(--ease-glide);
+}
+
+@media (hover: hover) {
+  .link:is(:hover, :focus-visible)::before {
+    border-color: var(--color-ink);
+    background-color: var(--color-ink);
+    transition-duration: var(--hover-in);
+  }
+
+  .link:is(:hover, :focus-visible) .linkText {
+    transform: translateX(0.375rem);
+    transition-duration: var(--hover-in);
+  }
+
+  .link:is(:hover, :focus-visible) .linkText::after {
+    transform: scaleX(1);
+    transform-origin: left;
+    transition-duration: var(--hover-in);
+  }
+}
+
+/* ---- 所在地 ---- */
+.office {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--color-border);
+}
+
+.officeTitle {
+  font-size: var(--ui-button);
+  font-weight: 700;
+  letter-spacing: var(--ls-en);
 }
 
 .address {
-  grid-area: address;
-  margin-top: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
   font-size: var(--t-note);
   font-style: normal;
-  font-weight: 500;
-  /* モックの住所は字間が広い（行の長さから逆算して約0.12em）。字間トークンのうち実測に合う値を使う */
-  letter-spacing: var(--ls-heading);
-  color: var(--color-on-dark);
+  line-height: var(--lh-body);
 }
 
-.addressLine {
-  display: inline-block;
-}
-
-/* ---- ナビ ---- */
-.nav {
-  grid-area: nav;
-  margin-top: var(--space-6);
-}
-
-/* モバイルは2列。文字の左端をロゴ・住所にそろえるため、リンクの左右余白ぶん外へ出す */
-.navList {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: var(--space-5);
-  margin-inline: calc(var(--space-2) * -1);
-}
-
-/* 文字の役割はヘッダーのナビと同じ（--ui-nav・700・--ls-ui）。地はオレンジで文字は白、hoverは白い下線だけ */
-.navLink {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-height: var(--space-8);
-  padding-inline: var(--space-2);
-  font-size: var(--ui-nav);
+.companyName {
   font-weight: 700;
-  letter-spacing: var(--ls-ui);
-  white-space: nowrap;
-  color: var(--color-on-dark);
 }
 
-.navLink::after {
-  content: "";
-  position: absolute;
-  inset-inline: var(--space-2);
-  bottom: var(--space-2);
-  height: 2px;
-  border-radius: var(--radius-pill);
-  background: var(--color-on-dark); /* 地がオレンジなので下線は白 */
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--duration-base) var(--ease-out);
+.contactLine {
+  --tel-color: var(--color-text);
 }
 
-.navLink:hover::after {
-  transform: scaleX(1);
-}
-
-/* ---- SNS・ページ上部へ戻る ---- */
-.utility {
-  grid-area: utility;
+/* ---- 下段（上下を線で挟んだ段）---- */
+.bottom {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-6);
-  margin-top: var(--space-5);
+  gap: var(--space-4) var(--space-6);
+  margin-top: var(--space-7);
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--color-border);
 }
 
-/* 線画の見た目の左端をロゴ・住所の左端に近づける（アイコンはタップ領域44pxの中央に約32px） */
-.social {
+/* プライバシーポリシーと Page Top は右に寄せる（折り返したときも右） */
+.bottomEnd {
   display: flex;
-  gap: var(--space-4);
-  margin-inline-start: calc(var(--space-1) * -1);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+  margin-inline-start: auto;
 }
 
-.socialLink {
+.sns {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.snsTitle {
+  font-size: var(--ui-button);
+  font-weight: 700;
+  letter-spacing: var(--ls-en);
+}
+
+.snsLink {
   display: grid;
   place-items: center;
   width: var(--tap-min);
   height: var(--tap-min);
-  border-radius: var(--radius-sm);
-  color: var(--color-on-dark);
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.socialLink:hover {
-  color: var(--color-base); /* 地がオレンジなので淡いベージュに（オレンジ地で約3.9:1） */
-}
-
-/*
- * 淡いグレーの丸に紺の矢印。地の色はモック実測 #dcdee2 で、白を紺地に85%重ねた色（#e0e2e4）と一致するため
- * トークン同士の混色で作る。矢印（--color-text）とのコントラストは高く、オレンジ地との境目も十分に見える。
- * 透明の枠線は、強制カラーモード（Windowsのハイコントラスト）で地色が消えても丸の輪郭を残すため。
- */
-.toTop {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: var(--to-top-size);
-  height: var(--to-top-size);
-  border: 1px solid transparent;
-  border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--color-on-dark) 85%, var(--color-footer-bg));
-  color: var(--color-text);
-  transition: background-color var(--duration-fast) var(--ease-out);
-}
-
-.toTopArrow {
-  transition: transform var(--duration-fast) var(--ease-out);
-}
-
-.toTop:hover {
-  background: var(--color-on-dark);
-}
-
-.toTop:hover .toTopArrow {
-  transform: translateY(-3px);
-}
-
-/* base.css の :focus-visible が角丸を --radius-sm に上書きして丸が四角くなるため、丸のまま保つ */
-.toTop:focus-visible {
-  border-radius: var(--radius-pill);
-}
-
-/* ---- プライバシーポリシー・コピーライト（グリッドの copy エリアにまとめて置く） ---- */
-.bottom {
-  grid-area: copy;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* リンクは押せる高さ44pxの中央に字があるため、上の余白は従来（--space-5）より一段詰める */
-  margin-top: var(--space-3);
+  border-radius: 50%;
 }
 
 .legal {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 var(--space-4);
+  gap: var(--space-4);
 }
 
-/* 小リンクの役割（--ui-meta）。オレンジ地に白（4.60:1）。ナビと区別するため常に下線を付ける */
 .legalLink {
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-min);
-  padding-inline: var(--space-2);
   font-size: var(--ui-meta);
-  font-weight: 500;
-  letter-spacing: var(--ls-ui);
-  color: var(--color-on-dark);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
 }
 
-.legalLink:hover {
-  text-decoration-thickness: 2px;
+/* 下線を2本重ねる。ふだんは1本目（::before）が見えている。離したときは一瞬で元に戻す（手本どおり） */
+.legalText {
+  position: relative;
+  display: inline-block;
+}
+
+.legalText::before,
+.legalText::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transition: transform 0s var(--ease-glide);
+}
+
+.legalText::before {
+  transform-origin: right;
+}
+
+.legalText::after {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+@media (hover: hover) {
+  .legalLink:is(:hover, :focus-visible) .legalText::before {
+    transform: scaleX(0);
+    transition-duration: var(--hover-swap);
+  }
+
+  .legalLink:is(:hover, :focus-visible) .legalText::after {
+    transform: scaleX(1);
+    transition-duration: var(--hover-swap);
+    transition-delay: var(--hover-swap);
+  }
+}
+
+/* Page Top（手本: グレーのピル、右に小さな矢印） */
+.toTop {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  padding-inline: var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--color-pill);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-en);
+  transition:
+    background-color var(--hover-swap) var(--ease-fade),
+    color var(--hover-swap) var(--ease-fade);
+}
+
+@media (hover: hover) {
+  .toTop:is(:hover, :focus-visible) {
+    background: var(--color-action);
+    color: var(--color-on-action);
+  }
 }
 
 .copyright {
+  margin-top: var(--space-5);
   font-size: var(--ui-caption);
-  font-weight: 500;
-  letter-spacing: var(--ls-body);
-  text-align: center;
+  letter-spacing: var(--ls-ui);
+  color: var(--color-text-muted);
 }
 
-.copyright small {
-  font-size: inherit;
-}
-
-/* ---- タブレット: ロゴ＋住所／ナビ4列／コピーライト＋SNS・戻る ---- */
 @media (min-width: 640px) {
-  .footer .inner {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "logo    logo"
-      "address address"
-      "nav     nav"
-      "copy    utility";
-    column-gap: var(--space-6);
-  }
-
-  .navList {
+  .nav {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .utility {
-    justify-content: flex-end;
-  }
-
-  .social {
-    margin-inline-start: 0;
-  }
-
-  /* 左の列に「プライバシーポリシー　© …」を1行で。リンクの字の左端をロゴ・住所にそろえる */
-  .bottom {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-self: center;
-    column-gap: var(--space-5);
-    margin-top: var(--space-5);
-    margin-inline-start: calc(var(--space-2) * -1);
-  }
-
   .copyright {
-    text-align: start;
+    text-align: right;
   }
 }
 
-/* ---- デスクトップ: モックの配置 ---- */
 @media (min-width: 1024px) {
-  .footer {
-    padding-block: var(--space-5) var(--space-7);
-  }
-
-  .footer .inner {
+  .top {
     grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "logo    nav"
-      "address utility"
-      "copy    copy";
-    align-items: center;
-    column-gap: var(--space-8);
+    column-gap: var(--space-11);
   }
 
-  /*
-   * 住所とSNSの行はロゴのすぐ下（モックでロゴ下端〜住所の行の上端は約4px）。
-   * 住所は2列にまたがらせ、ロゴの列幅を住所の長さで広げない（広がるとナビの列が狭まって折り返す）。
-   * 右端のSNS・戻るボタンとは同じ行で重なり合う配置だが、住所は左寄せなので文字は重ならない。
-   */
-  .address {
-    grid-column: 1 / -1;
-    justify-self: start;
-    margin-top: var(--space-1);
-  }
-
-  /*
-   * 下に --space-3 の余白を持たせて中心を6px上げ、社名「華護」の行にそろえる（モック）。
-   * 右の --space-2 は、リンクの左右余白のぶん内側にある文字の右端を、SNSアイコンの右端にそろえるため。
-   */
-  .nav {
-    justify-self: end;
-    margin: 0 var(--space-2) var(--space-3) 0;
-  }
-
-  /*
-   * 1024〜1279pxは7項目がロゴの横に収まるよう字の間隔を 16 + 8×2 = 32 に詰める（1280px以上でモックの間隔へ）。
-   * 項目が増えた事業者でもロゴに重ならないよう、収まらなければ右寄せのまま折り返す。
-   */
-  .navList {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0 var(--space-4);
-    margin-inline: 0;
-  }
-
-  /*
-   * 戻るボタンはコンテンツ幅の右端からはみ出させる（モック: 右端から +16〜+60px）。
-   * はみ出し量は「コンテンツの外の余白 − 60px」を 0〜60px に収めた値。
-   * 1440px幅で60px、1280px以下では0になり、狭い画面で画面外へ出ることはない（その分SNSが左へ寄る）。
-   */
-  .utility {
-    --to-top-reach: calc(var(--to-top-size) + var(--space-4));
-
-    justify-self: end;
-    gap: var(--space-6);
-    margin-top: var(--space-1);
-    margin-inline-end: calc(
-      clamp(0px, (100cqi - var(--container-max)) / 2 - var(--to-top-reach), var(--to-top-reach)) * -1
-    );
-  }
-
-  /* SNSの中心より少し下げる（モック約19px）。translate なので行の高さは増えない */
-  .toTop {
-    translate: 0 var(--space-4);
-  }
-
-  /* 最下部の中央に1行で。リンクの押せる高さの分だけ上の余白を詰め、字の位置を従来（--space-4）に近づける */
-  .bottom {
-    justify-content: center;
-    margin-top: var(--space-1);
-    margin-inline-start: 0;
-  }
-
-  .copyright {
-    text-align: center;
-  }
-}
-
-@media (min-width: 1280px) {
-  /* 字の間隔 = gap 32 + リンク左右の余白 8×2 = 48（モック 約51） */
-  .navList {
-    column-gap: var(--space-6);
+  .office {
+    grid-template-columns: calc(var(--space-12) * 1.5) minmax(0, 1fr);
+    align-items: baseline;
   }
 }

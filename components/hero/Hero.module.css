@@ -1,303 +1,385 @@
 /*
- * Hero（参考モック (0,61)-(869,470) → 1440px換算 ×1.657。docs/sections/02-hero.md）
- *   写真: 高さ 409 → 約680（波の最下点まで）。上端はごく浅い弧、下端は左高右低の白い波（形は Hero.tsx）
- *   主コピー: 左端 x78 → 129（コンテナ左端）、字の上端はヘッダー下から約115。行送り約1.45
- *   リード: 字の上端 328、3行・行送り 22.5 → 37
- *   ボタン: 上端 452、181×37 → 300×61
- *
- * 写真の下部は Hero の箱より下へはみ出させ、Services の上余白に重ねる（--hero-bleed）。
- * モックでは Services の見出しが波の左側の白地に入り込んでいる（右端の写真の下端より約60px上）ため。
- * Hero の箱を写真の最下点で終えると、波から見出しまでの余白が開きすぎる。
- * 波より下は透明なので、Services の地色（--color-bg-soft）がそのまま見える。
- *
- * 前提: Services の上余白は --section-pad-block（ServicesSection.module.css にも同じ注記あり。変えるときは両方）。
- *   1440幅: 箱 508（コピーの高さ）＋はみ出し 176 = 写真 684。見出しの上端 604（モック 598）、
- *   波の左側の平らな部分 561 との間は約43（モック約40）。右側の写真は見出しの右横まで下りる。
- * Hero の箱の高さはコピーの量で決まり、写真の高さはそれに追従する（文字を拡大しても重ならない）。
+ * ヒーロー（2026-10-28 CEO指示「人を大切にする会社になる」をコンセプトに、合う写真を大きく）
+ *   地: 透明（全ページの固定背景 SiteBackground の色の丸を透かす）
+ *   1024px以上: 左に見出し・リード・ボタン（見出しの幅ぶん）、右に大きな写真（残り全部）。見出しは写真に重ねない
+ *              （2026-10-28 CEO指示で、見出しの白い帯をやめた）
+ *   写真: 角丸36px。後ろにロゴの色の淡い面（傾けた角丸・大小の丸）がゆっくり揺れ、左下に会社のマークの丸いバッジ
+ *   〜1023px: 見出し → リード → ボタン → 写真の縦並び
+ *   右下: Instagram へのカード（ピンク。2026-10-28 CEO指示で、お知らせから差し替え）
  */
 
 .hero {
-  /* 写真が Hero の箱より下へはみ出す量 */
-  --hero-bleed: var(--space-7);
-
   position: relative;
-  z-index: var(--z-content); /* 写真の下部と右下の葉っぱを Services より手前に出す */
-  overflow-x: clip; /* 画面外へはみ出す葉っぱで横スクロールを出さない（縦ははみ出してよい） */
-  background: var(--color-bg-soft); /* 写真の外側の地。Services と同じ色 */
+  overflow-x: clip; /* 写真の後ろの色の面が画面の端から出ても、横スクロールを出さない */
+  padding-block: var(--space-7) calc(var(--space-12) + var(--space-5));
 }
 
-/* ---- 写真 ---- */
+.inner {
+  display: grid;
+  gap: var(--space-9);
+  width: 100%;
+  max-width: calc(var(--container-max) + var(--container-pad) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
 
-.media {
+/* ---- 見出し・リード・ボタン ---- */
+.content {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+.title {
+  display: grid;
+  justify-items: start;
+  font-size: var(--t-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-heading);
+}
+
+.line {
+  display: block;
+  white-space: nowrap; /* 「人を大切にする」「会社になる」は各1行で読ませる */
+  animation: rise var(--duration-reveal) var(--ease-out) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lead {
+  max-width: 24em; /* 読点の後ろで2行に折り返す */
+  margin-top: var(--space-6);
+  font-size: var(--t-lead);
+  font-weight: 700;
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  animation: rise var(--duration-reveal) var(--ease-out) 520ms both;
+}
+
+.leadLine {
+  display: inline-block;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-7);
+  animation: rise var(--duration-reveal) var(--ease-out) 680ms both;
+}
+
+/* ---- 大きな写真と、後ろの色の面 ---- */
+.visual {
+  position: relative;
+  margin: 0;
+  animation: rise 1.1s var(--ease-out) 120ms both;
+}
+
+/* GSAP の奥行き（Parallax）の層。色の面の層は写真の後ろ、写真の層は前 */
+.layer {
   position: absolute;
-  inset: 0 0 calc(var(--hero-bleed) * -1);
-  isolation: isolate;
-  overflow: hidden;
-  clip-path: url(#hero-wave-sm);
+  inset: 0;
+  z-index: 0;
   pointer-events: none;
 }
 
-/*
- * モバイルでは写真の上端を透明へ溶かし、Hero の地色につなぐ（リードの2〜3行目がこの上に乗る）。
- * 白い板を重ねる方式だと、写真の端と板の端が1pxずれて線が出るため、写真そのものをマスクする。
- * マスクは透明度だけを使うので、色は black（不透明）／transparent でよい。
- */
+.photoLayer {
+  position: relative;
+  z-index: 1;
+}
+
 .photo {
-  position: absolute;
-  inset: 0;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: calc(var(--radius-xl) * 1.5);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-float);
 }
 
 .image {
   object-fit: cover;
 }
 
-/* 霞（タブレット以上）。文字の背後だけ写真を白く飛ばして読みやすくする（グラデーションは霞の再現に限る） */
-.media::after {
-  content: none;
+.blobPink,
+.blobYellow,
+.blobMint {
+  position: absolute;
+  z-index: 0;
+  animation: drift 10s ease-in-out infinite alternate;
+}
+
+/* 写真の後ろで少し傾いた、淡いピンクの角丸 */
+.blobPink {
+  inset: 7% -4% -7% 6%;
+  border-radius: calc(var(--radius-xl) * 1.8);
+  background: color-mix(in srgb, var(--logo-pink) 62%, var(--color-bg));
+  --tilt: 5deg;
+}
+
+.blobYellow {
+  top: -7%;
+  right: 8%;
+  width: 26%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--logo-yellow) 80%, var(--color-bg));
+  --tilt: 0deg;
+  animation-delay: -4s;
+}
+
+.blobMint {
+  right: -5%;
+  bottom: 18%;
+  width: 14%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--logo-mint) 85%, var(--color-bg));
+  --tilt: 0deg;
+  animation-delay: -7s;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(var(--tilt));
+  }
+
+  to {
+    transform: translate3d(0, calc(var(--space-3) * -1), 0) rotate(calc(var(--tilt) + 2deg));
+  }
+}
+
+/* 会社のマークの丸いバッジ。周りの欧文がゆっくり回る */
+.badge {
+  position: absolute;
+  bottom: calc(var(--space-6) * -1);
+  left: calc(var(--space-3) * -1);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 104px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.badgeText {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 10.5px; /* SVGの座標系（120×120）の中の字の大きさ */
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  fill: var(--color-text);
+  animation: spin 22s linear infinite;
 }
 
-.decorTop {
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.badgeMark {
+  width: 40%;
+  height: auto;
+}
+
+/* ---- 右下のお知らせ（手本のピンクのカード）---- */
+.notice {
   position: absolute;
-  inset: 0;
-  z-index: var(--z-decor);
-  overflow: hidden;
-  pointer-events: none;
+  right: var(--container-pad);
+  bottom: var(--space-5);
+  left: var(--container-pad);
+  z-index: var(--z-float);
+  border-radius: var(--radius-lg);
+  background: var(--logo-pink);
+  box-shadow: var(--shadow-float);
+  animation: pop 700ms var(--ease-spring) 1200ms both;
 }
 
-.defs {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-/* ---- コピー ---- */
-
-.content {
-  position: relative;
-  z-index: var(--z-content);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-block: var(--space-7) var(--space-5);
-}
-
-.title {
-  font-family: var(--font-heading);
-  font-size: var(--t-display);
-  font-weight: 600;
-  line-height: 1.45; /* モック実測（行送り 55.5 → 92 / 64px）。--lh-heading 1.5 では行間が開きすぎる */
-  letter-spacing: var(--ls-heading);
-  white-space: nowrap; /* 「富士のまちで、」「ともに生きる。」は各1行で読ませる */
-}
-
-.lead {
-  margin-top: var(--space-5);
-  font-size: var(--t-body);
-  font-weight: 700; /* モックのリードは線が太い（字高約20pxに対して線幅約3px） */
-  line-height: var(--lh-body);
-  letter-spacing: var(--ls-body); /* 2行目（15字）が320幅でも折り返さない字間 */
-}
-
-.line {
-  display: block;
-}
-
-/* .hero を付けて Button（.lg）と同じ詳細度の指定より確実に優先させる（CSS Modules の読み込み順に依存しない） */
-.hero .cta {
-  margin-top: var(--space-5);
-}
-
-/* ---- 葉っぱ（幅はモックの見えている大きさから。画面外にはみ出す分は .hero と .media で切る） ---- */
-
-.leafTopLeft {
-  top: calc(var(--space-8) * -1);
-  left: calc(var(--space-4) * -1);
-  width: 104px; /* モバイルは主コピーの行の上に収まる大きさ（字の背後に葉を入れない） */
-}
-
-.leafTopRight,
-.leafMidLeft,
-.leafCornerTall,
-.leafCornerLow {
-  display: none;
-}
-
-.leafCornerWide {
-  right: calc(var(--space-5) * -1);
-  bottom: calc(var(--hero-bleed) * -1 - var(--space-3));
-  width: 150px;
-}
-
-/* ---- モバイル（〜639）: コピーは上、写真は下側に縦長で置き、ボタンは写真の上 ---- */
-@media (max-width: 639px) {
-  .hero {
-    min-height: 560px; /* 375幅で ヘッダー64＋560。ボタンまでが主要な端末の初期表示に収まる高さ */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-5));
   }
 
-  .media {
-    /* 写真は高さ基準で拡大され、山頂は写真の上から約20%に来る。山頂がリードの下に出る位置から始める */
-    top: 37%;
-  }
-
-  .content {
-    min-height: inherit;
-  }
-
-  .lead {
-    margin-bottom: var(--space-9); /* リードとボタンの間に写真（富士山）を見せる最低限の間 */
-  }
-
-  .hero .cta {
-    margin-top: auto;
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-/* ---- タブレット（640〜1023）: 写真は全面、霞は左から ---- */
+.noticeLink {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--tap-min);
+  padding: var(--space-4) var(--space-5);
+  color: var(--color-text);
+}
+
+.noticeIcon {
+  display: grid;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: 50%;
+  background: var(--color-bg);
+}
+
+.noticeText {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.noticeLabel {
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-en);
+}
+
+.noticeTitle {
+  font-size: var(--t-note);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+  word-break: auto-phrase;
+}
+
+.noticeArrow {
+  font-weight: 700;
+  transition: transform var(--duration-base) var(--ease-spring);
+}
+
+.noticeLink:hover .noticeArrow {
+  transform: translateX(4px);
+}
+
+.noticeLink:hover .noticeTitle {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 @media (min-width: 640px) {
-  .hero {
-    --hero-bleed: calc(var(--section-pad-block) + var(--space-9)); /* 80+64。768幅で写真の高さ約550 */
+  .notice {
+    left: auto;
+    width: min(400px, calc(100% - var(--container-pad) * 2));
   }
 
-  .media {
-    clip-path: url(#hero-wave-lg);
-  }
-
-  /*
-   * 写真の箱を右へ1割はみ出させ、山頂（position の x66%）を画面幅の約73%に置く（モック実測 72.7%）。
-   * object-position だけでは、1440幅で写真の左右の余りが約130pxしかなく右へ寄せきれないため。
-   */
-  .photo {
-    right: -10%;
-    mask-image: none;
-  }
-
-  /* タブレットはコピーが画面幅の6割近くを占め、主コピーの行末が山肌の濃い筋にかかるため、霞を広く取る */
-  .media::after {
-    content: "";
-    background: linear-gradient(
-      to right,
-      color-mix(in srgb, var(--color-bg) 72%, transparent) 0%,
-      color-mix(in srgb, var(--color-bg) 60%, transparent) 45%,
-      transparent 80%
-    );
-  }
-
-  .content {
-    padding-block: var(--space-9) 0;
-  }
-
-  .title {
-    letter-spacing: 0.16em; /* モック実測（字送り 約46 → 76 / 64px）。--ls-heading 0.12em では詰まる */
-  }
-
-  .lead {
-    margin-top: var(--space-6);
-    letter-spacing: 0.16em; /* モック実測（2行目の幅 222 → 368）。--ls-heading では1割狭い */
-  }
-
-  .leafTopLeft {
-    top: calc(var(--space-9) * -1);
-    left: calc(var(--space-4) * -1);
-    width: 160px;
-  }
-
-  .leafTopRight {
-    display: block;
-    top: calc(var(--space-8) * -1);
-    right: calc(var(--space-9) * -1);
-    width: 160px;
-  }
-
-  /*
-   * 左の中ほど（モック: x0〜75・ボタンの左横から波の下まで）。ボタンにかぶせないよう、右端を
-   * 「コンテンツの左端 − --space-2」に合わせる。左の余白が狭い画面では大半が画面外へ逃げる。
-   */
-  .leafMidLeft {
-    --leaf-w: 100px;
-    --content-left: max(var(--container-pad), (100% - var(--container-max)) / 2);
-
-    display: block;
-    bottom: 18%;
-    left: calc(var(--content-left) - var(--leaf-w) - var(--space-2));
-    width: var(--leaf-w);
-  }
-
-  .leafCornerTall {
-    display: block;
-    right: calc(var(--space-8) * -1);
-    bottom: calc(var(--hero-bleed) * -1 + var(--space-9));
-    width: 160px;
-    transform: scaleY(-1); /* 右上用の枝を上下反転し、右下の角から立ち上がる房にする */
-  }
-
-  /* 右下の角を埋める房（左下用の枝を左右反転し、右下の角から左上へ伸ばす） */
-  .leafCornerLow {
-    display: block;
-    right: calc(var(--space-4) * -1);
-    bottom: calc(var(--hero-bleed) * -1 - var(--space-2));
-    width: 130px;
-  }
-
-  /* 波に沿って横へ伸びる枝（モックの黄色い花の帯の位置） */
-  .leafCornerWide {
-    right: var(--space-11);
-    bottom: calc(var(--hero-bleed) * -1 - var(--space-3));
-    width: 160px;
+  .badge {
+    width: 128px;
   }
 }
 
-/* ---- デスクトップ（1024〜） ---- */
+/* デスクトップ: 左に文（5）、右に大きな写真（7）。見出しは写真の左端に重なる */
 @media (min-width: 1024px) {
   .hero {
-    --hero-bleed: calc(var(--section-pad-block) + var(--space-10)); /* 96+80。1440幅で写真の高さ684 */
+    display: grid;
+    align-items: center;
+    min-height: calc(100svh - var(--header-height));
+    padding-block: var(--space-8) var(--space-12);
   }
 
-  .media::after {
-    background: linear-gradient(
-      to right,
-      color-mix(in srgb, var(--color-bg) 70%, transparent) 0%,
-      color-mix(in srgb, var(--color-bg) 50%, transparent) 32%,
-      transparent 62%
-    );
+  /* 左の列は見出しの幅（max-content）。見出しは1行のまま写真に重ならず、写真は残りの幅いっぱいに広がる */
+  .inner {
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-9);
   }
 
-  .content {
-    padding-top: var(--space-11);
+  .photo {
+    aspect-ratio: auto;
+    height: min(68svh, 620px);
   }
 
-  /* モックは枝が上端に沿って横へ広がる（x0〜240・高さ約90）。素材の斜めの枝を少し起こして寄せる */
-  .leafTopLeft {
-    top: calc(var(--space-2) * -1);
+  .badge {
+    width: 148px;
+    bottom: calc(var(--space-7) * -1);
     left: calc(var(--space-7) * -1);
-    width: 250px; /* 下端を主コピーの字の上端より上に収める（1024〜1279はコンテンツの左端が40pxしかない） */
-    transform: rotate(-28deg);
-    transform-origin: 0 0;
   }
+}
 
-  .leafTopRight {
-    top: calc(var(--space-9) * -1);
-    right: calc(var(--space-11) * -1);
-    width: 240px;
-  }
+/*
+ * ---- トップを開いたときの登場（2026-10-28 CEO指示「日本テレビアートのヒーローの動きを喜援版で」。lib/intro.ts）----
+ * 手本と同じ順番・時間（時刻は tokens.css の --intro-*）: 写真が飛んでくる → 見出しが1文字ずつせり上がる → リード → ボタン → Instagram のカード。
+ * 背景の同心円と色の丸は SiteBackground 側。演出がないとき（サイト内の移動でトップに戻ったとき・動きを減らす設定）は、上のふだんの出方のまま。
+ */
+.char {
+  display: inline-block;
+}
 
-  .leafMidLeft {
-    --leaf-w: 150px;
-  }
+:global(html[data-intro]) .line,
+:global(html[data-intro]) .lead,
+:global(html[data-intro]) .actions,
+:global(html[data-intro]) .visual,
+:global(html[data-intro]) .notice {
+  animation: none;
+}
 
-  .leafCornerTall {
-    width: 280px;
-  }
+/* 行ごとに下を隠し、文字は半分下・透明から上がる（手本: 0.6秒、少し行き過ぎて戻る。1文字0.05秒ずつずらす） */
+:global(html[data-intro]) .line,
+:global(html[data-intro]) .leadLine {
+  overflow: hidden;
+  vertical-align: top;
+}
 
-  .leafCornerLow {
-    width: 200px;
-  }
+:global(html[data-intro="wait"]) .char {
+  opacity: 0;
+  transform: translateY(50%);
+}
 
-  .leafCornerWide {
-    right: var(--space-12);
-    width: 240px;
-  }
+:global(html[data-intro="play"]) .char {
+  transition:
+    transform var(--intro-char-for) var(--ease-back-out),
+    opacity var(--intro-char-for) var(--ease-fade);
+  transition-delay: calc(var(--intro-text-at) + var(--i) * var(--intro-char-step));
+}
+
+/* 写真（後ろの色の面・バッジごと）: 画面の中央寄りから、傾きを戻しながら飛んでくる（手本の写真カード: 3秒、power3.out） */
+:global(html[data-intro="wait"]) .visual {
+  opacity: 0;
+  transform: translate3d(-24%, 8%, 0) scale(0.6) rotate(-10deg);
+}
+
+:global(html[data-intro="play"]) .visual {
+  transition:
+    transform var(--intro-photo-for) var(--ease-power3-out) var(--intro-photo-at),
+    opacity 0.8s var(--ease-fade) var(--intro-photo-at);
+}
+
+/* ボタンはリードがせり上がる途中から */
+:global(html[data-intro="wait"]) .actions {
+  opacity: 0;
+  transform: translateY(var(--space-5));
+}
+
+:global(html[data-intro="play"]) .actions {
+  transition:
+    transform 0.8s var(--ease-back-out) var(--intro-actions-at),
+    opacity 0.8s var(--ease-fade) var(--intro-actions-at);
+}
+
+/* Instagram のカードは最後に右から滑り込む（手本のお知らせ: 5秒後、60px、1秒） */
+:global(html[data-intro="wait"]) .notice {
+  opacity: 0;
+  transform: translateX(60px);
+}
+
+:global(html[data-intro="play"]) .notice {
+  transition:
+    transform var(--intro-notice-for) var(--ease-back-out) var(--intro-notice-at),
+    opacity var(--intro-notice-for) var(--ease-fade) var(--intro-notice-at);
 }

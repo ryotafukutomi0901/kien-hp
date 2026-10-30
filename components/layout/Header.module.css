@@ -1,16 +1,16 @@
 /*
- * ヘッダー（参考モック実測 → 1440px換算、docs/DESIGN.md 6章）
- *   高さ 61 → 101（--header-height 96）。白地、境界線なし
- *   左右の余白 30 → 50（実装は --container-pad 40 のまま）。ロゴ〜CTAの外幅 805 → 1334 で、本文のコンテンツ幅（1200）より広い
- *   ナビ: 字高9（14px相当）、字の間隔 約25 → 41。ロゴとCTAの間の中央
- *   CTA: 100×30 → 166×50（md）、文字の左右余白 14 → 23（--space-5）
+ * ヘッダー（手本: 日本テレビアート）
+ *   高さ 86。ロゴは左、ナビは右寄せ（14px・700）、その右に黒いピルの「お問い合わせ」。
+ *   地は手本と同じく下の面が透ける。読みやすさのため、半透明のグレーに背景のぼかしを重ねる。
  */
 
 .header {
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  background: var(--color-bg);
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 /* スクロールしたときだけ薄い影を出し、白いセクションと重なっても境目が分かるようにする（対応ブラウザのみ・JS不要） */
@@ -58,7 +58,7 @@
 /* 字の間隔 = gap + リンク左右の余白×2 = 24 + 8×2 = 40（参考モック約41）。余白はタップ領域とフォーカスリングのゆとり */
 .navList {
   display: flex;
-  gap: var(--space-5);
+  gap: var(--space-2);
 }
 
 .navLink {
@@ -82,13 +82,13 @@
   bottom: var(--space-2);
   height: 2px;
   border-radius: var(--radius-pill);
-  background: var(--color-primary);
+  background: var(--color-text);
   transform: scaleX(0);
   transition: transform var(--duration-base) var(--ease-out);
 }
 
 .navLink:hover {
-  color: var(--color-primary-text);
+  color: var(--color-text);
 }
 
 .navLink:hover::after,
@@ -97,7 +97,7 @@
 }
 
 .navLink[aria-current="page"]:not([href="/"]) {
-  color: var(--color-primary-text);
+  color: var(--color-text);
 }
 
 @media (min-width: 640px) {
@@ -112,14 +112,16 @@
    * --space-10 ずつ広げ、1440px幅でちょうど左右 --container-pad になるようにする。
    */
   .header .inner {
-    max-width: calc(var(--header-max) + var(--container-pad) * 2);
+    max-width: none;
+    padding-inline: var(--space-6);
     gap: var(--space-6);
   }
 
+  /* 手本どおり、ナビはロゴから離して右に寄せる */
   .nav {
     display: flex;
     flex: 1;
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   .actions {

@@ -1,0 +1,238 @@
+/*
+ * 会社行事の下層ページの写真（手本: ハウステンボス採用サイトの記事）
+ *   先頭の写真を大きく（縦長の写真も切らずに、高さを画面の7割までに収める）→ 本文 → 写真の一覧（3列、639px以下は2列）
+ *   どの写真も押すと拡大（暗い地の上に写真、下に説明と「3 / 8」、前後のボタン（PCは左右、1023px以下は下）、右上に閉じる）
+ *   拡大している写真へマウスを乗せたときの動きは手本のカードと同じ緩急（写真が少し寄る）
+ */
+.gallery {
+  --ease-card: cubic-bezier(0.16, 1, 0.3, 1);
+
+  display: grid;
+  gap: var(--space-8);
+}
+
+.lead {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-gray);
+  cursor: zoom-in;
+}
+
+.leadImage {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh;
+  transition: transform 0.4s var(--ease-card);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-4);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+}
+
+/* ---- 写真の一覧 ---- */
+.photos {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.photosTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--t-heading-sm);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+}
+
+.photosCount {
+  color: var(--color-text-muted);
+  font-size: var(--ui-meta);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-gray);
+  cursor: zoom-in;
+  isolation: isolate;
+}
+
+.thumbImage {
+  object-fit: cover;
+  transition: transform 0.4s var(--ease-card);
+}
+
+@media (hover: hover) {
+  .lead:hover .leadImage {
+    transform: scale(1.03);
+  }
+
+  .thumb:hover .thumbImage {
+    transform: scale(1.1);
+  }
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+/* ---- 拡大 ---- */
+.dialog {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  /* 1023px以下は前後のボタンを下に置くので、下を広く空ける */
+  padding: var(--space-9) var(--space-4) var(--space-11);
+  border: 0;
+  background: rgb(29 29 29 / 0.92);
+  color: var(--color-bg);
+}
+
+.dialog[open] {
+  display: grid;
+  place-items: center;
+  animation: dialog-in 0.3s var(--ease-card);
+}
+
+.dialog::backdrop {
+  background: transparent;
+}
+
+/* 写真のまわりは押せない（押すと dialog 自身に届いて閉じる）。説明の文字は選べるように押せる */
+.figure {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 写真は枠いっぱいに、縦横比を保って収める（縦長でも横長でも画面からはみ出さない） */
+.stage {
+  position: relative;
+  min-height: 0;
+}
+
+.full {
+  object-fit: contain;
+}
+
+.caption {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--t-note);
+  line-height: var(--lh-compact);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.counter {
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+}
+
+.control {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.4s var(--ease-card);
+}
+
+.closeButton {
+  top: var(--space-4);
+  right: var(--space-4);
+}
+
+.prev,
+.next {
+  bottom: var(--space-5);
+}
+
+.prev {
+  left: var(--space-4);
+}
+
+.next {
+  right: var(--space-4);
+}
+
+.prevIcon {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .control:hover {
+    background: var(--logo-yellow);
+  }
+}
+
+@media (min-width: 1024px) {
+  .dialog {
+    padding: var(--space-9) var(--space-11) var(--space-6);
+  }
+
+  .prev,
+  .next {
+    top: 50%;
+    bottom: auto;
+    translate: 0 -50%;
+  }
+
+  .prev {
+    left: var(--space-6);
+  }
+
+  .next {
+    right: var(--space-6);
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leadImage,
+  .thumbImage,
+  .control {
+    transition: none;
+  }
+
+  .dialog[open] {
+    animation: none;
+  }
+}

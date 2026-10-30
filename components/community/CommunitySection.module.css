@@ -1,0 +1,89 @@
+/*
+ * Instagram と会社行事（手本: 日本テレビアートの「Works」の色の面のカード。2026-10-28 黒い帯をやめ、淡いミントの帯にした）
+ *   〜639   : Instagram → 会社行事（1列）
+ *   640〜   : Instagram｜会社行事（2カラム）。会社行事は2×2
+ *   Instagram が無いとき: 会社行事を 2列（640〜）／4列（1024〜）
+ */
+.section {
+  padding-block: var(--section-pad-block);
+  background: color-mix(in srgb, var(--tone-green-tint) 78%, transparent);
+  color: var(--color-text);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* ---- Instagram（手本の色の面のタイル。中央に大きく）---- */
+.instagram {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--logo-coral);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: calc(var(--space-9) + var(--space-3));
+  height: calc(var(--space-9) + var(--space-3));
+  border-radius: 50%;
+  background: var(--color-bg);
+}
+
+.instagramEn {
+  font-size: var(--t-heading);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: var(--ls-en);
+}
+
+.instagramText {
+  font-size: var(--t-note);
+  font-weight: 700;
+  line-height: var(--lh-body);
+}
+
+.line {
+  display: block;
+  word-break: auto-phrase;
+  text-wrap: balance;
+}
+
+@media (min-width: 640px) {
+  .withInstagram .body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .eventsOnly .list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
