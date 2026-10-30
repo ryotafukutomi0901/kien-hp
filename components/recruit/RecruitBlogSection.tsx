@@ -45,7 +45,8 @@ export function RecruitBlogSection() {
             ))}
           </ul>
           <div className={styles.actions} data-reveal>
-            <Button href={card.cta.href} size="md">
+            {/* ヒーローの2つと同じ「»」の動き（2026-10-30 CEO指示）。となりの「スタッフの一日を見る」は縁をなぞる動き */}
+            <Button href={card.cta.href} size="md" effect="chevron">
               {card.cta.label}
             </Button>
             {card.secondaryCta && (

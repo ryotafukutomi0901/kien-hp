@@ -71,15 +71,43 @@
   min-width: 240px;
   min-height: var(--space-10);
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
-  border: 1px solid var(--tab-line);
+  border: 1px solid color-mix(in srgb, var(--tab-line) 35%, var(--color-bg));
   border-radius: var(--radius-lg);
   background: var(--tab-bg);
   color: var(--color-text);
-  transition: transform var(--duration-base) var(--ease-spring);
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
+/*
+ * マウスを乗せると、縁が事業の色になり、目印の顔が首をかしげ（左へ傾いてから右へ揺れて戻る）、矢印が少し右へ。
+ * 事業ページの「ほかの事業」のボタン（ServiceJumpNav）と同じ動き（2026-10-30 CEO指示「ヘッダーの事業を選ぶタブにも同じアニメーションを」。
+ * それまでは少し浮く動き）
+ */
 .tab:hover {
-  transform: translateY(-3px);
+  border-color: var(--tab-line);
+}
+
+.tab:hover .mark,
+.tab:focus-visible .mark {
+  animation: tilt 0.8s var(--ease-out);
+}
+
+@keyframes tilt {
+  0% {
+    transform: rotate(0);
+  }
+
+  30% {
+    transform: rotate(-16deg);
+  }
+
+  65% {
+    transform: rotate(9deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
 }
 
 .tab[aria-current="page"] {
@@ -112,7 +140,7 @@
 }
 
 .arrow {
-  transition: transform var(--duration-base) var(--ease-spring);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .tab:hover .arrow {

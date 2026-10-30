@@ -16,7 +16,7 @@ export function Header() {
   return (
     <header className={styles.header}>
       <Container className={styles.inner}>
-        <Logo company={site.company} />
+        <Logo company={site.company} introReplay />
         <nav aria-label="グローバルナビゲーション" className={styles.nav}>
           <ul className={styles.navList}>
             <NavItems nav={site.nav} linkClassName={styles.navLink} />

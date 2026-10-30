@@ -3,10 +3,12 @@ import { Ubuntu } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { SiteBackground } from "@/components/background/SiteBackground";
+import { ButtonWipeColor } from "@/components/common/ButtonWipeColor";
 import { Reveal } from "@/components/common/Reveal";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { ContactBandGate } from "@/components/cta/ContactBandGate";
 import { FinalCta } from "@/components/cta/FinalCta";
+import { IntroReplay } from "@/components/hero/IntroReplay";
 import { Header } from "@/components/layout/Header";
 import { site } from "@/data/site";
 import { INTRO_SCRIPT } from "@/lib/intro";
@@ -67,6 +69,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Footer />
         <Reveal />
         <SmoothScroll />
+        <ButtonWipeColor />
+        <IntroReplay />
       </body>
     </html>
   );

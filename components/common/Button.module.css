@@ -3,7 +3,7 @@
  *   primary: ロゴのコーラルの地に黒文字（5.8:1）、右端に白い丸の矢印（2026-10-28 黒いピルから変更）
  *   outline: 淡いグレー地に黒文字（14.5:1）、右端に小さな黒い丸。手本の「もっとみる •」
  *   white  : 白地に黒文字。グレー地・色の面の上で使う
- * マウスを乗せたときの動きは種類ごとに別（Button.tsx の MOTION。2026-10-29）: .wipe .chevron .slot .bloom .trace
+ * マウスを乗せたときの動き（Button.tsx。2026-10-30）: お問い合わせは .wipe、ヒーローの2つと採用の欄の「採用情報を見る」は .chevron、それ以外はすべて .trace
  */
 .button {
   position: relative;
@@ -95,7 +95,8 @@
 /*
  * お問い合わせのボタン（2026-10-28 CEO指示。CEOが示したボタンの動きを、喜援の色に置き換えたもの）。
  * マウスを乗せる・キーボードで選ぶと、斜め45度の帯が中央から左右へ広がり、地の色が
- * コーラル → イエロー（ロゴの色）に切り替わる。文字はどちらもほぼ黒（5.8:1 → 12.6:1）。
+ * コーラル → ロゴのほかの色に切り替わる（2026-10-30 からピンク・イエロー・ミントのどれかを毎回ランダムに。それまではイエローだけ）。
+ * 文字はどれもほぼ黒（コーラル 5.8:1 → ピンク・イエロー・ミント 9〜12.6:1）。
  * 帯は ::before（sm の当たり判定に ::after を使っているため）。ボタンの中だけに出るよう isolation と overflow で囲む。
  */
 .wipe {
@@ -108,7 +109,7 @@
   position: absolute;
   inset: 0 -20%;
   z-index: -1;
-  background: var(--logo-yellow);
+  background: var(--wipe-color, var(--logo-yellow)); /* 乗せるたびに ButtonWipeColor がロゴのほかの色から選ぶ */
   transform: skewX(-45deg) scaleX(0);
   transition: transform 1s var(--ease-out); /* 2026-10-28 CEO指示で 0.5秒 → 1.0秒（0.5秒遅く） */
 }
@@ -127,6 +128,7 @@
 /*
  * 「»」が現れるボタン（2026-10-28 CEO指示。CEOが示したボタンの動きを、サイトの色・形のまま取り入れたもの）。
  * マウスを乗せる・キーボードで選ぶと、文字が少し左へ寄り（右に余白が開き）、右から「»」がふわっと現れる（0.5秒）。
+ * 使うのはヒーローの2つと、トップの採用の欄の「採用情報を見る」だけ（2026-10-30 に一度やめ、CEO指示で同じ日に戻した）。
  */
 .chevron .label {
   position: relative;
@@ -157,103 +159,10 @@
 }
 
 /*
- * primary: 文字のスロット（2026-10-29）。文字が上へ抜け、同じ文言が下から入ってくる。
- * 白い丸の中の矢印は、右へ抜けて左から戻る。下から入る文言は data-text を ::after に出す（読み上げない）。
- * 字の上下が切れないよう、切り抜く枠だけを上下に少し広げ、同じだけ負の余白で戻して大きさは変えない。
- */
-.slot .label {
-  overflow: hidden;
-  padding-block: 0.15em;
-  margin-block: -0.15em;
-}
-
-.slot .labelInner {
-  position: relative;
-  display: block;
-  transition: transform 0.6s var(--ease-power3-out);
-}
-
-.slot .labelInner[data-text]::after {
-  content: attr(data-text);
-  content: attr(data-text) / "";
-  position: absolute;
-  top: calc(100% + 0.3em);
-  left: 0;
-  right: 0;
-}
-
-.slot:hover .labelInner[data-text],
-.slot:focus-visible .labelInner[data-text] {
-  transform: translateY(calc(-100% - 0.3em));
-}
-
-.slot .circle {
-  overflow: hidden;
-}
-
-.slot:hover .circle svg,
-.slot:focus-visible .circle svg {
-  animation: arrow-through 0.6s var(--ease-power3-inout);
-}
-
-@keyframes arrow-through {
-  0% {
-    transform: translateX(0);
-  }
-
-  49.9% {
-    transform: translateX(170%);
-  }
-
-  50% {
-    transform: translateX(-170%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-/*
- * outline: 点が咲く（2026-10-29）。右端の小さな丸の位置から、ロゴのミントの円が広がってボタンを満たす。
- * 円は .dot の ::before（ボタンの中だけに出るよう isolation と overflow で囲み、文字の後ろに置く）。文字はほぼ黒のまま（ミント地で 11:1）
- */
-.bloom {
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.bloom .dot {
-  position: relative;
-}
-
-.bloom .dot::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: -1;
-  width: 56em;
-  height: 56em;
-  border-radius: 50%;
-  background: var(--logo-mint);
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.7s var(--ease-power3-out);
-}
-
-.bloom:hover .dot::before,
-.bloom:focus-visible .dot::before {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-/* 円が広がる間は、地の色の切り替え（.outline:hover）をしない */
-.outline.bloom:hover {
-  background: var(--color-pill);
-}
-
-/*
- * white: 縁をなぞる（2026-10-29）。コーラルの線がボタンの縁を上から時計回りに一周して描かれ、ボタンが少し浮く。
- * 線は ::before の円すい状のグラデーションを縁の太さだけ残して切り抜いたもの。角度（--trace）を動かす
+ * 縁をなぞる（2026-10-29 に white の動きとして作り、2026-10-30 CEO指示でお問い合わせ以外のすべてのボタンに）。
+ * ロゴの色の線（--trace-color。ボタンごとに Button.tsx が決める）が縁を上から時計回りに一周して描かれ、ボタンが少し浮く。
+ * 線は ::before の円すい状のグラデーションを縁の太さだけ残して切り抜いたもの。角度（--trace）を動かす。
+ * 一周の速さは 0.4秒（2026-10-30 CEO指示「0.5秒早く」で 0.9秒から）
  */
 @property --trace {
   syntax: "<angle>";
@@ -274,12 +183,12 @@
   inset: 0;
   padding: 2px;
   border-radius: inherit;
-  background: conic-gradient(var(--logo-coral) var(--trace), transparent 0);
+  background: conic-gradient(var(--trace-color, var(--logo-coral)) var(--trace), transparent 0);
   mask:
     linear-gradient(#000 0 0) content-box exclude,
     linear-gradient(#000 0 0);
   pointer-events: none;
-  transition: --trace 0.9s var(--ease-power3-inout);
+  transition: --trace 0.4s var(--ease-power3-inout);
 }
 
 .trace:hover::before,
@@ -296,7 +205,15 @@
   transform: translateY(-2px) scale(0.97);
 }
 
-/* 線を描く間は、地の色の切り替え（.white:hover）をしない */
+/* 線を描く間は、地の色の切り替え（.primary:hover など）をしない */
+.primary.trace:hover {
+  background: var(--color-action);
+}
+
+.outline.trace:hover {
+  background: var(--color-pill);
+}
+
 .white.trace:hover {
   background: var(--color-bg);
 }

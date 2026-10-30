@@ -19,16 +19,24 @@ const LOGO_MARK_HEIGHT = 318;
 export function Logo({
   company,
   tone = "dark",
+  introReplay = false,
   className,
 }: {
   company: Company;
   tone?: "dark" | "light";
+  /** 押してトップへ戻ったとき、トップの登場演出をもう一度流す（ヘッダーのロゴ。components/hero/IntroReplay.tsx） */
+  introReplay?: boolean;
   className?: string;
 }) {
   const classes = [styles.logo, styles[tone], className].filter(Boolean).join(" ");
   const mark = tone === "light" ? (company.logoMarkLight ?? company.logoMark) : company.logoMark;
   return (
-    <Link href="/" className={classes} aria-label={`${company.legalForm} ${company.name} トップへ`}>
+    <Link
+      href="/"
+      className={classes}
+      aria-label={`${company.legalForm} ${company.name} トップへ`}
+      data-intro-replay={introReplay || undefined}
+    >
       {mark && (
         <Image
           src={mark.src}
