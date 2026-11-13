@@ -5,7 +5,6 @@ import { Button } from "@/components/common/Button";
 import { ScrollDrift } from "@/components/motion/ScrollDrift";
 import { Container } from "@/components/common/Container";
 import { SectionTitle } from "@/components/common/SectionTitle";
-import { aboutPage } from "@/data/pages/about";
 import { site } from "@/data/site";
 
 import styles from "./AboutSection.module.css";
@@ -13,12 +12,11 @@ import styles from "./AboutSection.module.css";
 /**
  * 経営理念（手本: 日本テレビアートの「Who We Are」）。トップでは Hero の直後（2026-10-21 引き継ぎ）。
  * 中央揃えの大きな欧文＋日本語の見出し（ほかの節と同じ SectionTitle。2026-10-29 CEO指摘「経営理念だけH2ちっちゃくない？」で小さなラベルから変更）
- * → 中央に大きく理念の3か条 → 横に流れる色のタイル（写真入り）→ ご挨拶の文 → 会社案内へ。
- * ご挨拶の文は /about と同じ原文（data/pages/about.ts）を使う。
+ * → 中央に大きく理念の3か条 → 「会社概要を見る」→ 横に流れる色のタイル（写真入り）。
+ * ご挨拶の文（「人を大切にする会社になる」と本文）は会社の説明なので会社概要（/about）だけに置き、トップからは外した（2026-11-13 CEO指示）。
  */
 export function AboutSection() {
   const { about } = site;
-  const { greeting } = aboutPage.company;
   // タイルの列は途切れなく流すため2回描く（2回目は読み上げない）
   const tiles = [...about.gallery, ...about.gallery];
   return (
@@ -36,6 +34,11 @@ export function AboutSection() {
             </li>
           ))}
         </ol>
+        <div className={styles.cta} data-reveal>
+          <Button href={about.cta.href} variant="white" size="lg">
+            {about.cta.label}
+          </Button>
+        </div>
       </Container>
 
       <div className={styles.gallery} aria-hidden="true">
@@ -59,22 +62,6 @@ export function AboutSection() {
           </ul>
         </ScrollDrift>
       </div>
-
-      <Container className={styles.message}>
-        <p className={styles.motto} data-reveal>
-          {greeting.motto}
-        </p>
-        {[greeting.opening, ...greeting.body].map((paragraph) => (
-          <p key={paragraph} className={styles.paragraph} data-reveal>
-            {paragraph}
-          </p>
-        ))}
-        <div className={styles.cta} data-reveal>
-          <Button href={about.cta.href} variant="white" size="lg">
-            {about.cta.label}
-          </Button>
-        </div>
-      </Container>
     </section>
   );
 }

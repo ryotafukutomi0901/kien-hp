@@ -50,6 +50,60 @@
   letter-spacing: var(--ls-heading);
 }
 
+/*
+ * 登場の動き（animate。下層ページの h1。2026-11-13）: 欧文が1文字ずつ下からせり上がり（字の下半分から先に見える切り抜き）、
+ * 最後の文字に重ねて日本語が下からふわっと出る。動きを減らす設定では base.css が止め、最後の形のまま出る
+ */
+.enWord {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.08em;
+  padding-block-end: 0.08em; /* 「y」「g」などの下を切らない */
+  white-space: pre;
+}
+
+.enChar {
+  display: inline-block;
+}
+
+.animated .enChar {
+  animation: en-rise 0.9s var(--ease-power3-out) both;
+  animation-delay: calc(0.15s + var(--i) * 0.045s);
+}
+
+@keyframes en-rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+.animated .ja {
+  animation: ja-rise 0.8s var(--ease-out) both;
+  animation-delay: calc(0.35s + var(--n, 6) * 0.045s);
+}
+
+@keyframes ja-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+}
+
+/* 欧文の無い見出し: 日本語が1文字ずつ下からせり上がる（ヒーローの見出しと同じ出方） */
+.jaChar,
+.textRise {
+  display: inline-block;
+}
+
+.animated .jaChar {
+  animation: ja-rise 0.7s var(--ease-power3-out) both;
+  animation-delay: calc(0.15s + var(--i) * 0.05s);
+}
+
+.animated .textRise {
+  animation: ja-rise 0.8s var(--ease-out) 0.15s both;
+}
+
 /* ---- 日本語の大見出し ---- */
 .brush .title {
   font-size: var(--t-heading);

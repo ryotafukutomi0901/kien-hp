@@ -98,9 +98,12 @@
 }
 
 /* マウスを乗せると、ぷるんと弾む（ページ内へ飛ぶ小さなピルの動き。ニュースの年の目次と同じ。2026-10-29） */
-.tocLink:hover,
-.tocLink:focus-visible {
-  animation: jelly 0.6s var(--ease-out);
+/* 動きはマウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」） */
+@media (hover: hover) and (pointer: fine) {
+  .tocLink:hover,
+  .tocLink:focus-visible {
+    animation: jelly 0.6s var(--ease-out);
+  }
 }
 
 @keyframes jelly {

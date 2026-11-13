@@ -8,7 +8,13 @@ export function Greeting({ greeting }: { greeting: AboutPageContent["company"]["
     <>
       <p className={styles.opening}>{greeting.opening}</p>
       <div className={styles.motto}>
-        <p className={styles.mottoText}>{greeting.motto}</p>
+        <p className={styles.mottoText}>
+          {greeting.motto.map((phrase) => (
+            <span key={phrase} className={styles.phrase}>
+              {phrase}
+            </span>
+          ))}
+        </p>
       </div>
       <div className={styles.prose}>
         {greeting.body.map((paragraph) => (

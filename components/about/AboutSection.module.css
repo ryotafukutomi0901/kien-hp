@@ -2,8 +2,8 @@
  * 経営理念（手本: 日本テレビアートの「Who We Are」。グレーの地で Hero から続く）
  *   見出し: ほかの節と同じ大きな欧文＋日本語（SectionTitle、中央揃え）
  *   理念の3か条: 中央に大きく（--t-heading・700）
- *   タイルの列: 色の角丸タイル（大小3種）の中に写真。横にゆっくり流れる
- *   ご挨拶: 中央揃えの太字（--t-lead）。最後に白いピルの「会社案内を見る」
+ *   その下に白いピルの「会社概要を見る」（中央）
+ *   タイルの列: 色の角丸タイル（大小3種）の中に写真。横にゆっくり流れる。節の最後
  */
 .section {
   overflow: clip;
@@ -30,7 +30,7 @@
 
 /* ---- タイルの列 ---- */
 .gallery {
-  margin-block: var(--space-9);
+  margin-top: var(--space-9);
   overflow: hidden;
 }
 
@@ -93,32 +93,10 @@
 .orange { --tile-bg: var(--logo-coral); }
 .blue { --tile-bg: var(--logo-pink); }
 
-/* ---- ご挨拶 ---- */
-.message {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-5);
-  text-align: center;
-}
-
-.motto {
-  font-size: var(--t-heading-sm);
-  font-weight: 700;
-  letter-spacing: var(--ls-heading);
-}
-
-.paragraph {
-  max-width: 36em;
-  font-size: var(--t-lead);
-  font-weight: 700;
-  line-height: var(--lh-body);
-  letter-spacing: var(--ls-body);
-  word-break: auto-phrase;
-  text-wrap: pretty;
-}
-
 .cta {
-  margin-top: var(--space-6);
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-8);
 }
 
 @media (min-width: 1024px) {

@@ -104,12 +104,15 @@
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
-.link:hover {
-  color: var(--color-text-muted);
-}
+/* 乗せたときの色と矢印の動きはマウスのある端末だけ（タップのあとに色が薄いまま残らないように。2026-11-13） */
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--color-text-muted);
+  }
 
-.link:hover .arrow {
-  transform: translateX(3px);
+  .link:hover .arrow {
+    transform: translateX(3px);
+  }
 }
 
 /* 現在地。トップはPCナビと同じく装飾しない（参考モックのトップに現在地表示が無いため） */
@@ -119,20 +122,40 @@
   text-underline-offset: 6px;
 }
 
-/* 「事業内容」の見出しと、1段下げた3事業（2026-10-28 CEO指示。一覧ページは廃止） */
-.group {
-  padding-block: var(--space-3) var(--space-2);
+/*
+ * 「事業内容」（2026-11-13 CEO指示）: ほかの行と同じ見た目のボタン。押すと下に3事業が開く（行末の矢印が下向き → 上向き）。
+ * 開け閉めは高さ 0fr ⇄ 1fr で滑らかに（動きを減らす設定では base.css が止める）
+ */
+.groupToggle {
+  width: 100%;
+  text-align: start;
 }
 
-.groupLabel {
-  display: block;
-  font-size: var(--ui-meta);
-  font-weight: 700;
-  letter-spacing: var(--ls-ui);
-  color: var(--color-text-muted);
+.groupToggle .groupChevron,
+.groupToggle:hover .groupChevron {
+  transform: none;
 }
 
-.subList > li + li {
+.groupToggle[aria-expanded="true"] .groupChevron {
+  transform: rotate(180deg);
+}
+
+.subWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-base) var(--ease-out);
+}
+
+.subWrap[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.subList {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.subList > li {
   border-top: 1px dashed var(--color-border);
 }
 

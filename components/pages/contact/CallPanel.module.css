@@ -39,9 +39,12 @@
 }
 
 /* マウスを乗せると、電話の絵が鳴っているように小刻みに揺れる（採用ページの電話ボタンと同じ。2026-10-29） */
-.call:hover .icon,
-.call:focus-visible .icon {
-  animation: ring 0.9s ease-in-out;
+/* 動きはマウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」） */
+@media (hover: hover) and (pointer: fine) {
+  .call:hover .icon,
+  .call:focus-visible .icon {
+    animation: ring 0.9s ease-in-out;
+  }
 }
 
 @keyframes ring {

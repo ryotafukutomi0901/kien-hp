@@ -115,25 +115,26 @@ export function Hero() {
                 style={{ objectPosition: hero.image.position }}
               />
             </div>
+            {/* バッジは写真の層の中に置き、スクロールで写真が動いても写真の角からずれないようにする（2026-11-13） */}
+            <span className={styles.badge} aria-hidden="true">
+              <svg viewBox="0 0 120 120" className={styles.badgeText}>
+                <defs>
+                  <path id="hero-badge-circle" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" />
+                </defs>
+                {/*
+                  欧文は1周ぶんを、円周（半径44 = 上の d と同じ）ちょうどに割り付ける。2回くり返していたときは円周より長く、
+                  はみ出た分が継ぎ目で切れて「KIEN · F KIEN」と重なっていた（2026-10-28 修正）。
+                  末尾の空白も1文字として数え、継ぎ目の「· KIEN」の間をほかの区切りと同じにする（xmlSpace）
+                */}
+                <text xmlSpace="preserve">
+                  <textPath href="#hero-badge-circle" textLength={2 * Math.PI * 44} lengthAdjust="spacing">
+                    {hero.badge}
+                  </textPath>
+                </text>
+              </svg>
+              {mark && <Image src={mark.src} alt="" width={268} height={318} className={styles.badgeMark} />}
+            </span>
           </Parallax>
-          <span className={styles.badge} aria-hidden="true">
-            <svg viewBox="0 0 120 120" className={styles.badgeText}>
-              <defs>
-                <path id="hero-badge-circle" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" />
-              </defs>
-              {/*
-                欧文は1周ぶんを、円周（半径44 = 上の d と同じ）ちょうどに割り付ける。2回くり返していたときは円周より長く、
-                はみ出た分が継ぎ目で切れて「KIEN · F KIEN」と重なっていた（2026-10-28 修正）。
-                末尾の空白も1文字として数え、継ぎ目の「· KIEN」の間をほかの区切りと同じにする（xmlSpace）
-              */}
-              <text xmlSpace="preserve">
-                <textPath href="#hero-badge-circle" textLength={2 * Math.PI * 44} lengthAdjust="spacing">
-                  {hero.badge}
-                </textPath>
-              </text>
-            </svg>
-            {mark && <Image src={mark.src} alt="" width={268} height={318} className={styles.badgeMark} />}
-          </span>
         </figure>
       </div>
 

@@ -159,15 +159,23 @@
   }
 }
 
-/* 会社のマークの丸いバッジ。周りの欧文がゆっくり回る */
+/*
+ * 会社のマークの丸いバッジ。周りの欧文がゆっくり回る。
+ * 写真の層（photoLayer）の中に置き、位置は写真の角を基準に、バッジの大きさ（--badge）に比例させる
+ * （2026-11-13 CEO指摘「画面の幅を変えたときのロゴの位置が変」。それまでは写真と別の層で、スクロールで写真だけが動いてずれ、
+ *   スマホでは写真の右端からはみ出していた）。
+ * 639px以下は写真の上の辺の右寄り（下は全幅の Instagram のカードが重なるため。2026-10-31）。
+ * 640px以上は左下の角に重ねる（カードは右下に寄るので重ならない）
+ */
 .badge {
+  --badge: 92px;
   position: absolute;
-  bottom: calc(var(--space-6) * -1);
-  left: calc(var(--space-3) * -1);
+  top: calc(var(--badge) * -0.45);
+  right: var(--space-4);
   z-index: 2;
   display: grid;
   place-items: center;
-  width: 104px;
+  width: var(--badge);
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--color-bg);
@@ -280,7 +288,11 @@
   }
 
   .badge {
-    width: 128px;
+    --badge: 120px;
+    top: auto;
+    right: auto;
+    bottom: calc(var(--badge) * -0.3);
+    left: calc(var(--badge) * -0.25);
   }
 }
 
@@ -305,10 +317,15 @@
     height: min(68svh, 620px);
   }
 
+  /* 1024〜1279px は写真の幅が狭いので、バッジも小さめに */
   .badge {
-    width: 148px;
-    bottom: calc(var(--space-7) * -1);
-    left: calc(var(--space-7) * -1);
+    --badge: 112px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .badge {
+    --badge: 148px;
   }
 }
 

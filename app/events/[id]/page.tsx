@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/common/Button";
 import { Container } from "@/components/common/Container";
 import { PageIntro } from "@/components/common/PageIntro";
-import { PriceGuide } from "@/components/page/PriceGuide";
 import { CategoryPill } from "@/components/pages/events/CategoryPill";
 import { EventCategoryMenu } from "@/components/pages/events/EventCategoryMenu";
 import styles from "@/components/pages/events/EventDetail.module.css";
@@ -135,7 +134,6 @@ export default async function Page({ params }: Props) {
           </article>
         </Container>
       </div>
-      <PriceGuide />
     </>
   );
 }

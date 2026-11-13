@@ -48,7 +48,8 @@ export interface AboutPageContent {
   company: {
     id: string;
     title: string;
-    greeting: { title: string; opening: string; motto: string; body: string[] };
+    /** motto は折り返してよい位置で区切った文節（狭い画面で「人を大切に／する会社になる」と切れないように。2026-10-31） */
+    greeting: { title: string; opening: string; motto: string[]; body: string[] };
     philosophy: { title: string; principles: string[]; body: string[] };
     policies: { title: string; goalLabel: string; goal: string; items: AboutPolicy[] };
     profile: { title: string; items: AboutProfileItem[] };
@@ -93,7 +94,7 @@ export const aboutPage: AboutPageContent = {
     greeting: {
       title: "ご挨拶",
       opening: "弊社は2024年3月に開業したばかりの事業所です。",
-      motto: "「人を大切にする会社になる」",
+      motto: ["「人を大切にする", "会社になる」"],
       body: [
         "社員一人ひとり、年齢も環境も性格も価値観も違う。違うからイイ！年配者を敬い、若者に多くの経験を語り、支え合う、まるで家族のような会社にしたい。",
         "子育ても病気治療も、みんなで一緒にやろう！一人では出来ないことも、きっとここでなら乗り越えていけるはず。",

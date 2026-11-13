@@ -10,7 +10,6 @@ import { PositionList } from "@/components/pages/recruit/PositionList";
 import { RecruitIntro } from "@/components/pages/recruit/RecruitIntro";
 import { recruitPage } from "@/data/pages/recruit";
 import { site } from "@/data/site";
-import { PriceGuide } from "@/components/page/PriceGuide";
 
 export const metadata: Metadata = recruitPage.metadata;
 
@@ -58,7 +57,6 @@ export default function Page() {
           contactLink={apply.contactLink}
         />
       </PageSection>
-      <PriceGuide />
     </>
   );
 }

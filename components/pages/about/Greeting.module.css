@@ -14,6 +14,11 @@
   background: var(--tone-orange-tint);
 }
 
+/* 文節（data の motto の区切り）の中では折り返さない。折り返すのは文節の間だけ */
+.phrase {
+  display: inline-block;
+}
+
 .mottoText {
   position: relative;
   z-index: var(--z-content);

@@ -40,9 +40,12 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
-:hover > .arrowBox .shaft,
-:focus-visible > .arrowBox .shaft {
-  width: 24px;
+/* 動きはマウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」） */
+@media (hover: hover) and (pointer: fine) {
+  :hover > .arrowBox .shaft,
+  :focus-visible > .arrowBox .shaft {
+    width: 24px;
+  }
 }
 
 .yellow {

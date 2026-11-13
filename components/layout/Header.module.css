@@ -8,6 +8,18 @@
   position: sticky;
   top: 0;
   z-index: var(--z-header);
+}
+
+/*
+ * 地とぼかしは疑似要素に置く（2026-11-13 CEO指摘「実際のスマホでメニューが出ない」の修正）。
+ * ヘッダー自体にぼかし（backdrop-filter）を付けると、iPhone の Safari ではヘッダーが固定配置の基準になり、
+ * 中のメニューのパネル（position: fixed）がヘッダーの高さに閉じ込められて見えなくなっていた
+ */
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgb(255 255 255 / 0.72);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);

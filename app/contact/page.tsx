@@ -9,7 +9,6 @@ import { TelLink } from "@/components/common/TelLink";
 import { contactPage } from "@/data/pages/contact";
 import { privacyLink } from "@/data/pages/privacy";
 import { site } from "@/data/site";
-import { PriceGuide } from "@/components/page/PriceGuide";
 
 const { company } = site;
 const companyName = `${company.legalForm}${company.name}（${company.nameReading}）`;
@@ -90,7 +89,6 @@ export default function Page() {
           </ArrowLink>
         </div>
       </PageSection>
-      <PriceGuide />
     </>
   );
 }

@@ -58,7 +58,8 @@ export const site: SiteContent = {
         icon: item.icon,
       })),
     },
-    { label: "アクセス", href: "/about#offices" },
+    // アクセスはPCのナビだけ。スマホ・タブレットのメニューには出さない（2026-11-13 CEO指示）
+    { label: "アクセス", href: "/about#offices", pcOnly: true },
     { label: "採用情報", href: "/recruit" },
     { label: "ニュース", href: "/news" },
     { label: "会社行事", href: "/events" },

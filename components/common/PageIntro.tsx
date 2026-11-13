@@ -13,6 +13,7 @@ interface Crumb {
 /**
  * 下層ページの冒頭（手本: 日本テレビアートの下層ページ。グレーの地にパンくず、大きな欧文＋日本語の見出し）。
  * 右上にロゴの点を思わせる色の丸を飾る。見出し（h1）の読み上げは日本語だけ（欧文は飾り）。
+ * 見出しは開いたときに欧文が1文字ずつせり上がる（SectionTitle の animate。2026-11-13 CEO指示）。
  */
 export function PageIntro({
   title,
@@ -55,7 +56,7 @@ export function PageIntro({
             <li aria-current="page">{current}</li>
           </ol>
         </nav>
-        <SectionTitle as="h1" en={en} subtitle={subtitle}>
+        <SectionTitle as="h1" en={en} subtitle={subtitle} animate>
           {title}
         </SectionTitle>
         {children && <div className={styles.body}>{children}</div>}

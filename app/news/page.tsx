@@ -6,7 +6,6 @@ import { RecordYearNav } from "@/components/pages/records/RecordYearNav";
 import { RecordYearSections } from "@/components/pages/records/RecordYearSections";
 import { newsRecords } from "@/data/records/news";
 import { site } from "@/data/site";
-import { PriceGuide } from "@/components/page/PriceGuide";
 
 export const metadata: Metadata = {
   title: "ニュース",
@@ -35,7 +34,6 @@ export default function Page() {
           </div>
         }
       />
-      <PriceGuide />
     </>
   );
 }

@@ -73,12 +73,19 @@ const AUDIT = `(() => {
     return base;
   };
   const contrast = [], seen = new Set();
+  // CSS で画面から隠し、読み上げだけに残した要素（.visually-hidden と同じ隠し方。スマホの事業カードの表など）は数えない
+  const srOnly = (e) => {
+    for (let x = e; x; x = x.parentElement) {
+      if (getComputedStyle(x).clipPath === 'inset(50%)' && x.getBoundingClientRect().width <= 1) return true;
+    }
+    return false;
+  };
   const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let n;
   const orphans = [];
   while ((n = w.nextNode())) {
     const t = n.nodeValue.trim(); if (!t) continue;
-    const el = n.parentElement; if (!el || el.closest('script,style,noscript,.visually-hidden')) continue;
+    const el = n.parentElement; if (!el || el.closest('script,style,noscript,.visually-hidden') || srOnly(el)) continue;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.display === 'none') continue;
     const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
@@ -124,7 +131,7 @@ const AUDIT = `(() => {
   const clipped = [];
   document.querySelectorAll('h1,h2,h3,h4,p,li,dt,dd,a,span,td,th,div').forEach((e) => {
     // 読み上げ対象外の飾り（流れる欧文の帯など）は、端で切るのが仕様なので数えない
-    if (e.closest('.visually-hidden, [aria-hidden="true"], [role="img"]')) return;
+    if (e.closest('.visually-hidden, [aria-hidden="true"], [role="img"]') || srOnly(e)) return;
     const cs = getComputedStyle(e);
     if ((cs.overflowX === 'hidden' || cs.overflowX === 'clip') && e.clientWidth > 0 && e.scrollWidth > e.clientWidth + 1 && (e.innerText || '').trim()) {
       clipped.push((e.innerText || '').trim().slice(0, 18));

@@ -30,21 +30,40 @@ function isCurrent(pathname: string, href: string) {
 /**
  * ヘッダー（PC）の「事業内容」。マウスを乗せると3事業のタブが開く（2026-10-28 CEO指示）。
  * - マウス: 乗せると開き、離すと閉じる
- * - キーボード・タップ: ボタンで開閉。Esc で閉じてボタンへ戻る。タブから外へ移ると閉じる
+ * - キーボード・タップ: ボタンで開閉。Esc で閉じてボタンへ戻る。タブから外へ移ると閉じる。タブの外をタップしても閉じる
+ * 乗せて開くのはマウスのときだけ（2026-11-03。iPad の横向き＝1366px でタップすると、乗せたときの「開く」と
+ * ボタンの「開閉」が続けて起きて、1回目のタップでは開かなかったため）。
  * 子項目のどれかを開いているページでは、「事業内容」に現在地の下線を付ける（data-current）。
  */
 function NavDropdown({ item, linkClassName }: { item: NavItem; linkClassName: string }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const panelId = useId();
+  const itemRef = useRef<HTMLLIElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const children = item.children ?? [];
   const current = children.some((child) => isCurrent(pathname, child.href));
+
+  // タップで開いたときは、タブの外を押したら閉じる（タッチではマウスを離したことにならず、ボタンにフォーカスも移らない端末がある）
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!itemRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [open]);
+
   return (
     <li
+      ref={itemRef}
       className={dropdownStyles.item}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse") setOpen(true);
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType === "mouse") setOpen(false);
+      }}
       onKeyDown={(e) => {
         if (e.key === "Escape" && open) {
           setOpen(false);
@@ -95,10 +114,55 @@ function NavDropdown({ item, linkClassName }: { item: NavItem; linkClassName: st
 }
 
 /**
+ * メニューパネルの「事業内容」（2026-11-13 CEO指示）。押すと下に3事業が開き、もう一度押すと閉じる。
+ * 3事業のどれかを開いているページでは、最初から開いておく。
+ */
+function MenuGroup({ item, linkClassName }: { item: NavItem; linkClassName: string }) {
+  const pathname = usePathname();
+  const children = item.children ?? [];
+  const [open, setOpen] = useState(() => children.some((child) => isCurrent(pathname, child.href)));
+  const listId = useId();
+  return (
+    <li className={styles.group}>
+      <button
+        type="button"
+        className={`${linkClassName} ${styles.groupToggle}`}
+        aria-expanded={open}
+        aria-controls={listId}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span>{item.label}</span>
+        <ChevronDownIcon size={20} strokeWidth={2.4} className={`${styles.arrow} ${styles.groupChevron}`} />
+      </button>
+      <div className={styles.subWrap} data-open={open || undefined}>
+        <ul id={listId} className={styles.subList} inert={!open}>
+          {children.map((child) => (
+            <li key={child.href}>
+              <Link
+                href={child.href}
+                className={`${linkClassName} ${styles.subLink}`}
+                aria-current={isCurrent(pathname, child.href) ? "page" : undefined}
+              >
+                <span className={styles.subLabel}>
+                  {child.icon && child.tone && <ToneMark icon={child.icon} tone={child.tone} className={styles.subMark} />}
+                  {child.label}
+                </span>
+                <ArrowRightIcon size={20} className={styles.arrow} />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  );
+}
+
+/**
  * ナビの項目（li）を描画する。現在地の判定に usePathname が要るためクライアント側で描く。
  * PCナビ（Header）とメニューパネルの両方で使う。
  * 現在地には aria-current="page" を付け、見た目は各CSSの [aria-current] で付ける。
- * 子項目のある項目（事業内容）は、PCナビではマウスで開くタブ（NavDropdown）、メニューパネルでは見出し＋子項目の一覧にする。
+ * 子項目のある項目（事業内容）は、PCナビではマウスで開くタブ（NavDropdown）、メニューパネルでは押して開く一覧（MenuGroup）にする。
+ * pcOnly の項目（アクセス）はメニューパネルには出さない。
  */
 export function NavItems({
   nav,
@@ -111,31 +175,10 @@ export function NavItems({
 }) {
   const pathname = usePathname();
   return nav.map((item) => {
+    if (withArrow && item.pcOnly) return null;
     if (item.children?.length) {
       if (!withArrow) return <NavDropdown key={item.href} item={item} linkClassName={linkClassName} />;
-      // メニューパネル: 「事業内容」を見出しにして、3事業を1段下げて並べる
-      return (
-        <li key={item.href} className={styles.group}>
-          <span className={styles.groupLabel}>{item.label}</span>
-          <ul className={styles.subList}>
-            {item.children.map((child) => (
-              <li key={child.href}>
-                <Link
-                  href={child.href}
-                  className={`${linkClassName} ${styles.subLink}`}
-                  aria-current={isCurrent(pathname, child.href) ? "page" : undefined}
-                >
-                  <span className={styles.subLabel}>
-                    {child.icon && child.tone && <ToneMark icon={child.icon} tone={child.tone} className={styles.subMark} />}
-                    {child.label}
-                  </span>
-                  <ArrowRightIcon size={20} className={styles.arrow} />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </li>
-      );
+      return <MenuGroup key={item.href} item={item} linkClassName={linkClassName} />;
     }
     return (
       <li key={item.href}>
@@ -213,15 +256,20 @@ export function MobileMenu({ nav, contact }: { nav: NavItem[]; contact: NavLink 
       if (e.matches) setOpen(false);
     };
 
+    /*
+     * 背景のスクロールは <html> で止める（2026-11-03 CEO指示「スマホ・パッドでメニューを開いたときに消せない」の修正）。
+     * <body> で止めると、Lenis が止まっている間の html の overflow: clip により body が独立したスクロールの箱になり、
+     * 追従するヘッダー（sticky）がページの頭に戻って、スクロールした後に開くと「閉じる」ごと画面の外へ出ていた
+     */
     document.addEventListener("keydown", onKey);
     region.addEventListener("click", onClick);
     desktop.addEventListener("change", onDesktop);
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       region.removeEventListener("click", onClick);
       desktop.removeEventListener("change", onDesktop);
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [open]);
 

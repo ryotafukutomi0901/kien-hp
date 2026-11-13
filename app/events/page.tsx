@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { Container } from "@/components/common/Container";
 import { PageIntro } from "@/components/common/PageIntro";
-import { PriceGuide } from "@/components/page/PriceGuide";
 import { EventsBrowser } from "@/components/pages/events/EventsBrowser";
 import { EventTopics } from "@/components/pages/events/EventTopics";
 import styles from "@/components/pages/events/EventsPage.module.css";
@@ -30,7 +29,6 @@ export default function Page() {
           <EventsBrowser records={eventRecords} />
         </Container>
       </div>
-      <PriceGuide />
     </>
   );
 }

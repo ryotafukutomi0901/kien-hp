@@ -4,6 +4,7 @@
  *   outline: 淡いグレー地に黒文字（14.5:1）、右端に小さな黒い丸。手本の「もっとみる •」
  *   white  : 白地に黒文字。グレー地・色の面の上で使う
  * マウスを乗せたときの動き（Button.tsx。2026-10-30）: お問い合わせは .wipe、ヒーローの2つと採用の欄の「採用情報を見る」は .chevron、それ以外はすべて .trace
+ * 動きはマウスのある端末だけ（下の @media (hover: hover) and (pointer: fine)）
  */
 .button {
   position: relative;
@@ -54,23 +55,10 @@
   transition: transform var(--duration-base) var(--ease-spring);
 }
 
-/* お問い合わせのボタンは、帯に加えて目印を少し動かす（2026-10-28 のまま） */
-.wipe:hover .circle {
-  transform: translateX(3px);
-}
-
-.wipe:hover .dot {
-  transform: scale(1.8);
-}
-
 /* variant */
 .primary {
   background: var(--color-action);
   color: var(--color-on-action);
-}
-
-.primary:hover {
-  background: var(--color-action-hover);
 }
 
 .outline {
@@ -78,18 +66,10 @@
   color: var(--color-text);
 }
 
-.outline:hover {
-  background: var(--color-pill-hover);
-}
-
 .white {
   background: var(--color-bg);
   color: var(--color-text);
   box-shadow: var(--shadow-card); /* 淡い地の上でも、押せる形が分かるように */
-}
-
-.white:hover {
-  background: var(--color-pill-hover);
 }
 
 /*
@@ -114,17 +94,6 @@
   transition: transform 1s var(--ease-out); /* 2026-10-28 CEO指示で 0.5秒 → 1.0秒（0.5秒遅く） */
 }
 
-.wipe:hover::before,
-.wipe:focus-visible::before {
-  transform: skewX(-45deg) scaleX(1);
-}
-
-/* 帯が広がる間は、地の色の切り替え（.primary:hover）をしない。
-   なお overflow: hidden は sm の当たり判定（::after）も切るため、お問い合わせのボタンは md 以上で使う */
-.primary.wipe:hover {
-  background: var(--color-action);
-}
-
 /*
  * 「»」が現れるボタン（2026-10-28 CEO指示。CEOが示したボタンの動きを、サイトの色・形のまま取り入れたもの）。
  * マウスを乗せる・キーボードで選ぶと、文字が少し左へ寄り（右に余白が開き）、右から「»」がふわっと現れる（0.5秒）。
@@ -145,17 +114,6 @@
   transition:
     opacity 0.5s var(--ease-out),
     right 0.5s var(--ease-out);
-}
-
-.chevron:hover .label,
-.chevron:focus-visible .label {
-  padding-right: 15px;
-}
-
-.chevron:hover .label::after,
-.chevron:focus-visible .label::after {
-  opacity: 1;
-  right: 0;
 }
 
 /*
@@ -191,31 +149,80 @@
   transition: --trace 0.4s var(--ease-power3-inout);
 }
 
-.trace:hover::before,
-.trace:focus-visible::before {
-  --trace: 360deg;
-}
+/*
+ * マウスを乗せたときの動き・色の切り替えは、マウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」）。
+ * スマホ・タブレットでは、タップのあとに :hover が残って動きが出たままになるため。押した瞬間の縮み（.button:active）は残す
+ */
+@media (hover: hover) and (pointer: fine) {
+  /* お問い合わせのボタンは、帯に加えて目印を少し動かす（2026-10-28 のまま） */
+  .wipe:hover .circle {
+    transform: translateX(3px);
+  }
 
-.trace:hover {
-  box-shadow: var(--shadow-float);
-  transform: translateY(-2px);
-}
+  .wipe:hover .dot {
+    transform: scale(1.8);
+  }
 
-.trace:active {
-  transform: translateY(-2px) scale(0.97);
-}
+  .primary:hover {
+    background: var(--color-action-hover);
+  }
 
-/* 線を描く間は、地の色の切り替え（.primary:hover など）をしない */
-.primary.trace:hover {
-  background: var(--color-action);
-}
+  .outline:hover {
+    background: var(--color-pill-hover);
+  }
 
-.outline.trace:hover {
-  background: var(--color-pill);
-}
+  .white:hover {
+    background: var(--color-pill-hover);
+  }
 
-.white.trace:hover {
-  background: var(--color-bg);
+  .wipe:hover::before,
+  .wipe:focus-visible::before {
+    transform: skewX(-45deg) scaleX(1);
+  }
+
+  /* 帯が広がる間は、地の色の切り替え（.primary:hover）をしない。
+     なお overflow: hidden は sm の当たり判定（::after）も切るため、お問い合わせのボタンは md 以上で使う */
+  .primary.wipe:hover {
+    background: var(--color-action);
+  }
+
+  .chevron:hover .label,
+  .chevron:focus-visible .label {
+    padding-right: 15px;
+  }
+
+  .chevron:hover .label::after,
+  .chevron:focus-visible .label::after {
+    opacity: 1;
+    right: 0;
+  }
+
+  .trace:hover::before,
+  .trace:focus-visible::before {
+    --trace: 360deg;
+  }
+
+  .trace:hover {
+    box-shadow: var(--shadow-float);
+    transform: translateY(-2px);
+  }
+
+  .trace:active {
+    transform: translateY(-2px) scale(0.97);
+  }
+
+  /* 線を描く間は、地の色の切り替え（.primary:hover など）をしない */
+  .primary.trace:hover {
+    background: var(--color-action);
+  }
+
+  .outline.trace:hover {
+    background: var(--color-pill);
+  }
+
+  .white.trace:hover {
+    background: var(--color-bg);
+  }
 }
 
 /* size（sm は見た目40pxだが、当たり判定を上下に広げてタップ領域44px以上にする） */

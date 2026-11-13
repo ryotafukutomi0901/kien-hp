@@ -28,14 +28,16 @@ interface ServiceFlipCardProps {
  * 裏: 写真・何をしているか（原文）・「詳しく見る」。
  * 見た目はCEOの2つ目の案（斜めのグラデーション・細い枠）を、ロゴの色に置き換えたもの（ServiceFlipCard.module.css）。
  * めくり方:
- *   - マウスのある端末は、カードにマウスを乗せるとめくれる（CSS の :hover）
- *   - スマホ・タブレットは、表をタップするとめくれる（ボタン）。裏の「戻る」で表に戻る
+ *   - めくるのはマウスのある端末（PC。640px以上）だけ。カードにマウスを乗せるとめくれる（CSS の :hover）
+ *   - スマホ・タブレットは、めくらずに裏（写真の面）だけを見せる（2026-11-13 CEO指示。CSS だけで切り替え）。
+ *     表の見出し（h3）は読み上げ用に残し、見た目は裏の事業名で示す
  *   - キーボードは、表のボタンでめくる。裏の「詳しく見る」に移ったときもめくれる（:focus-within）
  * 読み上げは表と裏の両方を読む（見た目の裏返しは読み上げに影響しない）。
  */
 export function ServiceFlipCard({ title, description, tone, icon, link, image, badge }: ServiceFlipCardProps) {
   const [flipped, setFlipped] = useState(false);
   const backId = useId();
+
   return (
     // スクロールで現れる目印（is-revealed）は Reveal.tsx が class に足す。めくったときに React が article の class を
     // 書き直して目印が消えないよう、data-reveal は class を持たない外側の要素に付ける
