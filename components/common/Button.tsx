@@ -31,7 +31,7 @@ interface ButtonProps {
 }
 
 /** お問い合わせへのボタンかどうか（斜めに色が広がる動きを付ける。2026-10-28 CEO指示） */
-const isContact = (href: string) => href === "/contact" || href.startsWith("/contact#");
+const isContact = (href: string) => href === "/contact" || href.startsWith("/contact#") || href.startsWith("/contact?");
 
 /*
  * マウスを乗せたときの動き（2026-10-30 CEO指示「家事支援事業を見るのボタンの動きを、お問い合わせ以外すべてに。色はコーポレートカラーを使い分けて」）

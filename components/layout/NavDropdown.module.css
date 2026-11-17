@@ -83,12 +83,12 @@
  * 事業ページの「ほかの事業」のボタン（ServiceJumpNav）と同じ動き（2026-10-30 CEO指示「ヘッダーの事業を選ぶタブにも同じアニメーションを」。
  * それまでは少し浮く動き）
  */
-.tab:hover {
-  border-color: var(--tab-line);
-}
-
-/* 動きはマウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」） */
+/* 動きはマウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」）。縁の色も同じ（タッチ端末で「乗せただけ」にならないように） */
 @media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    border-color: var(--tab-line);
+  }
+
   .tab:hover .mark,
   .tab:focus-visible .mark {
     animation: tilt 0.8s var(--ease-out);

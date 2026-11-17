@@ -16,7 +16,7 @@ import type { IconName, Tone } from "@/types/site";
  *   #11 重要事項説明書のリンクは置かない（PDF未入手）
  *
  * 2026-10-21 引き継ぎで3事業を独立ページにした（/services は一覧、/services/home-visit・care-plan・home-help）。
- * 家事支援の料金表は PriceGuide（components/page/PriceGuide.tsx）が家事支援以外の全ページにも出す。値はここの fee だけを参照する。
+ * 家事支援の料金表は PriceGuide（components/page/PriceGuide.tsx）が訪問介護・居宅介護支援のページにも出す。値はここの fee だけを参照する。
  */
 
 export type ServiceId = "home-visit" | "care-plan" | "home-help";

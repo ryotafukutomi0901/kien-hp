@@ -45,7 +45,8 @@ export const site: SiteContent = {
     // 旧サイトのナビの文言と順（ホーム／会社概要／事業内容／アクセス／採用情報／INFO［ニュース・会社行事］）に合わせる。
     // 「お問い合わせ」はヘッダーのボタン（contact）、「INFO」は下位の2項目をそのまま並べている
     { label: "ホーム", href: "/" },
-    { label: "会社概要", href: "/about#company" },
+    // 会社概要は /about の一番上へ（2026-11-17 CEO指示「会社情報のタブを押したら、カンパニーの一番上に飛ぶように」。#company は途中の節）
+    { label: "会社概要", href: "/about" },
     // 事業内容: マウスを乗せると3事業のタブが開く（2026-10-28 CEO指示。一覧ページ /services は廃止）。
     // href はトップの事業内容の節。子項目はトップの事業カードと同じ data/sections/services.ts から作る
     {
@@ -58,8 +59,7 @@ export const site: SiteContent = {
         icon: item.icon,
       })),
     },
-    // アクセスはPCのナビだけ。スマホ・タブレットのメニューには出さない（2026-11-13 CEO指示）
-    { label: "アクセス", href: "/about#offices", pcOnly: true },
+    // アクセスはヘッダー・フッターのどちらにも出さない（2026-11-13 にスマホのメニューから、2026-11-17 にPCのナビとフッターからも外した。CEO指示）
     { label: "採用情報", href: "/recruit" },
     { label: "ニュース", href: "/news" },
     { label: "会社行事", href: "/events" },
@@ -69,10 +69,7 @@ export const site: SiteContent = {
     {
       en: "Company",
       title: "会社案内",
-      links: [
-        { label: "会社概要", href: "/about#company" },
-        { label: "アクセス", href: "/about#offices" },
-      ],
+      links: [{ label: "会社概要", href: "/about" }],
     },
     {
       en: "Service",

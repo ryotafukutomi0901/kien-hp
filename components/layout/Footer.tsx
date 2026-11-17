@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/common/Container";
 import { Logo } from "@/components/common/Logo";
+import { ScrollTopLink } from "@/components/common/ScrollTopLink";
 import { TelLink } from "@/components/common/TelLink";
 import { ArrowUpIcon, InstagramIcon } from "@/components/icons";
 import { site } from "@/data/site";
@@ -34,9 +35,9 @@ export function Footer() {
                 <ul className={styles.links}>
                   {group.links.map((link) => (
                     <li key={link.href}>
-                      <Link href={link.href} className={styles.link}>
+                      <ScrollTopLink href={link.href} className={styles.link}>
                         <span className={styles.linkText}>{link.label}</span>
-                      </Link>
+                      </ScrollTopLink>
                     </li>
                   ))}
                 </ul>

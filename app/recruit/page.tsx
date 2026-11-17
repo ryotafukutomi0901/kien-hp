@@ -6,7 +6,7 @@ import { Faq } from "@/components/page/Faq";
 import { PageSection } from "@/components/page/PageSection";
 import { ApplyPanel } from "@/components/pages/recruit/ApplyPanel";
 import { DayList } from "@/components/pages/recruit/DayList";
-import { PositionList } from "@/components/pages/recruit/PositionList";
+import { PositionTabs } from "@/components/pages/recruit/PositionTabs";
 import { RecruitIntro } from "@/components/pages/recruit/RecruitIntro";
 import { recruitPage } from "@/data/pages/recruit";
 import { site } from "@/data/site";
@@ -15,7 +15,7 @@ export const metadata: Metadata = recruitPage.metadata;
 
 /**
  * 採用情報。求職者が知りたい順に並べる:
- * 働き方（導入）→ 募集職種と条件 → 1日の流れ → よくある質問 → 応募方法。
+ * 働き方（導入）→ 募集職種と条件（職種のタブで選ぶ。2026-11-17）→ 1日の流れ → よくある質問 → 応募方法。
  * #day はトップの「1日の流れを見る」の着地点。
  */
 export default function Page() {
@@ -33,7 +33,7 @@ export default function Page() {
       </PageIntro>
 
       <PageSection id={sections.positions.id} title={sections.positions.title} tone="plain">
-        <PositionList positions={positions} />
+        <PositionTabs positions={positions} contactHref="/contact" />
         <div>
           <Button href={`#${sections.apply.id}`}>応募方法を見る</Button>
         </div>

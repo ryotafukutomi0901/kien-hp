@@ -1,0 +1,321 @@
+/*
+ * お問い合わせフォーム（2026-11-17）
+ *   白いカードの中に、先頭に「ご相談の種類」のタブ、続けてプルダウンの質問、お名前など、同意、送信ボタン。
+ *   タブは色の縁のピル。選ぶと地が事業の色の淡い面になり、印（丸）が付く。
+ *   入力欄の文字は 16px 以上（iPhone は 16px 未満の欄に触れると画面が拡大されてしまう）。
+ *   選ぶ質問は標準の select（スマホでは端末の選択画面が開く）。矢印だけ自前で重ねる。
+ */
+.form {
+  display: grid;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.fieldset {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: var(--space-3);
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-body);
+}
+
+/* ---- 種類のタブ ---- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tab {
+  --tab-bg: var(--tone-yellow-tint);
+  --tab-line: var(--logo-yellow);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--tab-line);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  font-size: var(--ui-button);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.yellow { --tab-bg: var(--tone-yellow-tint); --tab-line: var(--logo-yellow); }
+.green { --tab-bg: var(--tone-green-tint); --tab-line: var(--logo-mint); }
+.orange { --tab-bg: var(--tone-orange-tint); --tab-line: var(--logo-coral); }
+.blue { --tab-bg: var(--tone-blue-tint); --tab-line: var(--logo-pink); }
+
+/* 選んでいるタブ: 事業の色の淡い面にして、左に色の丸の印を付ける */
+.tab::before {
+  content: "";
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  border: 2px solid var(--tab-line);
+  background: var(--color-bg);
+}
+
+.tab[data-selected] {
+  background: var(--tab-bg);
+  box-shadow: 0 0 0 2px var(--tab-line);
+}
+
+.tab[data-selected]::before {
+  background: var(--tab-line);
+}
+
+/* ラジオボタン本体は見せない（タブの見た目で代える）。キーボードの矢印キーと読み上げはそのまま使える */
+.radio {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.tab:has(.radio:focus-visible) {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* 選んだ瞬間にぽんと弾む。動きはマウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」） */
+@media (hover: hover) and (pointer: fine) {
+  .tab[data-selected] {
+    animation: tab-pop 0.5s var(--ease-spring);
+  }
+
+  .tab:not([data-selected]):hover {
+    background: var(--tab-bg);
+  }
+}
+
+@keyframes tab-pop {
+  0% {
+    transform: scale(0.92);
+  }
+
+  60% {
+    transform: scale(1.06);
+  }
+
+  100% {
+    transform: none;
+  }
+}
+
+/* ---- 質問・入力欄 ---- */
+.questions,
+.pair {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--t-note);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+  letter-spacing: var(--ls-body);
+}
+
+.required {
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--logo-coral);
+  color: var(--color-on-action);
+  font-size: var(--ui-caption);
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+.control {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 1rem; /* 16px。これより小さいと iPhone が入力時に画面を拡大する */
+  line-height: 1.5;
+  letter-spacing: var(--ls-body);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.control::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+.control:hover {
+  border-color: var(--logo-pink);
+}
+
+.control:focus-visible {
+  border-color: var(--color-focus);
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.textarea {
+  min-height: calc(var(--space-11) + var(--space-8));
+  resize: vertical;
+}
+
+/* プルダウン: 標準の見た目をやめ、右に矢印を重ねる */
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap .control {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-end: var(--space-8);
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  translate: 0 -50%;
+  pointer-events: none;
+  color: var(--color-text);
+}
+
+/* ---- 同意・送信 ---- */
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: var(--t-note);
+  line-height: var(--lh-compact);
+  cursor: pointer;
+}
+
+.consent > span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+}
+
+.check {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: calc((var(--tap-min) - 24px) / 2) 0 0; /* 隣の1行（リンクの高さ = タップ領域）の真ん中にそろえる */
+  accent-color: var(--logo-coral);
+  cursor: pointer;
+}
+
+.consentLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.submitArea {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: stretch;
+}
+
+.submit {
+  min-height: var(--button-h-lg);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--color-action);
+  color: var(--color-on-action);
+  font-size: var(--ui-button);
+  font-weight: 700;
+  letter-spacing: var(--ls-ui);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .submit:hover {
+    background: var(--color-action-hover);
+  }
+}
+
+.submit:active {
+  transform: scale(0.98);
+}
+
+.status {
+  margin: 0;
+  font-size: var(--t-note);
+  line-height: var(--lh-compact);
+  word-break: auto-phrase;
+}
+
+.status[data-show] {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--tone-orange-tint);
+}
+
+@media (min-width: 640px) {
+  .form {
+    padding: var(--space-6);
+  }
+
+  .questions,
+  .pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-5);
+  }
+
+  .submit {
+    justify-self: start;
+    min-width: 320px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .form {
+    padding: var(--space-8);
+  }
+
+  .questions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

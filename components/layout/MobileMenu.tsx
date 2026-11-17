@@ -6,6 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Container } from "@/components/common/Container";
+import { ScrollTopLink } from "@/components/common/ScrollTopLink";
 import { ToneMark } from "@/components/common/ToneMark";
 import { ArrowRightIcon, ChevronDownIcon, CloseIcon } from "@/components/icons";
 import { getLenis } from "@/lib/lenis";
@@ -18,8 +19,7 @@ import dropdownStyles from "./NavDropdown.module.css";
 const DESKTOP_QUERY = "(min-width: 1280px)";
 
 /**
- * 現在地の判定。ハッシュ付きリンク（/about#offices と /about#company）は
- * 同じページで複数項目が同時に該当してしまうため対象外にする。
+ * 現在地の判定。ハッシュ付きリンクは、同じページで複数項目が同時に該当してしまうため対象外にする。
  */
 function isCurrent(pathname: string, href: string) {
   if (href.includes("#")) return false;
@@ -162,7 +162,6 @@ function MenuGroup({ item, linkClassName }: { item: NavItem; linkClassName: stri
  * PCナビ（Header）とメニューパネルの両方で使う。
  * 現在地には aria-current="page" を付け、見た目は各CSSの [aria-current] で付ける。
  * 子項目のある項目（事業内容）は、PCナビではマウスで開くタブ（NavDropdown）、メニューパネルでは押して開く一覧（MenuGroup）にする。
- * pcOnly の項目（アクセス）はメニューパネルには出さない。
  */
 export function NavItems({
   nav,
@@ -175,21 +174,20 @@ export function NavItems({
 }) {
   const pathname = usePathname();
   return nav.map((item) => {
-    if (withArrow && item.pcOnly) return null;
     if (item.children?.length) {
       if (!withArrow) return <NavDropdown key={item.href} item={item} linkClassName={linkClassName} />;
       return <MenuGroup key={item.href} item={item} linkClassName={linkClassName} />;
     }
     return (
       <li key={item.href}>
-        <Link
+        <ScrollTopLink
           href={item.href}
           className={linkClassName}
           aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
         >
           <span>{item.label}</span>
           {withArrow && <ArrowRightIcon size={20} className={styles.arrow} />}
-        </Link>
+        </ScrollTopLink>
       </li>
     );
   });
@@ -215,6 +213,7 @@ export function MobileMenu({ nav, contact }: { nav: NavItem[]; contact: NavLink 
   const panelId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const half = Math.ceil(nav.length / 2);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -304,9 +303,13 @@ export function MobileMenu({ nav, contact }: { nav: NavItem[]; contact: NavLink 
       </button>
       <div id={panelId} className={styles.panel} hidden={!open} data-lenis-prevent>
         <Container className={styles.panelInner}>
-          <nav aria-label="メニュー">
+          {/* 前半・後半の2つのリストに分ける。640px以上では左右に並べ、「事業内容」を開いても反対側の列が引き伸ばされない */}
+          <nav aria-label="メニュー" className={styles.lists}>
             <ul className={styles.list}>
-              <NavItems nav={nav} linkClassName={styles.link} withArrow />
+              <NavItems nav={nav.slice(0, half)} linkClassName={styles.link} withArrow />
+            </ul>
+            <ul className={styles.list}>
+              <NavItems nav={nav.slice(half)} linkClassName={styles.link} withArrow />
             </ul>
           </nav>
           <Button href={contact.href} size="lg" className={styles.contact}>

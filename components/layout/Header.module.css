@@ -99,11 +99,17 @@
   transition: transform var(--duration-base) var(--ease-out);
 }
 
-.navLink:hover {
-  color: var(--color-text);
+/* 乗せたときの色と下線はマウスのある端末だけ（iPad などのタッチ端末では、タップが「乗せただけ」になって1回で押せなくなるのを防ぐ。現在地の下線は全端末） */
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover {
+    color: var(--color-text);
+  }
+
+  .navLink:hover::after {
+    transform: scaleX(1);
+  }
 }
 
-.navLink:hover::after,
 .navLink[aria-current="page"]:not([href="/"])::after {
   transform: scaleX(1);
 }

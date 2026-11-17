@@ -199,8 +199,6 @@ export interface MarqueeContent {
 /** ヘッダーのナビの1項目。children があると、マウスを乗せたときに子項目のタブが開く（事業内容 → 3事業） */
 export interface NavItem extends Link {
   children?: (Link & { tone?: Tone; icon?: IconName })[];
-  /** PCのナビにだけ出し、スマホ・タブレットのメニューには出さない */
-  pcOnly?: boolean;
 }
 
 export interface FooterGroup {

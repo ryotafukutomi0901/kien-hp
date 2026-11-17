@@ -9,7 +9,7 @@ export const about: AboutContent = {
   title: "経営理念",
   en: "Philosophy",
   body: ["社員全員の物心両面の倖せを追求すること", "お客様一人ひとりに心を込めて向き合うこと", "事業を通じて地域社会の発展に貢献し続けること"],
-  cta: { label: "会社概要を見る", href: "/about#company" },
+  cta: { label: "会社概要を見る", href: "/about" },
   gallery: [
     { image: { src: "/images/services/home-visit.jpg", alt: "", position: "50% 55%" }, tone: "yellow", shape: "wide" },
     { image: { src: "/images/recruit/recruit.jpg", alt: "", position: "30% 40%" }, tone: "orange", shape: "tall" },

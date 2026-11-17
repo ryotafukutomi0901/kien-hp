@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { ArrowLink } from "@/components/common/ArrowLink";
 import { PageIntro } from "@/components/common/PageIntro";
 import { DefinitionList } from "@/components/page/DefinitionList";
 import { PageSection } from "@/components/page/PageSection";
 import { CallPanel } from "@/components/pages/contact/CallPanel";
+import { ContactForm } from "@/components/pages/contact/ContactForm";
 import { TelLink } from "@/components/common/TelLink";
-import { contactPage } from "@/data/pages/contact";
+import { contactForm, contactPage } from "@/data/pages/contact";
 import { privacyLink } from "@/data/pages/privacy";
 import { site } from "@/data/site";
 
@@ -19,7 +21,8 @@ export const metadata: Metadata = {
 };
 
 /**
- * お問い合わせ。メールフォームは未実装（送信先が不明）のため、お電話での受付を案内する。
+ * お問い合わせ。お電話の案内 → メールフォーム → 所在地 → 家事支援のご予約 → 個人情報の取り扱い。
+ * フォームは画面だけ（2026-11-17）。送信先が未定のため、送信はまだつないでいない（ContactForm.tsx）。
  * 電話・FAX・所在地は site.company から読み、ここには書かない。
  */
 export default function Page() {
@@ -40,7 +43,14 @@ export default function Page() {
         />
       </PageSection>
 
-      <PageSection id="access" title={access.title} tone="soft">
+      <PageSection id={contactForm.id} title={contactForm.title} lead={contactForm.lead} tone="soft">
+        {/* useSearchParams（採用ページの職種タブから種類・職種を受け取る）を使うため、静的に作るには Suspense が要る */}
+        <Suspense fallback={null}>
+          <ContactForm />
+        </Suspense>
+      </PageSection>
+
+      <PageSection id="access" title={access.title}>
         <DefinitionList
           items={[
             { term: "会社名", detail: companyName },
@@ -55,7 +65,7 @@ export default function Page() {
         </div>
       </PageSection>
 
-      <PageSection id="home-help" title={homeHelp.title} lead={homeHelp.serviceName}>
+      <PageSection id="home-help" title={homeHelp.title} lead={homeHelp.serviceName} tone="soft">
         <p>{homeHelp.lead}</p>
         <DefinitionList
           items={[
@@ -79,7 +89,7 @@ export default function Page() {
         </div>
       </PageSection>
 
-      <PageSection id="privacy" title={privacy.title} tone="soft">
+      <PageSection id="privacy" title={privacy.title}>
         {privacy.body.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}

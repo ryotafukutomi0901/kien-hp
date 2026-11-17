@@ -51,57 +51,89 @@
 }
 
 /*
- * 登場の動き（animate。下層ページの h1。2026-11-13）: 欧文が1文字ずつ下からせり上がり（字の下半分から先に見える切り抜き）、
- * 最後の文字に重ねて日本語が下からふわっと出る。動きを減らす設定では base.css が止め、最後の形のまま出る
+ * 登場の動き（animate。下層ページの h1。2026-11-13 に1文字ずつせり上がる動きで入れ、2026-11-17 CEO指示
+ * 「会社・採用・ニュース・会社行事・お問い合わせのアニメーションが少し嫌。もっとポップで跳ねたイメージに」で、跳ねる動きに替えた）:
+ * 欧文が1文字ずつ、小さく傾いた状態から下で弾んで跳び上がり、着地で少し潰れてから落ち着く。
+ * 続いて日本語がぽんと跳ねて出る。字の下端（足元）を軸に動かすので、地面で弾んでいるように見える。
+ * 動きを減らす設定では base.css が止め、最後の形のまま出る
  */
 .enWord {
   display: inline-block;
-  overflow: clip;
-  overflow-clip-margin: 0.08em;
-  padding-block-end: 0.08em; /* 「y」「g」などの下を切らない */
   white-space: pre;
 }
 
-.enChar {
+.enChar,
+.jaChar,
+.textRise {
   display: inline-block;
+  transform-origin: 50% 100%;
 }
 
 .animated .enChar {
-  animation: en-rise 0.9s var(--ease-power3-out) both;
-  animation-delay: calc(0.15s + var(--i) * 0.045s);
+  animation: char-pop 1s ease-out both;
+  animation-delay: calc(0.1s + var(--i) * 0.06s);
 }
 
-@keyframes en-rise {
-  from {
-    transform: translateY(105%);
+/* 小さく傾いて下にいる → 勢いよく跳ね上がる（行き過ぎ）→ 着地で潰れる → 小さく戻る → 落ち着く */
+@keyframes char-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(0.7em) scale(0.4) rotate(-14deg);
+  }
+
+  38% {
+    opacity: 1;
+    transform: translateY(-0.26em) scale(1.1, 1.14) rotate(5deg);
+  }
+
+  58% {
+    transform: translateY(0.02em) scale(1.12, 0.86) rotate(-3deg);
+  }
+
+  76% {
+    transform: translateY(-0.07em) scale(0.97, 1.05) rotate(1.5deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
   }
 }
 
 .animated .ja {
-  animation: ja-rise 0.8s var(--ease-out) both;
-  animation-delay: calc(0.35s + var(--n, 6) * 0.045s);
+  animation: ja-pop 0.9s ease-out both;
+  animation-delay: calc(0.2s + var(--n, 6) * 0.06s);
 }
 
-@keyframes ja-rise {
-  from {
+@keyframes ja-pop {
+  0% {
     opacity: 0;
-    transform: translateY(0.6em);
+    transform: translateY(0.9em) scale(0.85);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateY(-0.18em) scale(1.04);
+  }
+
+  70% {
+    transform: translateY(0.05em) scale(0.99);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
   }
 }
 
-/* 欧文の無い見出し: 日本語が1文字ずつ下からせり上がる（ヒーローの見出しと同じ出方） */
-.jaChar,
-.textRise {
-  display: inline-block;
-}
-
+/* 欧文の無い見出し: 日本語が1文字ずつ跳ねる（欧文と同じ動き。字が小さいぶん、ほんの少し控えめ） */
 .animated .jaChar {
-  animation: ja-rise 0.7s var(--ease-power3-out) both;
-  animation-delay: calc(0.15s + var(--i) * 0.05s);
+  animation: char-pop 0.9s ease-out both;
+  animation-delay: calc(0.1s + var(--i) * 0.07s);
 }
 
 .animated .textRise {
-  animation: ja-rise 0.8s var(--ease-out) 0.15s both;
+  animation: ja-pop 0.9s ease-out 0.15s both;
 }
 
 /* ---- 日本語の大見出し ---- */

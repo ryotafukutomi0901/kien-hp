@@ -1,0 +1,158 @@
+/*
+ * 募集要項のタブ（2026-11-17）
+ *   上に職種のタブ（640px未満は縦に3つ、以上は横に3つ）、下に選んだ職種の条件のカード。
+ *   タブの地・カードの上の帯は、事業の色（ケアマネ=ミント、ヘルパー=イエロー、家事支援=コーラル）
+ */
+.root {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.yellow {
+  --pos-base: var(--tone-yellow-base);
+  --pos-tint: var(--tone-yellow-tint);
+}
+
+.green {
+  --pos-base: var(--tone-green-base);
+  --pos-tint: var(--tone-green-tint);
+}
+
+.orange {
+  --pos-base: var(--tone-orange-base);
+  --pos-tint: var(--tone-orange-tint);
+}
+
+.blue {
+  --pos-base: var(--tone-blue-base);
+  --pos-tint: var(--tone-blue-tint);
+}
+
+.tabs {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-9);
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-3);
+  border: 2px solid var(--pos-base);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  text-align: start;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.tab[aria-selected="true"] {
+  background: var(--pos-tint);
+  box-shadow: 0 0 0 2px var(--pos-base);
+}
+
+.mark {
+  --tone-mark-size: var(--space-7);
+  flex-shrink: 0;
+}
+
+.tabLabel {
+  font-size: var(--t-body);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+  letter-spacing: var(--ls-body);
+  word-break: auto-phrase;
+}
+
+/* 選んだ瞬間にぽんと弾む。動きはマウスのある端末（PC）だけ（2026-11-13 CEO指示「ボタンのアニメーションはPCのみ」） */
+@media (hover: hover) and (pointer: fine) {
+  .tab[aria-selected="true"] {
+    animation: tab-pop 0.5s var(--ease-spring);
+  }
+
+  .tab[aria-selected="false"]:hover {
+    background: var(--pos-tint);
+  }
+}
+
+@keyframes tab-pop {
+  0% {
+    transform: scale(0.94);
+  }
+
+  60% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: none;
+  }
+}
+
+/* ---- 条件のカード ---- */
+.panel {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-top: var(--space-2) solid var(--pos-base);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  animation: panel-pop 0.5s var(--ease-spring) both;
+  /* 項目の内容が、末尾の1〜2文字だけ次の行に落ちないよう文節で折り返す */
+  word-break: auto-phrase;
+  text-wrap: pretty;
+}
+
+@keyframes panel-pop {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-3)) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.title {
+  margin-bottom: var(--space-4);
+  font-size: var(--t-body);
+  font-weight: 700;
+  letter-spacing: var(--ls-body);
+}
+
+.wage {
+  font-size: var(--t-body);
+  font-weight: 700;
+  line-height: var(--lh-compact);
+}
+
+.actions {
+  margin-top: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .tab {
+    justify-content: center;
+    padding-inline: var(--space-4);
+  }
+
+  .panel {
+    padding: var(--space-6) var(--space-6) var(--space-7);
+  }
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    padding: var(--space-7) var(--space-8) var(--space-8);
+  }
+}

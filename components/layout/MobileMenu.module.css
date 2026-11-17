@@ -17,8 +17,11 @@
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.toggle:hover {
-  color: var(--color-text-muted);
+/* 乗せたときの色はマウスのある端末だけ（タッチ端末では、タップのあとに色が薄いまま残るのを防ぐ） */
+@media (hover: hover) and (pointer: fine) {
+  .toggle:hover {
+    color: var(--color-text-muted);
+  }
 }
 
 /* 手本の「…」 */
@@ -43,24 +46,40 @@
   white-space: nowrap;
 }
 
-/* ---- パネル（ヘッダー直下の全面） ---- */
+/*
+ * ---- パネル（ヘッダー直下の全面）----
+ * ヘッダー（position: sticky）の直下に、ヘッダーを基準にした絶対配置で重ねる（2026-11-17 CEO指示「スマホ・タブレットでメニューの開閉ができない」への対応）。
+ * 以前は画面基準の固定配置（position: fixed）だったが、固定配置は、祖先に transform・filter・backdrop-filter などが付くと基準がその祖先に変わり、
+ * 端末（特に iPhone の Safari）によってはパネルがヘッダーの高さに閉じ込められて見えなくなる。
+ * ヘッダーは画面の上に貼り付いている（sticky, top: 0）ので、ヘッダーの直下に絶対配置すれば見た目は同じで、祖先の影響を受けない。
+ * 高さは画面の残り（dvh = ブラウザの上下のバーを除いた高さ。非対応の端末は vh）。中身が長いときはパネルの中だけがスクロールする。
+ */
 .panel {
-  position: fixed;
-  inset: var(--header-height) 0 0;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
   z-index: var(--z-menu);
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
+  padding-bottom: env(safe-area-inset-bottom);
   background: var(--color-page);
   overflow-y: auto;
   overscroll-behavior: contain;
-  transition:
-    opacity var(--duration-base) var(--ease-out),
-    translate var(--duration-base) var(--ease-out);
+  -webkit-overflow-scrolling: touch;
+  animation: panel-in var(--duration-base) var(--ease-out);
 }
 
 /* 開いた瞬間だけ上から少しだけ降りてくる（どこから出たパネルかを示す）。reduced-motion では base.css が止める */
-@starting-style {
-  .panel {
+@keyframes panel-in {
+  from {
     opacity: 0;
-    translate: 0 calc(var(--space-2) * -1);
+    transform: translateY(calc(var(--space-2) * -1));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -70,6 +89,11 @@
 
 .panelInner {
   padding-block: var(--space-4) var(--space-8);
+}
+
+.lists {
+  display: grid;
+  align-items: start;
 }
 
 .list {
@@ -183,7 +207,7 @@
     padding-block: var(--space-5) var(--space-9);
   }
 
-  .list {
+  .lists {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: var(--space-8);
   }

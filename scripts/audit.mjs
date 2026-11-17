@@ -85,7 +85,7 @@ const AUDIT = `(() => {
   const orphans = [];
   while ((n = w.nextNode())) {
     const t = n.nodeValue.trim(); if (!t) continue;
-    const el = n.parentElement; if (!el || el.closest('script,style,noscript,.visually-hidden') || srOnly(el)) continue;
+    const el = n.parentElement; if (!el || el.closest('script,style,noscript,svg,.visually-hidden') || srOnly(el)) continue; // svg: 円に沿って回る文字（ヒーローのバッジ）は折り返しではない
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.display === 'none') continue;
     const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
