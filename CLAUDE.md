@@ -29,7 +29,7 @@ Tailwind・UIライブラリは入れていない。アニメーションは **G
 
 ```
 app/            ページ（トップ＋下層: services［home-visit・care-plan・home-help の3事業ページ。一覧 /services は廃止してトップの #services へ転送］ about events recruit news contact privacy、not-found、sitemap・robots）
-components/     background（全ページの固定背景。色の丸の演出）／トップのセクション（hero［大きな写真］about services marquee［流れる欧文］community［Instagram｜会社行事］news recruit cta［Contact Us! の帯。layout が全ページに置く］）。料金帯 `components/page/PriceGuide.tsx` は訪問介護・居宅介護支援のページの最後だけに置く（トップには置かない）／layout common icons／page（下層ページ共通部品）／pages（ページ専用）
+components/     background（全ページの固定背景。色の丸の演出）／トップのセクション（hero［大きな写真］about services marquee［流れる欧文］community［Instagram｜会社行事］news recruit cta［Contact Us! の帯。トップだけ］）。料金帯 `components/page/PriceGuide.tsx` は訪問介護・居宅介護支援のページの最後だけに置く（トップには置かない）／layout common icons／page（下層ページ共通部品）／pages（ページ専用）
 data/           site.ts（サイト全体）／sections/（トップの各セクション）／records/（会社行事・ニュース）／pages/（下層ページ）
 types/site.ts   内容の型
 styles/         tokens.css（デザイントークンの正本）/ base.css（リセット）

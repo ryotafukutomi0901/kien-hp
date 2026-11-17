@@ -12,7 +12,7 @@
 - 色・余白・文字サイズは `styles/tokens.css` の変数だけ（`handbook/02_quality/web_design_standard.md`）。本文は `--t-note`、リードや強調は `--t-body`、節見出しは `SectionTitle`
 - 写真は使わない（旧サイトの写真は未取得で、仮画像は内容と関係がない）。装飾が必要なら `LeafDecoration` だけ
 - **家事支援の料金表（`components/page/PriceGuide.tsx`）は、訪問介護・居宅介護支援のページだけに置く**（2026-10-21 引き継ぎ 05 で全ページに置き、2026-11-13 CEO指示「多すぎる。必要なところだけ」で絞り、2026-11-17 CEO指示「トップにpriceの画面はいらない」でトップからも外した）。置き場所は各ページの最後（お問い合わせの帯・フッターの直前）。
-- **最後の「Contact Us!」の帯（`FinalCta`）は、トップ・会社概要・3事業のページだけ**（2026-11-13。置くページは `components/cta/ContactBandGate.tsx`）。表の値は `data/pages/services.ts` の `homeHelp.fee` だけが出どころ
+- **最後の「Contact Us!」の帯（`FinalCta`）は、トップだけ**（2026-11-13にトップ・会社概要・3事業のページだけにし、2026-11-18に会社概要・3事業のページからも外した。`app/page.tsx` が置く）。表の値は `data/pages/services.ts` の `homeHelp.fee` だけが出どころ
 - 電話番号は `tel:` リンク（`0545-32-7860` → `tel:0545327860`）にし、タップ領域を `--tap-min` 以上にする
 - 各ページに `export const metadata`（title と description。description は原文から）
 - 追加ライブラリ禁止。`npm run build` は実行しない（統括が行う）。git commit しない

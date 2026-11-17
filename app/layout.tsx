@@ -6,8 +6,6 @@ import { SiteBackground } from "@/components/background/SiteBackground";
 import { ButtonWipeColor } from "@/components/common/ButtonWipeColor";
 import { Reveal } from "@/components/common/Reveal";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
-import { ContactBandGate } from "@/components/cta/ContactBandGate";
-import { FinalCta } from "@/components/cta/FinalCta";
 import { IntroReplay } from "@/components/hero/IntroReplay";
 import { Header } from "@/components/layout/Header";
 import { site } from "@/data/site";
@@ -62,9 +60,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Header />
         <main id="main">
           {children}
-          <ContactBandGate>
-            <FinalCta />
-          </ContactBandGate>
         </main>
         <Footer />
         <Reveal />
